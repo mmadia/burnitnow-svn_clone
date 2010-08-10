@@ -1,7 +1,12 @@
+/*
+ * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Distributed under the terms of the MIT License.
+ */
 #include "AboutWindow.h"
 #include "const.h"
-#define  ABOUT_STRING "BurnIT NOW! beta 2"
-#define ABOUT_STRING2 "©2000 Johan Nilsson"
+#define  ABOUT_STRING "BurnItNow beta 3"
+#define ABOUT_STRING2 "©2000-2002 Johan Nilsson"
+/* #define ABOUT_STRING3 "©2010 BurnItNow Maintainers" */
 
 BBitmap* GetBitmapResource(type_code type,const char* name);
 

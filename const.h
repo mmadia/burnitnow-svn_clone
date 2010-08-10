@@ -1,4 +1,7 @@
-
+/*
+ * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Distributed under the terms of the MIT License.
+ */
 #ifndef __CONSTS__
 #define __CONSTS__
 const uint32 MENU_FILE_QUIT = 'MFqu';

@@ -28,12 +28,12 @@ set(BURNITNOW_SRCS
 	StatusWindow.cpp
 	jpButton.cpp
 	jpWindow.cpp
-	"BurnIT NOW!.rdef"
+	BurnItNow.rdef
 	gfx.rdef
 	)
 
-add_executable("BurnIT Now!" ${BURNITNOW_SRCS})
+add_executable("BurnItNow" ${BURNITNOW_SRCS})
 
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-multichar -Woverloaded-virtual -Wno-unknown-pragmas")
 
-target_link_libraries("BurnIT Now!" "be" "tracker" "media")
+target_link_libraries("BurnItNow" "be" "tracker" "media")

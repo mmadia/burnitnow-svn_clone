@@ -1,3 +1,7 @@
+/*
+ * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Distributed under the terms of the MIT License.
+ */
 #include "CopyCDView.h"
 
 CopyCDView::CopyCDView (BRect size,BWindow *twin) : BView(size,"CopyCDView",B_FOLLOW_NONE,B_WILL_DRAW) {

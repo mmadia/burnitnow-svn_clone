@@ -1,3 +1,7 @@
+/*
+ * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Distributed under the terms of the MIT License.
+ */
 #include "BurnView.h"
 extern int16 BURN_SPD;
 extern int16 BURN_TYPE;

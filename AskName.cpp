@@ -1,3 +1,7 @@
+/*
+ * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Distributed under the terms of the MIT License.
+ */
 #include "AskName.h"
 #include "const.h"
 
@@ -7,7 +11,7 @@ AskName::AskName(BRect frame,char *title, uint32 mess, char *what) : BWindow(fra
 	if(title != NULL)
 		SetTitle(title);
 	else
-		SetTitle("BurnIT NOW!");
+		SetTitle("BurnItNow");
 	
 	message = mess;
 	

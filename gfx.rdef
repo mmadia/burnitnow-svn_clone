@@ -1,3 +1,7 @@
+/*
+ * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Distributed under the terms of the MIT License.
+ */
 
 resource(1, "BMP:OPTION") #'BBMP' archive BBitmap {
 	"_frame" = rect { 0.00000, 0.00000, 15.0000, 15.0000 },

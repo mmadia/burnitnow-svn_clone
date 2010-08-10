@@ -1,3 +1,7 @@
+/*
+ * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Distributed under the terms of the MIT License.
+ */
 #include "IconLabel.h"
 
 IconLabel::IconLabel (BRect size,char* labelstring,char* gfx) : BView(size,"IconLabel",B_FOLLOW_NONE,B_WILL_DRAW) {

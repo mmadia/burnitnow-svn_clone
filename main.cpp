@@ -1,3 +1,7 @@
+/*
+ * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Distributed under the terms of the MIT License.
+ */
 #include "jpWindow.h"
 extern char *IMAGE_NAME;
 extern char *BURNIT_PATH;

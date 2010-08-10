@@ -1,3 +1,7 @@
+/*
+ * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Distributed under the terms of the MIT License.
+ */
 #include "AudioView.h"
 extern char PAD[10]; //-pad (audio)
 extern char NOFIX[10]; // -nofix (audio)

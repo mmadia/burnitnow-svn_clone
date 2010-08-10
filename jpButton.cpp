@@ -1,3 +1,7 @@
+/*
+ * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Distributed under the terms of the MIT License.
+ */
 #include "jpButton.h"
 
 jpButton::jpButton(BRect frame,char *name,char *title, BMessage *msg,uint32 resizingMode = B_FOLLOW_LEFT | B_FOLLOW_TOP, uint32 flags = B_WILL_DRAW | B_NAVIGABLE) : BControl(frame,name,title,msg, resizingMode, flags)

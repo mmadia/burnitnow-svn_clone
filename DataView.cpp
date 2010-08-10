@@ -1,3 +1,7 @@
+/*
+ * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Distributed under the terms of the MIT License.
+ */
 #include "DataView.h"
 extern char DATA_STRING[100];
 extern bool BOOTABLE;

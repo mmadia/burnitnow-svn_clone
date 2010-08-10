@@ -1,4 +1,13 @@
-Changes BurnIT NOW!
+Changes BurnItNow
+
+2010-08-xx beta 3
+	* Revived Burn It Now! renamed at BurnItNow
+	* Added Haiku HVIF vector icon from Michele Frau
+	* Converted from a BeIDE project to use cmake for building
+	* Added MIT headers to all source files
+	* Moved source code to OSDrawer.net
+	* Now builds and mostly works on Haiku using the cdrecord OptionalPackage
+	* Probably more Haiku fixes and tweaks before we actually post a beta build
 
 28-12-2000 beta 2
 	
