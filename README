@@ -1,0 +1,29 @@
+BurnIT NOW! README
+Copyright ©2000
+
+
+BurnIT NOW! is a GUI FrontEnd for cdrecord and mkisofs. So all the burners that works with cdrecord works with BurnIT NOW!.
+
+BurnIT NOW!  is at the moment freeware so you can download it and share it to your friends.
+
+
+Requierment:
+	* cdrecord 1.9+ and mkisofs 1.12+
+	* A burner that works with cdrecord 1.9+
+
+Special functions:
+	* Doubleclick on an Audiofile and ISOfile in the rightlist will bring up info on the leftlist
+	* Doubleclick on the VRCD in the rightlist will bring up the Virtual CD Directory on 
+	    leftlist.
+	* Rightclick on an item in the rightlist will bring up a menu (MoveUp, Remove,
+	    MoveDown, Play)
+	* You can drag files to the left list after you created a VRCD
+	* You can drag audiofiles to the rightlist
+	* If you drag an other file than an audiofile to the rightlist it will assume that its
+	    an ISOfile and burnit as an ISOfile.
+
+
+
+Author: Johan Nilsson
+Email: jojje@quake.swe.net
+URL: http://quake.swe.net/~jojje
