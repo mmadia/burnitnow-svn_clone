@@ -111,7 +111,7 @@ StatusWindow::StatusWindow(char* title)
 	if (title != NULL)
 		SetTitle(title);
 	else
-		SetTitle("BurnIT NOW!");
+		SetTitle("BurnItNow");
 
 	r = Bounds();
 	Around = new BView(r, "Around", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);

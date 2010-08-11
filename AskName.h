@@ -18,7 +18,7 @@ public:
 
 private:
 	BView* Around;
-	jpButton* Okey;
+	jpButton* Ok;
 	BTextView* Name;
 	uint32 message;
 };

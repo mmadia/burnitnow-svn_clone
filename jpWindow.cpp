@@ -1,5 +1,7 @@
 /*
- * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Copyright 2000-2002, Johan Nilsson. 
+ * Copyright 2010 BurnItNow maintainers
+ * All rights reserved.
  * Distributed under the terms of the MIT License.
  */
 
@@ -12,7 +14,7 @@
 #include "MakeBFS.h"
 
 
-#define VERSION "beta 2"
+#define VERSION "beta 3"
 
 
 const char* BlType[] = {"all", "fast", "session", "track", "trtail", "unreserve", "unclose"};
@@ -104,7 +106,7 @@ int32 OutPutMkImage(void* p)
 		SWin->Lock();
 		SWin->Ready();
 		SWin->Unlock();
-		sprintf(IMAGE_NAME, "%s/tmp/BurnIT.raw", BURNIT_PATH);
+		sprintf(IMAGE_NAME, "%s/tmp/BurnItNow.raw", BURNIT_PATH);
 	}
 	if (BOOTABLE) {
 		char temp[1024];
@@ -146,7 +148,7 @@ int32 OutPutBurn(void* p)
 			SWin->Lock();
 			BMessage hejsan(WRITE_TO_LOG);
 			SWin->StatusSetText("An error accord when burning!");
-			hejsan.AddString("Text", "An error accord when burning, the most common wrong is that its not an empty or a damaged cd.\nTry again and if it fails send a email to jojje@quake.swe.net and write exactly what you did in the email.\n\n Thanks for using BurnIT NOW!");
+			hejsan.AddString("Text", "An error accord when burning, the most common wrong is that its not an empty or a damaged cd.\nTry again and if it fails send a email to jojje@quake.swe.net and write exactly what you did in the email.\n\n Thanks for using BurnItNow.");
 			hejsan.AddBool("Error", true);
 			SWin->SendMessage(&hejsan);
 			noerror = false;
@@ -192,7 +194,7 @@ int32 OutPutBurn(void* p)
 	if (noerror)
 		SWin->Ready();
 	SWin->Unlock();
-	sprintf(IMAGE_NAME, "%s/tmp/BurnIT.raw", BURNIT_PATH);
+	sprintf(IMAGE_NAME, "%s/tmp/BurnItNow.raw", BURNIT_PATH);
 	BEntry(IMAGE_NAME, true).Remove();
 	if (BOOTABLE) {
 		char temp[1024];
@@ -244,16 +246,16 @@ int32 OutPutBlank(void* p)
 
 jpWindow::jpWindow(BRect frame)
 	:
-	BWindow(frame, "BurnIT NOW!", B_TITLED_WINDOW, B_NOT_ZOOMABLE | B_NOT_RESIZABLE)
+	BWindow(frame, "BurnItNow", B_TITLED_WINDOW, B_NOT_ZOOMABLE | B_NOT_RESIZABLE)
 {
 	char temp_char[1024];
 	entry_ref temp_ref;
 	BRect r;
 	BMenu* menu;
-	SetTitle("BurnIt NOW!");
-	BurnITPrefs = new Prefs("BurnIT NOW!");
+	SetTitle("BurnItNow");
+	BurnItPrefs = new Prefs("BurnItNow");
 	// Load settings
-	InitBurnIT();
+	InitBurnIt();
 
 	r = Bounds();
 	r.top = 20;
@@ -427,9 +429,9 @@ jpWindow::jpWindow(BRect frame)
 	menubar->AddItem(new BMenuItem("Help", new BMessage(MENU_HELP)));
 	RecorderCount = 0;
 	LogV->LogText->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &red);
-	LogV->LogText->Insert("Welcome to BurnIt NOW! ");
+	LogV->LogText->Insert("Welcome to BurnItNow ");
 	LogV->LogText->Insert(VERSION);
-	LogV->LogText->Insert("\n ©2000 Johan Nilsson\n\n\n");
+	LogV->LogText->Insert("\n ©2000-2002 Johan Nilsson\n ©2010 BurnItNow maintainers\n\n");
 
 	CheckForDevices();
 	Show();
@@ -600,7 +602,7 @@ void jpWindow::CalculateSize()
 }
 
 
-void jpWindow::InitBurnIT()
+void jpWindow::InitBurnIt()
 {
 	const char* tr;
 	char temp_char[1024];
@@ -617,7 +619,7 @@ void jpWindow::InitBurnIT()
 		BDirectory(BURNIT_PATH).CreateDirectory(temp_char, NULL);
 	}
 	IMAGE_NAME = new char[1024];
-	sprintf(IMAGE_NAME, "%s/BurnIT.raw", temp_char);
+	sprintf(IMAGE_NAME, "%s/BurnItNow.raw", temp_char);
 	sprintf(temp_char, "%s/VRCD", temp_char);
 	if (!BEntry(temp_char).Exists()) {
 		BDirectory(temp_char).CreateDirectory(temp_char, NULL);
@@ -626,70 +628,70 @@ void jpWindow::InitBurnIT()
 	strcpy(BURN_DIR, temp_char);
 
 	// Load from pref file
-	if (BurnITPrefs->FindString("ISOFILE_DIR", &tr) == B_OK) {
+	if (BurnItPrefs->FindString("ISOFILE_DIR", &tr) == B_OK) {
 		strcpy(ISOFILE_DIR, tr);
 	} else {
 		strcpy(ISOFILE_DIR, "NONE");
 	}
-	if (BurnITPrefs->FindString("VOL_NAME", &tr) == B_OK) {
+	if (BurnItPrefs->FindString("VOL_NAME", &tr) == B_OK) {
 		strcpy(VOL_NAME, tr);
 	} else {
-		strcpy(VOL_NAME, "BurnIT");
+		strcpy(VOL_NAME, "BurnItNow");
 	}
-	if (BurnITPrefs->FindBool("VRCD", &VRCD) != B_OK)
+	if (BurnItPrefs->FindBool("VRCD", &VRCD) != B_OK)
 		VRCD = false;
 
-	if (BurnITPrefs->FindBool("ISOFILE", &ISOFILE) != B_OK)
+	if (BurnItPrefs->FindBool("ISOFILE", &ISOFILE) != B_OK)
 		ISOFILE = false;
 
-	if (BurnITPrefs->FindInt16("BURN_SPD", &BURN_SPD) != B_OK)
+	if (BurnItPrefs->FindInt16("BURN_SPD", &BURN_SPD) != B_OK)
 		BURN_SPD = 2;
 
-	if (BurnITPrefs->FindInt16("BLANK_TYPE", &BLANK_TYPE) != B_OK)
+	if (BurnItPrefs->FindInt16("BLANK_TYPE", &BLANK_TYPE) != B_OK)
 		BLANK_TYPE = 1;
 
-	if (BurnITPrefs->FindInt16("BLANK_SPD", &BLANK_SPD) != B_OK)
+	if (BurnItPrefs->FindInt16("BLANK_SPD", &BLANK_SPD) != B_OK)
 		BLANK_SPD = 1;
 
-	if (BurnITPrefs->FindInt16("BURN_TYPE", &BURN_TYPE) != B_OK)
+	if (BurnItPrefs->FindInt16("BURN_TYPE", &BURN_TYPE) != B_OK)
 		BURN_TYPE = 0;
 
-	if (BurnITPrefs->FindBool("ONTHEFLY", &ONTHEFLY) != B_OK)
+	if (BurnItPrefs->FindBool("ONTHEFLY", &ONTHEFLY) != B_OK)
 		ONTHEFLY = false;
 
-	if (BurnITPrefs->FindString("MULTISESSION", &tr) == B_OK) {
+	if (BurnItPrefs->FindString("MULTISESSION", &tr) == B_OK) {
 		strcpy(MULTISESSION, tr);
 	} else {
 		strcpy(MULTISESSION, " ");
 	}
-	if (BurnITPrefs->FindString("DUMMYMODE", &tr) == B_OK) {
+	if (BurnItPrefs->FindString("DUMMYMODE", &tr) == B_OK) {
 		strcpy(DUMMYMODE, tr);
 	} else {
 		strcpy(DUMMYMODE, " ");
 	}
-	if (BurnITPrefs->FindString("EJECT", &tr) == B_OK) {
+	if (BurnItPrefs->FindString("EJECT", &tr) == B_OK) {
 		strcpy(EJECT, tr);
 	} else {
 		strcpy(EJECT, " ");
 	}
-	if (BurnITPrefs->FindString("DATA_STRING", &tr) == B_OK) {
+	if (BurnItPrefs->FindString("DATA_STRING", &tr) == B_OK) {
 		strcpy(DATA_STRING, tr);
 	} else {
 		strcpy(DATA_STRING, " ");
 	}
-	if (BurnITPrefs->FindInt16("IMAGE_TYPE", &IMAGE_TYPE) != B_OK)
+	if (BurnItPrefs->FindInt16("IMAGE_TYPE", &IMAGE_TYPE) != B_OK)
 		IMAGE_TYPE = 0;
 
-	if (BurnITPrefs->FindInt16("SCSI_DEV", &SCSI_DEV) != B_OK)
+	if (BurnItPrefs->FindInt16("SCSI_DEV", &SCSI_DEV) != B_OK)
 		SCSI_DEV = -1;
 
-	if (BurnITPrefs->FindString("PAD", &tr) == B_OK) {
+	if (BurnItPrefs->FindString("PAD", &tr) == B_OK) {
 		strcpy(PAD, tr);
 	} else {
 		strcpy(PAD, "-pad");
 	}
 
-	if (BurnITPrefs->FindString("DAO", &tr) == B_OK) {
+	if (BurnItPrefs->FindString("DAO", &tr) == B_OK) {
 		strcpy(DAO, tr);
 	}
 
@@ -697,7 +699,7 @@ void jpWindow::InitBurnIT()
 		strcpy(DAO, " ");
 	}
 
-	if (BurnITPrefs->FindString("BURNPROOF", &tr) == B_OK) {
+	if (BurnItPrefs->FindString("BURNPROOF", &tr) == B_OK) {
 		strcpy(BURNPROOF, tr);
 	}
 
@@ -706,25 +708,25 @@ void jpWindow::InitBurnIT()
 	}
 
 
-	if (BurnITPrefs->FindString("NOFIX", &tr) == B_OK) {
+	if (BurnItPrefs->FindString("NOFIX", &tr) == B_OK) {
 		strcpy(NOFIX, tr);
 	} else {
 		strcpy(NOFIX, " ");
 	}
 
-	if (BurnITPrefs->FindString("PREEMP", &tr) == B_OK) {
+	if (BurnItPrefs->FindString("PREEMP", &tr) == B_OK) {
 		strcpy(PREEMP, tr);
 	} else {
 		strcpy(PREEMP, " ");
 	}
-	if (BurnITPrefs->FindString("SWAB", &tr) == B_OK) {
+	if (BurnItPrefs->FindString("SWAB", &tr) == B_OK) {
 		strcpy(SWAB, tr);
 	} else {
 		strcpy(SWAB, " ");
 	}
-	if (BurnITPrefs->FindRef("BOOTIMAGEREF", &BOOTIMAGEREF) == B_OK)
+	if (BurnItPrefs->FindRef("BOOTIMAGEREF", &BOOTIMAGEREF) == B_OK)
 		if (BEntry(&BOOTIMAGEREF, true).Exists())
-			if (BurnITPrefs->FindBool("BOOTABLE", &BOOTABLE) == B_OK) {}
+			if (BurnItPrefs->FindBool("BOOTABLE", &BOOTABLE) == B_OK) {}
 
 	// End loading from pref file
 
@@ -809,9 +811,9 @@ void jpWindow::CheckForDevices()
 	} else {
 		Lock();
 		LogV->LogText->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &blue);
-		LogV->LogText->Insert("Cound not find cdrecord/mkisofs check so its in /boot/home/config/bin.\nInstall cdrecord and restart BurnIT NOW!");
+		LogV->LogText->Insert("Cound not find cdrecord/mkisofs check so its in /boot/home/config/bin.\nInstall cdrecord and restart BurnItNow.");
 		Unlock();
-		BAlert* MyAlert = new BAlert("BurnIT", "Could not find cdrecord/mkisofs. You have to install them in /boot/home/config/bin", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_STOP_ALERT);
+		BAlert* MyAlert = new BAlert("BurnItNow", "Could not find cdrecord/mkisofs. You have to install them in /boot/home/config/bin", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_STOP_ALERT);
 		MyAlert->Go();
 		BurnV->SetButton(false);
 		CDRWV->BlankButton->SetEnabled(false);
@@ -854,7 +856,7 @@ void jpWindow::BurnNOW()
 	temp = 0;
 	if (BURNITDEV == NULL) {
 		MyTab->Select(5);
-		BAlert* MyAlert = new BAlert("BurnIT", "You have to select device to be able to burn!", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+		BAlert* MyAlert = new BAlert("BurnItNow", "You have to select device to be able to burn!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 		MyAlert->Go();
 	} else {
 		// DataCD
@@ -871,12 +873,12 @@ void jpWindow::BurnNOW()
 						if (temp != -1) {
 							MakeImageNOW(temp, buf);
 						} else {
-							BAlert* MyAlert = new BAlert("BurnIT", "Put a blank CD or a CD that you have burned multisession on before.", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+							BAlert* MyAlert = new BAlert("BurnItNow", "Put a blank CD or a CD that you have burned multisession on before.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 							MyAlert->Go();
 						}
 					}
 				} else {
-					BAlert* MyAlert = new BAlert("BurnIT", "This is a BUG! this shouldnt happen send me a mail and tell me exactly how you did and write that its \"BUG #13\"", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+					BAlert* MyAlert = new BAlert("BurnItNow", "This is a BUG! this shouldnt happen send me a mail and tell me exactly how you did and write that its \"BUG #13\"", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 					MyAlert->Go();
 				}
 
@@ -885,11 +887,11 @@ void jpWindow::BurnNOW()
 					strcpy(IMAGE_NAME, ISOFILE_DIR);
 					BurnWithCDRecord();
 				} else {
-					BAlert* MyAlert = new BAlert("BurnIT", "You have to choose an ISO file!", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+					BAlert* MyAlert = new BAlert("BurnItNow", "You have to choose an ISO file!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 					MyAlert->Go();
 				}
 			} else {
-				BAlert* MyAlert = new BAlert("BurnIT", "You have to Add an \"Virtual CD Directory\" or an ISOfile to be able to burn DataCD:s!", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+				BAlert* MyAlert = new BAlert("BurnItNow", "You have to Add an \"Virtual CD Directory\" or an ISOfile to be able to burn DataCD:s!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 				MyAlert->Go();
 			}
 		}
@@ -933,12 +935,12 @@ void jpWindow::BurnNOW()
 						if (temp != -1) {
 							MakeImageNOW(temp, buf);
 						} else {
-							BAlert* MyAlert = new BAlert("BurnIT", "Put a blank CD or a CD that you have burned multisession on before.", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+							BAlert* MyAlert = new BAlert("BurnItNow", "Put a blank CD or a CD that you have burned multisession on before.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 							MyAlert->Go();
 						}
 					}
 				} else {
-					BAlert* MyAlert = new BAlert("BurnIT", "This is a BUG! this shouldnt happen send me a mail and tell me exactly how you did and write that its \"BUG #13\"", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+					BAlert* MyAlert = new BAlert("BurnItNow", "This is a BUG! this shouldnt happen send me a mail and tell me exactly how you did and write that its \"BUG #13\"", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 					MyAlert->Go();
 				}
 
@@ -947,11 +949,11 @@ void jpWindow::BurnNOW()
 					strcpy(IMAGE_NAME, ISOFILE_DIR);
 					BurnWithCDRecord();
 				} else {
-					BAlert* MyAlert = new BAlert("BurnIT", "You have to choose an ISO file!", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+					BAlert* MyAlert = new BAlert("BurnItNow", "You have to choose an ISO file!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 					MyAlert->Go();
 				}
 			} else {
-				BAlert* MyAlert = new BAlert("BurnIT", "You have to add a Virtual CD Directory/ISOfile to be able to burn a MixCD!", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+				BAlert* MyAlert = new BAlert("BurnItNow", "You have to add a Virtual CD Directory/ISOfile to be able to burn a MixCD!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 				MyAlert->Go();
 			}
 		}
@@ -965,7 +967,7 @@ void jpWindow::BlankNOW()
 	int Result;
 	if (BURNITDEV == NULL) {
 		MyTab->Select(5);
-		BAlert* MyAlert = new BAlert("BurnIT", "You have to select device to be able to blank!", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+		BAlert* MyAlert = new BAlert("BurnItNow", "You have to select device to be able to blank!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 		MyAlert->Go();
 	} else {
 		BAlert* MyAlert = new BAlert("Put in a CDRW", "Put in a CDRW", "Oops forget it!", "Allready done.", NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
@@ -1028,20 +1030,20 @@ void jpWindow::MessageReceived(BMessage* message)
 		case MENU_HELP: {
 				char tempas[1024];
 				entry_ref tempas_ref;
-				sprintf(tempas, "%s/BurnIT help.html", BURNIT_PATH);
+				sprintf(tempas, "%s/BurnItNowHelp.html", BURNIT_PATH);
 				MessageLog(tempas);
 				if (BEntry(tempas).Exists()) {
 					BEntry(tempas).GetRef(&tempas_ref);
 					be_roster->Launch(&tempas_ref);
 				} else {
-					BAlert* MyAlert = new BAlert("BurnIT", "Cant find help (BurnIT help.html)\n Reinstall BurnIT NOW! to fix the problem.", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+					BAlert* MyAlert = new BAlert("BurnItNow", "Cant find help (BurnItNowHelp.html)\n Reinstall BurnItNow to fix the problem.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 					MyAlert->Go();
 				}
 			}
 			break;
 		case CALCULATE_SIZE: {
 				if (VRCD && !ISOFILE) {
-					BAlert* MyAlert = new BAlert("BurnIT", "This can take a moment because you have a Virtual CD Directory\nSo dont kill BurnIT NOW! because its dont answer its just calculating the size!", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+					BAlert* MyAlert = new BAlert("BurnItNow", "This can take a moment because you have a Virtual CD Directory\nSo dont kill BurnItNow because its dont answer its just calculating the size!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 					MyAlert->Go();
 				}
 
@@ -1281,7 +1283,7 @@ void jpWindow::MessageReceived(BMessage* message)
 			if (VRCD && !ISOFILE) {
 				SaveISOPanel->Show();
 			} else {
-				BAlert* MyAlert = new BAlert("BurnIT", "You have to Add an \"Virtual CD Directory\" able to make an ISOfile!", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
+				BAlert* MyAlert = new BAlert("BurnItNow", "You have to Add an \"Virtual CD Directory\" able to make an ISOfile!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 				MyAlert->Go();
 			}
 			break;
@@ -1346,7 +1348,7 @@ void jpWindow::MessageReceived(BMessage* message)
 			if (strcmp(temp_char, "boot.catalog")) {
 				RList->MakeDir(temp_char);
 			} else {
-				BAlert* MyAlert = new BAlert("BurnIT", "You cant create a directory named boot.catalog\nits reserved for making bootable cd:s.", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+				BAlert* MyAlert = new BAlert("BurnItNow", "You cant create a directory named boot.catalog\nits reserved for making bootable cd:s.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 				MyAlert->Go();
 			}
 			break;
@@ -1367,7 +1369,7 @@ void jpWindow::MessageReceived(BMessage* message)
 					DataV->ChooseBootImage->SetEnabled(true);
 				}
 			} else {
-				BAlert* MyAlert = new BAlert("BurnIT", "You can only have one ISOfile/VirtualCD on a CD!", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+				BAlert* MyAlert = new BAlert("BurnItNow", "You can only have one ISOfile/VirtualCD on a CD!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 				MyAlert->Go();
 			}
 			break;
@@ -1445,7 +1447,7 @@ void jpWindow::MessageReceived(BMessage* message)
 						DataV->BootableCD->SetValue(0);
 						DataV->ChooseBootImage->SetEnabled(false);
 						BOOTABLE = false;
-						BAlert* MyAlert = new BAlert("BurnIT", "The bootimage cant be bigger than 2.88 Mb!", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+						BAlert* MyAlert = new BAlert("BurnItNow", "The bootimage cant be bigger than 2.88 Mb!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 						MyAlert->Go();
 					}
 
@@ -1473,32 +1475,32 @@ void jpWindow::MessageReceived(BMessage* message)
 void jpWindow::SaveData()
 {
 	// Save all prefs!
-	BurnITPrefs->SetBool("BOOTABLE", BOOTABLE);
-	BurnITPrefs->SetRef("BOOTIMAGEREF", &BOOTIMAGEREF);
-	BurnITPrefs->SetString("ISOFILE_DIR", ISOFILE_DIR);
-	BurnITPrefs->SetString("VOL_NAME", VOL_NAME);
-	BurnITPrefs->SetBool("VRCD", VRCD);
-	BurnITPrefs->SetBool("ISOFILE", ISOFILE);
-	BurnITPrefs->SetInt16("BURN_SPD", BURN_SPD);
-	BurnITPrefs->SetInt16("BLANK_TYPE", BLANK_TYPE);
-	BurnITPrefs->SetInt16("BLANK_SPD", BLANK_SPD);
-	BurnITPrefs->SetInt16("BURN_TYPE", BURN_TYPE);
-	BurnITPrefs->SetBool("ONTHEFLY", ONTHEFLY);
-	BurnITPrefs->SetString("MULTISESSION", MULTISESSION);
-	BurnITPrefs->SetString("DUMMYMODE", DUMMYMODE);
-	BurnITPrefs->SetString("EJECT", EJECT);
-	BurnITPrefs->SetString("DATA_STRING", DATA_STRING);
-	BurnITPrefs->SetString("PAD", PAD);
-	BurnITPrefs->SetString("DAO", DAO);
-	BurnITPrefs->SetString("BURNPROOF", BURNPROOF);
-	BurnITPrefs->SetString("SWAB", SWAB);
-	BurnITPrefs->SetString("NOFIX", NOFIX);
-	BurnITPrefs->SetString("PREEMP", PREEMP);
-	BurnITPrefs->SetInt16("IMAGE_TYPE", IMAGE_TYPE);
-	BurnITPrefs->SetInt16("SCSI_DEV", SCSI_DEV);
+	BurnItPrefs->SetBool("BOOTABLE", BOOTABLE);
+	BurnItPrefs->SetRef("BOOTIMAGEREF", &BOOTIMAGEREF);
+	BurnItPrefs->SetString("ISOFILE_DIR", ISOFILE_DIR);
+	BurnItPrefs->SetString("VOL_NAME", VOL_NAME);
+	BurnItPrefs->SetBool("VRCD", VRCD);
+	BurnItPrefs->SetBool("ISOFILE", ISOFILE);
+	BurnItPrefs->SetInt16("BURN_SPD", BURN_SPD);
+	BurnItPrefs->SetInt16("BLANK_TYPE", BLANK_TYPE);
+	BurnItPrefs->SetInt16("BLANK_SPD", BLANK_SPD);
+	BurnItPrefs->SetInt16("BURN_TYPE", BURN_TYPE);
+	BurnItPrefs->SetBool("ONTHEFLY", ONTHEFLY);
+	BurnItPrefs->SetString("MULTISESSION", MULTISESSION);
+	BurnItPrefs->SetString("DUMMYMODE", DUMMYMODE);
+	BurnItPrefs->SetString("EJECT", EJECT);
+	BurnItPrefs->SetString("DATA_STRING", DATA_STRING);
+	BurnItPrefs->SetString("PAD", PAD);
+	BurnItPrefs->SetString("DAO", DAO);
+	BurnItPrefs->SetString("BURNPROOF", BURNPROOF);
+	BurnItPrefs->SetString("SWAB", SWAB);
+	BurnItPrefs->SetString("NOFIX", NOFIX);
+	BurnItPrefs->SetString("PREEMP", PREEMP);
+	BurnItPrefs->SetInt16("IMAGE_TYPE", IMAGE_TYPE);
+	BurnItPrefs->SetInt16("SCSI_DEV", SCSI_DEV);
 
 	// All saved
-	delete BurnITPrefs;
+	delete BurnItPrefs;
 }
 
 
@@ -1523,7 +1525,7 @@ void jpWindow::SetISOFile(char* string)
 		VRCD = false;
 
 	} else {
-		BAlert* MyAlert = new BAlert("BurnIT", "You can only have one ISOfile/VirtualCD on a CD!", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+		BAlert* MyAlert = new BAlert("BurnItNow", "You can only have one ISOfile/VirtualCD on a CD!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 		MyAlert->Go();
 	}
 }
@@ -1592,7 +1594,7 @@ void jpWindow::MakeImageNOW(int Multi, char* str)
 			StatusWin->Unlock();
 			MakeBFS();
 			MountBFS();
-			BFSDir = new BDirectory("/BurnITNOWTempMount");
+			BFSDir = new BDirectory("/BurnItNowTempMount");
 			CopyFiles();
 			delete BFSDir;
 			UnmountBFS();
@@ -1600,7 +1602,7 @@ void jpWindow::MakeImageNOW(int Multi, char* str)
 			if (!JUST_IMAGE)
 				BurnWithCDRecord();
 			else {
-				sprintf(IMAGE_NAME, "%s/tmp/BurnIT.raw", BURNIT_PATH);
+				sprintf(IMAGE_NAME, "%s/tmp/BurnItNow.raw", BURNIT_PATH);
 				StatusWin->Lock();
 				StatusWin->Ready();
 				StatusWin->Unlock();
@@ -1768,7 +1770,7 @@ void jpWindow::MakeBootImage()
 		DataV->BootableCD->SetValue(0);
 		DataV->ChooseBootImage->SetEnabled(false);
 		BOOTABLE = false;
-		BAlert* MyAlert = new BAlert("BurnIT", "The bootimage you choosen doesnt exist!\n BurnIT NOW! will burn this CD without a bootimage.", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+		BAlert* MyAlert = new BAlert("BurnItNow", "The bootimage you choosen doesnt exist!\n BurnItNow will burn this CD without a bootimage.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 		MyAlert->Go();
 	}
 }

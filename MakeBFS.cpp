@@ -146,9 +146,9 @@ int MakeBFS()
 int UnmountBFS()
 {
 	char temp[1024];
-	sprintf(temp, "sync; unmount /BurnITNOWTempMount");
+	sprintf(temp, "sync; unmount /BurnItNowTempMount");
 	system(temp);
-	sprintf(temp, "rmdir /BurnITNOWTempMount");
+	sprintf(temp, "rmdir /BurnItNowTempMount");
 	system(temp);
 	return 0;
 }
@@ -162,9 +162,9 @@ int MountBFS()
 	char command[1024], buffer[1024];
 
 	temp_dir = new BDirectory("/");
-	temp_dir->CreateDirectory("/BurnITNOWTempMount", NULL);
+	temp_dir->CreateDirectory("/BurnItNowTempMount", NULL);
 
-	sprintf(command, "sync ; mount \"%s\" /BurnITNOWTempMount", IMAGE_NAME);
+	sprintf(command, "sync ; mount \"%s\" /BurnItNowTempMount", IMAGE_NAME);
 	f1 = popen(command, "r");
 	while (!feof(f1) && !ferror(f1)) {
 		fgets(buffer, 1024, f1);

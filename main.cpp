@@ -26,7 +26,7 @@ private:
 
 jpApp::jpApp()
 	:
-	BApplication("application/x-vnd.TinkaDoo-BurnIT")
+	BApplication("application/x-vnd.osdrawer-BurnItNow")
 {
 	BRect windowRect;
 	windowRect.Set(200, 30, 600, 530);

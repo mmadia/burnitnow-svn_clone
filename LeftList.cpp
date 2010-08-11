@@ -156,7 +156,7 @@ void LeftList::MessageReceived(BMessage* msg)
 					if (!strcmp(AInfo.pretty_name, "Raw Audio") && (AInfo.channels == 2) && (AInfo.frame_rate == 44100) && (AInfo.bps == 2)) {
 						AddItem(new LeftListItem(&ref, ref.name, AudioIcon, &AInfo));
 					} else {
-						BAlert* MyAlert = new BAlert("BurnIT", "You can only burn 16 bits stereo 44.1 kHz Raw Audio files.\n (More audio files will be supported in the future)", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+						BAlert* MyAlert = new BAlert("BurnItNow", "You can only burn 16 bits stereo 44.1 kHz Raw Audio files.\n (More audio files will be supported in the future)", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 						MyAlert->Go();
 					}
 				} else {
@@ -184,7 +184,7 @@ void LeftList::KeyDown(const char* bytes, int32 numBytes)
 		case B_DELETE: {
 				int32 selection = CurrentSelection();
 				if (selection >= 0) {
-					BAlert* MyAlert = new BAlert("BurnIT", "Are you sure you want to delete this selection", "Yes", "No", NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+					BAlert* MyAlert = new BAlert("BurnItNow", "Are you sure you want to delete this selection", "Yes", "No", NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 					MyAlert->SetFeel(B_MODAL_ALL_WINDOW_FEEL);
 					result = MyAlert->Go();
 					if (result == 0) {
@@ -267,7 +267,7 @@ void LeftList::MouseDown(BPoint point)
 						be_roster->Launch(&item->fref);
 				} else if (!strcmp(selected->Label(), "Remove")) {
 					int32 result;
-					BAlert* MyAlert = new BAlert("BurnIT", "Are you sure you want to delete this selection", "Yes", "No", NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+					BAlert* MyAlert = new BAlert("BurnItNow", "Are you sure you want to delete this selection", "Yes", "No", NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 					MyAlert->SetFeel(B_MODAL_ALL_WINDOW_FEEL);
 					result = MyAlert->Go();
 					if (result == 0) {

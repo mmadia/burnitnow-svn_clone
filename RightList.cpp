@@ -138,7 +138,7 @@ void RightList::MessageReceived(BMessage* msg)
 				}
 				UpdateDir();
 			} else {
-				BAlert* MyAlert = new BAlert("BurnIT", "You have to add a Virtual CD Directory to be able to drop files!", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+				BAlert* MyAlert = new BAlert("BurnItNow", "You have to add a Virtual CD Directory to be able to drop files!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 				MyAlert->Go();
 			}
 			break;
@@ -190,7 +190,7 @@ void RightList::KeyDown(const char* bytes, int32 numBytes)
 				int32 selection = CurrentSelection();
 				if (selection >= 0) {
 					FileListItem* item = (FileListItem*)ItemAt(selection);
-					BAlert* MyAlert = new BAlert("BurnIT", "Are you sure you want to delete this selection", "Yes", "No", NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+					BAlert* MyAlert = new BAlert("BurnItNow", "Are you sure you want to delete this selection", "Yes", "No", NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 					MyAlert->SetFeel(B_MODAL_ALL_WINDOW_FEEL);
 					result = MyAlert->Go();
 					if (result == 0) {
@@ -325,7 +325,7 @@ void RightList::MakeDir(const char* name)
 		BDir->CreateDirectory(temp_char, NULL);
 		UpdateDir();
 	} else {
-		BAlert* MyAlert = new BAlert("BurnIT", "The directory is already exists!", "Okey", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+		BAlert* MyAlert = new BAlert("BurnItNow", "The directory is already exists!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 		MyAlert->SetFeel(B_MODAL_ALL_WINDOW_FEEL);
 		MyAlert->Go();
 	}

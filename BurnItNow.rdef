@@ -110,6 +110,6 @@ resource mini_icon array {
 	$"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
 };
 
-resource app_signature "application/x-vnd.BurnItNow";
+resource app_signature "application/x-vnd.osdrawer-BurnItNow";
 
 resource file_types message;

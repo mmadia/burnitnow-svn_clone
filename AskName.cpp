@@ -41,8 +41,8 @@ AskName::AskName(BRect frame, char* title, uint32 mess, char* what)
 	r2.left = r.right + 5;
 	r2.top -= 3;
 	r2.bottom = 25;
-	Okey = new jpButton(r2, "Okey!", "Okey!", new BMessage('STxt'));
-	Around->AddChild(Okey);
+	Ok = new jpButton(r2, "Ok", "Ok", new BMessage('STxt'));
+	Around->AddChild(Ok);
 
 	Name->MakeFocus();
 	if (what != NULL) {

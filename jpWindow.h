@@ -29,7 +29,7 @@
 class jpWindow : public BWindow {
 public:
 	jpWindow(BRect frame);
-	virtual void InitBurnIT();
+	virtual void InitBurnIt();
 	virtual bool QuitRequested();
 	virtual void MessageReceived(BMessage* message);
 	virtual void CheckForDevices();
@@ -57,7 +57,7 @@ public:
 
 	jpButton* ParentDir, *MakeDir, *NewVRCD, *AddISO, *CalcSize;
 	RightList* RList;
-	Prefs* BurnITPrefs;
+	Prefs* BurnItPrefs;
 
 	BSlider* Speed;
 	BMenuBar* menubar;
