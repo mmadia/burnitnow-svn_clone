@@ -2,20 +2,26 @@
  * Copyright 2000-2002, Johan Nilsson. All rights reserved.
  * Distributed under the terms of the MIT License.
  */
-#include<Be.h>
+#ifndef _ASKNAME_H_
+#define _ASKNAME_H_
+
+
+#include <Be.h>
 #include "jpButton.h"
-#ifndef __ASK_NAME__
-#define __ASK_NAME__
+
 
 class AskName : public BWindow {
-	public:
-		AskName(BRect frame,char *title, uint32 mess, char *what);
-		virtual void SendText();
-		virtual void MessageReceived(BMessage* msg);
-	private:
-		BView *Around;
-		jpButton *Okey;
-		BTextView *Name;
-		uint32 message;		
+public:
+	AskName(BRect frame, char* title, uint32 mess, char* what);
+	virtual void SendText();
+	virtual void MessageReceived(BMessage* msg);
+
+private:
+	BView* Around;
+	jpButton* Okey;
+	BTextView* Name;
+	uint32 message;
 };
-#endif
+
+
+#endif	// _ASKNAME_H_

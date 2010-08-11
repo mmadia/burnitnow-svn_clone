@@ -2,8 +2,10 @@
  * Copyright 2000-2002, Johan Nilsson. All rights reserved.
  * Distributed under the terms of the MIT License.
  */
-#ifndef __CONSTS__
-#define __CONSTS__
+#ifndef _CONST_H_
+#define _CONST_H_
+
+
 const uint32 MENU_FILE_QUIT = 'MFqu';
 const uint32 MENU_FILE_ABOUT = 'MFab';
 const uint32 MENU_HELP = 'MHlp';
@@ -71,16 +73,15 @@ const uint32 WRITE_TO_LOG = 'WTLo';
 const uint32 CALCULATE_SIZE = 'CaSi';
 
 
-const rgb_color red={200,0,0};
-const rgb_color red2={255,0,0};
-const rgb_color black={0,0,0};
-const rgb_color green={0,200,50};
-const rgb_color blue={0,0,200};
-const rgb_color white={255,255,255};
-const rgb_color darkblue={70,70,200};
-const rgb_color grey={216,216,216};
-const rgb_color greenblue={0,255,255};
-
+const rgb_color red = {200, 0, 0};
+const rgb_color red2 = {255, 0, 0};
+const rgb_color black = {0, 0, 0};
+const rgb_color green = {0, 200, 50};
+const rgb_color blue = {0, 0, 200};
+const rgb_color white = {255, 255, 255};
+const rgb_color darkblue = {70, 70, 200};
+const rgb_color grey = {216, 216, 216};
+const rgb_color greenblue = {0, 255, 255};
 
 
 struct cdrecorder {
@@ -88,4 +89,6 @@ struct cdrecorder {
 	char scsi_vendor[20];
 	char scsi_name[50];
 };
-#endif
+
+
+#endif	// _CONST_H_

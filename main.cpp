@@ -2,83 +2,101 @@
  * Copyright 2000-2002, Johan Nilsson. All rights reserved.
  * Distributed under the terms of the MIT License.
  */
+
+
 #include "jpWindow.h"
-extern char *IMAGE_NAME;
-extern char *BURNIT_PATH;
-extern char *BURN_DIR;
 
 
-class jpApp : public BApplication {
-	public:
-		jpApp();
-		virtual void RefsReceived(BMessage* msg);
-		virtual void MessageReceived(BMessage *msg);
-		virtual bool QuitRequested();
-	private:
-		jpWindow *baseWindow;
+extern char* IMAGE_NAME;
+extern char* BURNIT_PATH;
+extern char* BURN_DIR;
+
+
+class jpApp : public BApplication
+{
+public:
+	jpApp();
+	virtual void RefsReceived(BMessage* msg);
+	virtual void MessageReceived(BMessage* msg);
+	virtual bool QuitRequested();
+private:
+	jpWindow* baseWindow;
 };
 
-jpApp::jpApp() : BApplication("application/x-vnd.TinkaDoo-BurnIT") {
+
+jpApp::jpApp()
+	:
+	BApplication("application/x-vnd.TinkaDoo-BurnIT")
+{
 	BRect windowRect;
-	windowRect.Set(200,30,600,530);
-	baseWindow = new jpWindow(windowRect); 
+	windowRect.Set(200, 30, 600, 530);
+	baseWindow = new jpWindow(windowRect);
 }
-bool jpApp::QuitRequested() {
-		BApplication::QuitRequested();
-		return true;		
+
+
+bool jpApp::QuitRequested()
+{
+	BApplication::QuitRequested();
+	return true;
 }
-void jpApp::MessageReceived(BMessage *msg) {
+
+
+void jpApp::MessageReceived(BMessage* msg)
+{
 	switch (msg->what) {
 		case MAKE_DIRECTORY:
 			baseWindow->Lock();
 			baseWindow->MessageReceived(msg);
 			baseWindow->Unlock();
-		break;
+			break;
 		case BURN_WITH_CDRECORD:
 			baseWindow->Lock();
 			baseWindow->MessageReceived(msg);
 			baseWindow->Unlock();
-		break;
+			break;
 		case WRITE_TO_LOG:
 			baseWindow->Lock();
 			baseWindow->MessageReceived(msg);
 			baseWindow->Unlock();
-		break;
+			break;
 		case SET_BUTTONS_TRUE:
 			baseWindow->Lock();
 			baseWindow->MessageReceived(msg);
 			baseWindow->Unlock();
-		break;
+			break;
 		case VOLUME_NAME:
 			baseWindow->Lock();
 			baseWindow->MessageReceived(msg);
 			baseWindow->Unlock();
-		break;
+			break;
 		case BOOT_CHANGE_IMAGE_NAME:
 			baseWindow->Lock();
 			baseWindow->MessageReceived(msg);
 			baseWindow->Unlock();
-		break;
+			break;
 		case B_SAVE_REQUESTED:
 			baseWindow->Lock();
 			baseWindow->MessageReceived(msg);
 			baseWindow->Unlock();
-		break;
+			break;
 		default:
 			BApplication::MessageReceived(msg);
 	}
 }
-void jpApp::RefsReceived(BMessage* msg) {
-	
+
+
+void jpApp::RefsReceived(BMessage* msg)
+{
+
 	entry_ref ref;
-	msg->FindRef("refs",&ref);
-	BEntry entry(&ref,true);
+	msg->FindRef("refs", &ref);
+	BEntry entry(&ref, true);
 	BPath path;
 	entry.GetPath(&path);
-	char* temppath=(char*)path.Path();
+	char* temppath = (char*)path.Path();
 
 	char BurnDir[1024];
-	strcpy (BurnDir,temppath);
+	strcpy(BurnDir, temppath);
 
 	baseWindow->Lock();
 	baseWindow->SetISOFile(BurnDir);
@@ -87,8 +105,10 @@ void jpApp::RefsReceived(BMessage* msg) {
 
 }
 
-int main() {
-	jpApp *testapp;
+
+int main()
+{
+	jpApp* testapp;
 	testapp = new jpApp;
 	testapp->Run();
 	delete testapp;

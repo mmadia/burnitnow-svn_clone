@@ -6,6 +6,7 @@ Changes BurnItNow
 	* Converted from a BeIDE project to use cmake for building
 	* Added MIT headers to all source files
 	* Moved source code to OSDrawer.net
+	* Major code restyling/refactoring to bring it more in line with Haiku guidelines
 	* Now builds and mostly works on Haiku using the cdrecord OptionalPackage
 	* Probably more Haiku fixes and tweaks before we actually post a beta build
 
