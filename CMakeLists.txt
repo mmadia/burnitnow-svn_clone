@@ -10,13 +10,13 @@ set(EXECUTABLE_OUTPUT_PATH ${BURNITNOW_BINARY_DIR})
 
 set(BURNITNOW_SRCS
 	main.cpp
-	AboutWIndow.cpp
+	AboutWindow.cpp
 	AskName.cpp
 	AudioView.cpp
 	BootView.cpp
 	BurnView.cpp
 	CDRWView.cpp
-	CopyCDVIew.cpp
+	CopyCDView.cpp
 	DataView.cpp
 	IconLabel.cpp
 	LeftList.cpp
