@@ -10,8 +10,11 @@
 #include <String.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <FindDirectory.h>
+#include <OS.h>
 #include "jpWindow.h"
 #include "MakeBFS.h"
+
 
 
 #define VERSION "beta 3"
@@ -736,84 +739,86 @@ void jpWindow::InitBurnIt()
 }
 
 
-void jpWindow::CheckForDevices()
-{
+void jpWindow::CheckForDevices() {
 	bool got_it;
 	char command[2000];
-	char buffer[1024], buf[512];
-	FILE* f;
-	int i, j;
+	char buffer[1024],buf[512];
+	FILE *f;
+	int i,j;
 	int msg;
 
 	got_it = false;
-	sprintf(command, "/boot/home/config/bin/cdrecord -scanbus");
-	if (BEntry("/boot/home/config/bin/cdrecord").Exists() && BEntry("/boot/home/config/bin/mkisofs").Exists()) {
-		if (RecorderCount < 100) {
-			Lock();
-			f = popen(command, "r");
-			while (!feof(f) && !ferror(f)) {
-				buffer[0] = 0;
-				fgets(buffer, 1024, f);
-				if (!strncmp(buffer, "scsibus", 7)) scsibus = true;
-				for (i = 0; i < (int)strlen(buffer); i++) {
-					if (buffer[i] >= '0' && buffer[i] <= '9') {
-						if (buffer[i + 1] == ',' || buffer[i + 2] == ',') {
-							got_it = true;
-							break;
-						}
-					}
-				}
-				if (got_it) {
-					if (buffer[i + 11] == '\'') {
-						RecorderCount++;
-						// scsiid
-						memset((char*)&scsidevs[RecorderCount - 1].scsiid[0], 0, 7);
-						strncpy(scsidevs[RecorderCount - 1].scsiid, &buffer[i], 6);
-
-						// scsi vendor
-						i += 12;
-						for (j = 0; j < (int)strlen(buffer) - i; j ++) {
-							if (buffer[i + j] == '\'')
-								break;
-						}
-						memset((char*)&scsidevs[RecorderCount - 1].scsi_vendor[0], 0, 20);
-						strncpy(scsidevs[RecorderCount - 1].scsi_vendor, &buffer[i], j);
-
-						// scsi name
-						i += j + 3;
-						for (j = 0; j < (int)strlen(buffer) - i; j ++) {
-							if (buffer[i + j] == '\'')
-								break;
-						}
-						memset((char*)&scsidevs[RecorderCount - 1].scsi_name[0], 0, 50);
-						strncpy(scsidevs[RecorderCount - 1].scsi_name, &buffer[i], j);
-						msg = 'dev\0' | RecorderCount;
-
-						strcpy(buf, scsidevs[RecorderCount - 1].scsi_vendor);
-						strcat(buf, scsidevs[RecorderCount - 1].scsi_name);
-						PrefsV->Recorders->AddItem(new BMenuItem(buf, new BMessage(msg)));
-					}
+	sprintf(command,"/boot/apps/cdrtools/bin/cdrecord -scanbus");	
+	if(BEntry("/boot/apps/cdrtools/bin/cdrecord").Exists() && BEntry("/boot/apps/cdrtools/bin/mkisofs").Exists()) {
+	if(RecorderCount < 100) {
+	Lock();
+	f = popen(command, "r");
+	while (!feof(f) && !ferror(f))
+	{
+		buffer[0]=0;
+		fgets(buffer,1024,f);
+		if(!strncmp(buffer,"scsibus",7)) scsibus = true;
+		for(i=0;i<(int)strlen(buffer);i++) {
+			if(buffer[i] >= '0' && buffer[i] <= '9') {
+				if(buffer[i+1] == ',' || buffer[i+2] == ',') {
+					got_it = true;
+					break;
 				}
 			}
-			pclose(f);
-
-			LogV->LogText->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &blue);
-			sprintf(buf, "Found %d devices.\n\n", RecorderCount);
-			LogV->LogText->Insert(buf);
-			if (SCSI_DEV != -1) {
-				BURNITDEV = &scsidevs[SCSI_DEV - 1];
-				PrefsV->Recorders->ItemAt(SCSI_DEV - 1)->SetMarked(true);
-			} else {
-				BURNITDEV = NULL;
-			}
-			Unlock();
 		}
-	} else {
+		if(got_it) {
+			if(buffer[i+11] == '\'') {
+				RecorderCount++;
+				//scsiid
+				memset((char *)&scsidevs[RecorderCount-1].scsiid[0],0,7);
+				strncpy(scsidevs[RecorderCount-1].scsiid,&buffer[i],6);
+				
+				//scsi vendor
+				i += 12;
+				for(j=0;j<(int)strlen(buffer)-i;j ++) {
+					if(buffer[i+j] == '\'')
+						break;
+				}
+				memset((char *)&scsidevs[RecorderCount-1].scsi_vendor[0],0,20);
+				strncpy(scsidevs[RecorderCount-1].scsi_vendor,&buffer[i],j);
+				
+				//scsi name
+				i +=j+3;
+				for(j=0;j<(int)strlen(buffer)-i;j ++) {
+					if(buffer[i+j] == '\'')
+						break;
+				}
+				memset((char *)&scsidevs[RecorderCount-1].scsi_name[0],0,50);
+				strncpy(scsidevs[RecorderCount-1].scsi_name,&buffer[i],j);
+				msg = 'dev\0' | RecorderCount;
+				
+				strcpy(buf,scsidevs[RecorderCount-1].scsi_vendor);
+				strcat(buf,scsidevs[RecorderCount-1].scsi_name);				
+				PrefsV->Recorders->AddItem(new BMenuItem(buf,new BMessage(msg)));
+			}
+		}
+	}
+	pclose(f);
+	
+	LogV->LogText->SetFontAndColor(0,0,be_plain_font,B_FONT_ALL,&blue);
+	sprintf(buf,"Found %d devices.\n\n",RecorderCount);
+	LogV->LogText->Insert(buf);
+	if(SCSI_DEV != -1) {
+		BURNITDEV = &scsidevs[SCSI_DEV-1];
+		PrefsV->Recorders->ItemAt(SCSI_DEV-1)->SetMarked(true);
+	}
+	else {
+		BURNITDEV = NULL;
+	}
+	Unlock();
+	}
+	}
+	else {
 		Lock();
-		LogV->LogText->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &blue);
-		LogV->LogText->Insert("Cound not find cdrecord/mkisofs check so its in /boot/home/config/bin.\nInstall cdrecord and restart BurnItNow.");
+		LogV->LogText->SetFontAndColor(0,0,be_plain_font,B_FONT_ALL,&blue);
+		LogV->LogText->Insert("Cound not find cdrecord/mkisofs check that itis installed in /boot/apps/cdrtools/bin.\nInstall cdrecord and restart BurnItNow");
 		Unlock();
-		BAlert* MyAlert = new BAlert("BurnItNow", "Could not find cdrecord/mkisofs. You have to install them in /boot/home/config/bin", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_STOP_ALERT);
+		BAlert *MyAlert = new BAlert("BurnItNow","Could not find cdrecord/mkisofs. You need to install the cdrtools OptionalPackage","Ok",NULL,NULL,B_WIDTH_AS_USUAL, B_STOP_ALERT);
 		MyAlert->Go();
 		BurnV->SetButton(false);
 		CDRWV->BlankButton->SetEnabled(false);
@@ -826,7 +831,7 @@ int jpWindow::CheckMulti(char* str)
 	FILE* f;
 	int temp;
 	char buf[1024];
-	f = popen("/boot/home/config/bin/cdrecord -msinfo dev=9,1,0 2>&1", "r");
+	f = popen("/boot/apps/cdrtools/bin/cdrecord -msinfo dev=9,1,0 2>&1", "r");
 	while (!feof(f) && !ferror(f)) {
 		buf[0] = 0;
 		fgets(buf, 1024, f);
@@ -980,7 +985,7 @@ void jpWindow::BlankNOW()
 
 			SetButtons(false);
 			char command[2000];
-			sprintf(command, "/boot/home/config/bin/cdrecord dev=%s speed=%d blank=%s 2>&1", BURNITDEV->scsiid, BLANK_SPD, BlType[BLANK_TYPE]);
+			sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d blank=%s 2>&1", BURNITDEV->scsiid, BLANK_SPD, BlType[BLANK_TYPE]);
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Blanking", 15, command));
 			snooze(500000);
@@ -1618,7 +1623,7 @@ void jpWindow::GetTsize(char* tsize)
 	char buffer[1024];
 	char temp_char[1024];
 	FILE* f;
-	sprintf(temp_char, "/boot/home/config/bin/mkisofs -print-size %s -f -V \"%s\" \"%s\" 2>&1", DATA_STRING, VOL_NAME, BURN_DIR);
+	sprintf(temp_char, "/boot/apps/cdrtools/bin/mkisofs -print-size %s -f -V \"%s\" \"%s\" 2>&1", DATA_STRING, VOL_NAME, BURN_DIR);
 	f = popen(temp_char, "r");
 	memset(temp_char, 0, 1024);
 	while (!feof(f) && !ferror(f)) {
@@ -1666,9 +1671,9 @@ void jpWindow::BurnWithCDRecord()
 				}
 
 				GetTsize(tsize);
-				sprintf(command, "/boot/home/config/bin/mkisofs %s -quiet %s -f -V \"%s\" \"%s\" | /boot/home/config/bin/cdrecord dev=%s speed=%d %s tsize=%s %s -data %s %s -v -", DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR, BURNITDEV->scsiid, BURN_SPD, BURNPROOF, tsize, DAO, DUMMYMODE, EJECT);
+				sprintf(command, "/boot/apps/cdrtools/bin/mkisofs %s -quiet %s -f -V \"%s\" \"%s\" | /boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s tsize=%s %s -data %s %s -v -", DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR, BURNITDEV->scsiid, BURN_SPD, BURNPROOF, tsize, DAO, DUMMYMODE, EJECT);
 			} else {
-				sprintf(command, "/boot/home/config/bin/cdrecord dev=%s speed=%d %s %s -data %s %s %s -v \"%s\"", BURNITDEV->scsiid, BURN_SPD, BURNPROOF, DAO, DUMMYMODE, EJECT, MULTISESSION, IMAGE_NAME);
+				sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s -data %s %s %s -v \"%s\"", BURNITDEV->scsiid, BURN_SPD, BURNPROOF, DAO, DUMMYMODE, EJECT, MULTISESSION, IMAGE_NAME);
 			}
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
@@ -1681,7 +1686,7 @@ void jpWindow::BurnWithCDRecord()
 			StatusWin->SetAngles(angles, nrtracks);
 			StatusWin->Unlock();
 
-			sprintf(command, "/boot/home/config/bin/cdrecord dev=%s speed=%d %s %s %s %s %s %s -audio %s %s -v %s", BURNITDEV->scsiid, BURN_SPD, BURNPROOF, DAO, PAD, PREEMP, SWAB, NOFIX, DUMMYMODE, EJECT, AUDIO_FILES);
+			sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s %s %s %s %s -audio %s %s -v %s", BURNITDEV->scsiid, BURN_SPD, BURNPROOF, DAO, PAD, PREEMP, SWAB, NOFIX, DUMMYMODE, EJECT, AUDIO_FILES);
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
 			snooze(500000);
@@ -1698,10 +1703,10 @@ void jpWindow::BurnWithCDRecord()
 				if (DataV->BootableCD->Value() == 1) {
 					MakeBootImage();
 				}
-				sprintf(command, "/boot/home/config/bin/mkisofs %s %s -quiet -f -V \"%s\" \"%s\" | /boot/home/config/bin/cdrecord dev=%s speed=%d %s tsize=%s %s %s %s -v %s %s %s %s -data - -audio %s", DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR, BURNITDEV->scsiid, BURN_SPD, BURNPROOF, tsize, DAO, DUMMYMODE, EJECT, PAD, PREEMP, SWAB, NOFIX, AUDIO_FILES);
+				sprintf(command, "/boot/apps/cdrtools/bin/mkisofs %s %s -quiet -f -V \"%s\" \"%s\" | /boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s tsize=%s %s %s %s -v %s %s %s %s -data - -audio %s", DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR, BURNITDEV->scsiid, BURN_SPD, BURNPROOF, tsize, DAO, DUMMYMODE, EJECT, PAD, PREEMP, SWAB, NOFIX, AUDIO_FILES);
 				MessageLog(command);
 			} else {
-				sprintf(command, "/boot/home/config/bin/cdrecord dev=%s speed=%d %s %s %s %s %s %s %s %s -v -data \"%s\" -audio %s", BURNITDEV->scsiid, BURN_SPD, BURNPROOF, DAO, PAD, PREEMP, SWAB, NOFIX, DUMMYMODE, EJECT, IMAGE_NAME, AUDIO_FILES);
+				sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s %s %s %s %s %s %s -v -data \"%s\" -audio %s", BURNITDEV->scsiid, BURN_SPD, BURNPROOF, DAO, PAD, PREEMP, SWAB, NOFIX, DUMMYMODE, EJECT, IMAGE_NAME, AUDIO_FILES);
 			}
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
@@ -1770,7 +1775,7 @@ void jpWindow::MakeBootImage()
 		DataV->BootableCD->SetValue(0);
 		DataV->ChooseBootImage->SetEnabled(false);
 		BOOTABLE = false;
-		BAlert* MyAlert = new BAlert("BurnItNow", "The bootimage you choosen doesnt exist!\n BurnItNow will burn this CD without a bootimage.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+		BAlert* MyAlert = new BAlert("BurnItNow", "The boot image you chose doesn't exist!\n BurnItNow will burn this CD without a bootimage.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 		MyAlert->Go();
 	}
 }
