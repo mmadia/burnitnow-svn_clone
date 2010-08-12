@@ -37,7 +37,7 @@ BootView::BootView(BRect size)
 	r = MiscOpt->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 10;
-	r.right = 120;
+	r.right = 170; // was 120
 	r.bottom = 40;
 	DAOOption = new BCheckBox(r, "DAO", "DAO (Disc At Once)", new BMessage(MISC_DAO));
 	if (!strncmp(DAO, "-dao", 4)) {

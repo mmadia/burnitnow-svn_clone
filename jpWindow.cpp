@@ -266,8 +266,8 @@ jpWindow::jpWindow(BRect frame)
 	// Size Status and button
 	r = BoxAround->Bounds();
 	r.InsetBy(5.0, 5.0);
-	r.top = r.bottom - 30;
-	r.right -= 55;
+	r.top = r.bottom - 36; // was 30
+	r.right -= 75; // was 55
 	MyStatus = new BStatusBar(r, "MyStatus");
 	MyStatus->SetMaxValue(100.0);
 	BoxAround->AddChild(MyStatus);
@@ -276,7 +276,7 @@ jpWindow::jpWindow(BRect frame)
 	r = BoxAround->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = r.bottom - 17;
-	r.left = r.right - 50;
+	r.left = r.right - 70; // was 50
 	CalcSize = new jpButton(r, "calcsize", "Calc. Size", new BMessage(CALCULATE_SIZE));
 	BoxAround->AddChild(CalcSize);
 
@@ -400,7 +400,7 @@ jpWindow::jpWindow(BRect frame)
 	r.InsetBy(5.0, 5.0);
 	r.top = 220;
 	r.bottom = 240;
-	r.right = 100;
+	r.right = 120; // was 100
 	NewVRCD = new jpButton(r, "New Virtual CD", "New Virtual CD", new BMessage(NEW_VRCD));
 	BoxAround->AddChild(NewVRCD);
 
@@ -409,7 +409,7 @@ jpWindow::jpWindow(BRect frame)
 	r.InsetBy(5.0, 5.0);
 	r.top = 220;
 	r.bottom = 240;
-	r.left = 105;
+	r.left = 125; // was 105
 	r.right -= ((r.right / 2) + (B_V_SCROLL_BAR_WIDTH) + 2);
 	AddISO = new jpButton(r, "Add ISOFile", "Add ISOFile", new BMessage(OPEN_ISO_FILE));
 	BoxAround->AddChild(AddISO);
@@ -1033,7 +1033,7 @@ void jpWindow::MessageReceived(BMessage* message)
 		case MENU_HELP: {
 				char tempas[1024];
 				entry_ref tempas_ref;
-				sprintf(tempas, "%s/BurnItNowHelp.html", BURNIT_PATH);
+				sprintf(tempas, "%s/Docs/BurnItNowHelp.html", BURNIT_PATH);
 				MessageLog(tempas);
 				if (BEntry(tempas).Exists()) {
 					BEntry(tempas).GetRef(&tempas_ref);

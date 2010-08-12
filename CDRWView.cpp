@@ -49,7 +49,7 @@ CDRWView::CDRWView(BRect size)
 	r = CDRWBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 15;
-	r.left = 125;
+	r.left = 155; // was 125
 	r.right = 250;
 	sprintf(temp_char, "Blank Speed [%dx]", BLANK_SPD);
 	BlankSpeed = new BSlider(r, "BlankSpeed", temp_char, new BMessage(BLANK_SPEED_CHANGE), 0, 5, B_BLOCK_THUMB, B_FOLLOW_NONE);

@@ -21,7 +21,7 @@ DataView::DataView(BRect size)
 	BRect r;
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
-	r.bottom = 85;
+	r.bottom = 90; // was 85
 	FSLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Filesystem"), 19), " Filesystem", "BMP:FS");
 	FSLabel->SetViewColor(grey);
 	FSBox = new BBox(r, "FSBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
@@ -30,7 +30,7 @@ DataView::DataView(BRect size)
 	r = FSBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 10;
-	r.right = 170;
+	r.right = 220; // was 170
 	r.bottom = 25;
 	ISO9660 = new BRadioButton(r, "ISO-9660", "ISO-9660", new BMessage(DATA_ISO9660));
 	if (!strcmp(DATA_STRING, " ") && IMAGE_TYPE == 0)
@@ -54,7 +54,7 @@ DataView::DataView(BRect size)
 
 	r.bottom += 15;
 	r.top += 15;
-	BeOS = new BRadioButton(r, "BeOS", "BeOS (bfs)", new BMessage(DATA_BFS));
+	BeOS = new BRadioButton(r, "Haiku", "Haiku (bfs)", new BMessage(DATA_BFS));
 	if (IMAGE_TYPE == 1)
 		BeOS->SetValue(B_CONTROL_ON);
 
@@ -65,7 +65,7 @@ DataView::DataView(BRect size)
 	r.InsetBy(5.0, 5.0);
 	r.top += 10;
 	r.bottom = 25;
-	r.left = 175;
+	r.left = 230; // was 175
 	Rock = new BRadioButton(r, "RockRidge (UNIX Multiuser)", "RockRidge (UNIX Singeluser)", new BMessage(DATA_ROCK));
 	if (!strcmp(DATA_STRING, "-l -L -r") && IMAGE_TYPE == 0)
 		Rock->SetValue(B_CONTROL_ON);
@@ -96,7 +96,7 @@ DataView::DataView(BRect size)
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = 95;
-	r.right = r.right - 130;
+	r.right = r.right - 160; // was 130
 
 	BootLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" El Torito Bootable CD"), 19), " El Torito Bootable CD", "BMP:BOOTABLE");
 	BootLabel->SetViewColor(grey);
@@ -127,7 +127,7 @@ DataView::DataView(BRect size)
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = 135;
-	r.left = r.right - 120;
+	r.left = r.right - 150; // was 120
 	r.bottom = 165;
 
 	ChangeVolName = new jpButton(r, "Change Volume Name", "Change Volume Name", new BMessage(CHANGE_VOL_NAME));

@@ -45,7 +45,7 @@ BurnView::BurnView(BRect size)
 	r.left += 25;
 	r.top += 15;
 	r.bottom = 30;
-	r.right = 95;
+	r.right = 125;
 	r2.InsetBy(5.0, 5.0);
 	r2.left += 6;
 	r2.right = 27;
@@ -89,7 +89,7 @@ BurnView::BurnView(BRect size)
 	r.top += 35;
 	r.bottom += 35;
 	r.left = 13;
-	r.right = 95;
+	r.right = 125;
 	Multi = new BCheckBox(r, "MultiSession", "MultiSession", new BMessage(BURN_MULTI));
 	if (!strncmp(MULTISESSION, "-multi", 6)) {
 		Multi->SetValue(B_CONTROL_ON);
@@ -128,8 +128,8 @@ BurnView::BurnView(BRect size)
 	r.InsetBy(5.0, 5.0);
 	r.top = 120;
 	r.bottom -= 5;
-	r.left = 260;
-	r.right = 350;
+	r.left = 370; // was 260
+	r.right = 460; // was 350
 	BurnButton = new jpButton(r, "BurnButton", "Burn!", new BMessage(MAKE_IMAGE));
 	BurnBox->AddChild(BurnButton);
 
@@ -137,8 +137,8 @@ BurnView::BurnView(BRect size)
 	r.InsetBy(5.0, 5.0);
 	r.top = 120;
 	r.bottom -= 5;
-	r.left = 160;
-	r.right = 250;
+	r.left = 270; //was 160
+	r.right = 360; //was 250
 	MakeImage = new jpButton(r, "MakeImage", "Make Image", new BMessage(MAKE_AND_SAVE_IMAGE));
 	BurnBox->AddChild(MakeImage);
 	// BurningSpeed
