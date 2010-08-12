@@ -18,8 +18,8 @@ public:
 	BBitmap* GetBitmapResource(type_code type, const char* name);
 
 private:
-	const BBitmap* bitmap;
-	char label[100];
+	const BBitmap* fBitmap;
+	char fLabel[100];
 };
 
 

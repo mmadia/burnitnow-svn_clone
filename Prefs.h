@@ -31,13 +31,13 @@ public:
 	status_t		SetFlat(const char* name, const BFlattenable* obj);
 
 private:
-	BPath			path;
-	status_t		status;
+	BPath			fPath;
+	status_t		fStatus;
 };
 
 
 inline status_t Prefs::InitCheck(void) {
-	return status;
+	return fStatus;
 }
 
 

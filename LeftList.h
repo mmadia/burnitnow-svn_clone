@@ -27,11 +27,11 @@ public:
 	~LeftListItem();
 	virtual void DrawItem(BView* owner, BRect frame, bool complete);
 
-	BBitmap* ficon;
-	char fname[1024];
-	entry_ref fref;
-	struct AudioInfo AInfo;
-	bool isAudio;
+	BBitmap* fIconBitmap;
+	char fName[1024];
+	entry_ref fRef;
+	struct AudioInfo fAudioInfo;
+	bool fIsAudio;
 };
 
 
@@ -44,11 +44,11 @@ public:
 	virtual void WriteLog(char* string);
 	virtual void MessageReceived(BMessage* message);
 
-	uint32 mLastButton, mClickCount;
-	BBitmap* ISOIcon;
-	BBitmap* VRCDIcon;
-	BBitmap* AudioIcon;
-	BPopUpMenu* TrackPop;
+	uint32 fLastButton, fClickCount;
+	BBitmap* fISOBitmap;
+	BBitmap* fVRCDBitmap;
+	BBitmap* fAudioBitmap;
+	BPopUpMenu* fTrackPopUpMenu;
 };
 
 

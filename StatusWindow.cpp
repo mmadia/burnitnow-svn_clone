@@ -23,10 +23,10 @@ StatusView::StatusView(BRect r, char* title)
 	:
 	BView(r, title, B_FOLLOW_NONE, B_WILL_DRAW)
 {
-	f1 = new BFont(be_plain_font);
-	SetFont(f1);
-	nrtracks = 0;
-	angles[0] = 0;
+	fViewFont = new BFont(be_plain_font);
+	SetFont(fViewFont);
+	fNumberOfTracks = 0;
+	fAngles[0] = 0;
 	TRACK_FIN = 0;
 }
 
@@ -34,9 +34,9 @@ StatusView::StatusView(BRect r, char* title)
 void StatusView::SetAngles(float ang[100], int tracks)
 {
 	int i;
-	nrtracks = tracks;
-	for (i = 0; i < nrtracks; i++)
-		angles[i] = ang[i];
+	fNumberOfTracks = tracks;
+	for (i = 0; i < fNumberOfTracks; i++)
+		fAngles[i] = ang[i];
 }
 
 
@@ -47,7 +47,7 @@ void StatusView::Draw(BRect updateRect)
 	int i;
 	BPoint center, p1;
 	SetLowColor(216, 216, 216);
-	f1->SetSize(13);
+	fViewFont->SetSize(13);
 	center.x = 70;
 	center.y = Bounds().bottom / 2;
 	SetHighColor(216, 216, 216);
@@ -63,20 +63,20 @@ void StatusView::Draw(BRect updateRect)
 
 	oldangle = 0;
 	SetLowColor(190, 190, 190);
-	if (nrtracks > 1)
-		for (i = 0; i < nrtracks; i++) {
+	if (fNumberOfTracks > 1)
+		for (i = 0; i < fNumberOfTracks; i++) {
 			p1 = center;
-			p1.y += 60 * sin((3.14 / 180) * (angles[i] - 90));
-			p1.x += 60 * cos((3.14 / 180) * (angles[i] - 90));
+			p1.y += 60 * sin((3.14 / 180) * (fAngles[i] - 90));
+			p1.x += 60 * cos((3.14 / 180) * (fAngles[i] - 90));
 			StrokeLine(center, p1);
 			p1 = center;
-			p1.y += 40 * sin((3.14 / 180) * ((angles[i] - (angles[i] - oldangle) / 2) - 85));
-			p1.x += 40 * cos((3.14 / 180) * ((angles[i] - (angles[i] - oldangle) / 2) - 85));
+			p1.y += 40 * sin((3.14 / 180) * ((fAngles[i] - (fAngles[i] - oldangle) / 2) - 85));
+			p1.x += 40 * cos((3.14 / 180) * ((fAngles[i] - (fAngles[i] - oldangle) / 2) - 85));
 			MovePenTo(p1);
-			f1->SetRotation(-(angles[i] - (angles[i] - oldangle) / 2) - 180 - 89);
+			fViewFont->SetRotation(-(fAngles[i] - (fAngles[i] - oldangle) / 2) - 180 - 89);
 			if (i < TRACK_FIN) {
-				f1->SetFace(B_BOLD_FACE);
-				SetFont(f1);
+				fViewFont->SetFace(B_BOLD_FACE);
+				SetFont(fViewFont);
 
 				if (TRACK_FIN - 1 == i)
 					SetHighColor(255, 0, 0);
@@ -85,21 +85,21 @@ void StatusView::Draw(BRect updateRect)
 
 				sprintf(temp, "[%d]", i + 1);
 			} else {
-				f1->SetFace(B_REGULAR_FACE);
-				SetFont(f1);
+				fViewFont->SetFace(B_REGULAR_FACE);
+				SetFont(fViewFont);
 				SetHighColor(0, 0, 0);
 				sprintf(temp, "%d", i + 1);
 			}
 			DrawString(temp);
 			SetHighColor(105, 105, 105);
-			oldangle = angles[i];
+			oldangle = fAngles[i];
 		}
 
 	else {
-		if (nrtracks > 0) {
+		if (fNumberOfTracks > 0) {
 
 			SetHighColor(0, 0, 0);
-			SetFont(f1);
+			SetFont(fViewFont);
 			MovePenTo(center);
 			DrawString("1");
 		}
@@ -121,36 +121,36 @@ StatusWindow::StatusWindow(char* title)
 		SetTitle("BurnItNow");
 
 	r = Bounds();
-	Around = new BView(r, "Around", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);
-	Around->SetViewColor(216, 216, 216, 0);
-	AddChild(Around);
+	fAroundView = new BView(r, "fAroundView", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);
+	fAroundView->SetViewColor(216, 216, 216, 0);
+	AddChild(fAroundView);
 
-	r = Around->Bounds();
+	r = fAroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.bottom = r.top + 30;
-	MyStatus = new BStatusBar(r, "MyStatus");
-	Around->AddChild(MyStatus);
-	MyStatus->SetText("");
+	fStatusBar = new BStatusBar(r, "MyStatus");
+	fAroundView->AddChild(fStatusBar);
+	fStatusBar->SetText("");
 
-	fullview = false;
+	fFullView = false;
 
-	r = Around->Bounds();
+	r = fAroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = r.bottom - 20;
 	r.left = r.right - 35;
-	Close = new jpButton(r, "close", "Close", new BMessage('ClWi'));
-	Around->AddChild(Close);
-	Close->SetEnabled(false);
+	fCloseButton = new jpButton(r, "close", "Close", new BMessage('ClWi'));
+	fAroundView->AddChild(fCloseButton);
+	fCloseButton->SetEnabled(false);
 	r.right = r.left - 5;
 	r.left = r.right - 35;
-	More = new jpButton(r, "more", "More..", new BMessage('More'));
-	Around->AddChild(More);
-	r = Around->Bounds();
+	fMoreButton = new jpButton(r, "more", "More..", new BMessage('More'));
+	fAroundView->AddChild(fMoreButton);
+	r = fAroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 70;
 	r.bottom = 210;
-	SView = new StatusView(r, "StatusView");
-	Around->AddChild(SView);
+	fStatusView = new StatusView(r, "StatusView");
+	fAroundView->AddChild(fStatusView);
 }
 
 
@@ -162,7 +162,7 @@ void StatusWindow::SendMessage(BMessage* msg)
 
 void StatusWindow::StatusSetMax(float t1)
 {
-	MyStatus->SetMaxValue(t1);
+	fStatusBar->SetMaxValue(t1);
 }
 
 
@@ -177,9 +177,9 @@ void StatusWindow::UpdateStatus(float delta, char* str)
 	temp_int = atol(temp_char);
 	if (temp_int != TRACK_FIN) {
 		TRACK_FIN = temp_int;
-		SView->Invalidate();
+		fStatusView->Invalidate();
 	}
-	MyStatus->Update(delta - MyStatus->CurrentValue(), str);
+	fStatusBar->Update(delta - fStatusBar->CurrentValue(), str);
 	sprintf(temp, "%s - [%s]", VOL_NAME, str);
 	SetTitle(temp);
 }
@@ -194,23 +194,23 @@ void StatusWindow::StatusSetText(char* str)
 	TRACK_FIN = atol(temp_char);
 	if (!strcmp("Fixating...", str))
 		TRACK_FIN = 1000;
-	SView->Invalidate();
+	fStatusView->Invalidate();
 	sprintf(temp, "%s - [%s]", VOL_NAME, str);
-	MyStatus->SetText(str);
+	fStatusBar->SetText(str);
 	SetTitle(temp);
 }
 
 
 void StatusWindow::StatusSetColor(rgb_color color)
 {
-	MyStatus->SetBarColor(color);
+	fStatusBar->SetBarColor(color);
 }
 
 
 void StatusWindow::StatusUpdateReset()
 {
-	MyStatus->Reset();
-	MyStatus->Update(MyStatus->MaxValue());
+	fStatusBar->Reset();
+	fStatusBar->Update(fStatusBar->MaxValue());
 }
 
 
@@ -222,14 +222,14 @@ void StatusWindow::MessageReceived(BMessage* msg)
 			}
 			break;
 		case 'More': {
-				if (!fullview) {
-					fullview = !fullview;
+				if (!fFullView) {
+					fFullView = !fFullView;
 					ResizeBy(0.0, 150.0);
-					More->SetTitle("Less..");
+					fMoreButton->SetTitle("Less..");
 				} else {
-					fullview = !fullview;
+					fFullView = !fFullView;
 					ResizeBy(0.0, -150.0);
-					More->SetTitle("More..");
+					fMoreButton->SetTitle("More..");
 				}
 			}
 			break;
@@ -244,14 +244,14 @@ void StatusWindow::Ready()
 	StatusSetColor(blue);
 	StatusUpdateReset();
 	StatusSetText(temp);
-	Close->SetEnabled(true);
+	fCloseButton->SetEnabled(true);
 	TRACK_FIN = 1000;
-	SView->Invalidate();
+	fStatusView->Invalidate();
 }
 
 
 void StatusWindow::SetAngles(float ang[100], int tracks)
 {
-	SView->SetAngles(ang, tracks);
-	SView->Invalidate();
+	fStatusView->SetAngles(ang, tracks);
+	fStatusView->Invalidate();
 }

@@ -18,10 +18,10 @@ class LogView : public BView {
 public:
 	LogView(BRect size);
 	~LogView();
-	IconLabel* LogLabel;
-	BBox* BoxLog;
-	BTextView* LogText;
-	BScrollView* LogScroll;
+	IconLabel* fLogLabel;
+	BBox* fLogBox;
+	BTextView* fLogTextView;
+	BScrollView* fLogScrollView;
 };
 
 

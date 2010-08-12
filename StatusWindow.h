@@ -20,9 +20,9 @@ public:
 	virtual void Draw(BRect updateRect);
 	virtual void SetAngles(float* ang, int tracks);
 
-	BFont* f1;
-	float angles[100];
-	int nrtracks;
+	BFont* fViewFont;
+	float fAngles[100];
+	int fNumberOfTracks;
 };
 
 
@@ -39,11 +39,11 @@ public:
 	virtual void SendMessage(BMessage* msg);
 	virtual void Ready();
 
-	BView* Around;
-	StatusView* SView;
-	jpButton* Close, *More;
-	BStatusBar* MyStatus;
-	bool fullview;
+	BView* fAroundView;
+	StatusView* fStatusView;
+	jpButton* fCloseButton, *fMoreButton;
+	BStatusBar* fStatusBar;
+	bool fFullView;
 };
 
 

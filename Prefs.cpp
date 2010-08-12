@@ -16,15 +16,15 @@ Prefs::Prefs(char* filename)
 {
 	BFile file;
 
-	status = find_directory(B_USER_SETTINGS_DIRECTORY, &path);
-	if (status != B_OK) {
+	fStatus = find_directory(B_USER_SETTINGS_DIRECTORY, &fPath);
+	if (fStatus != B_OK) {
 		return;
 	}
 
-	path.Append(filename);
-	status = file.SetTo(path.Path(), B_READ_ONLY);
-	if (status == B_OK) {
-		status = Unflatten(&file);
+	fPath.Append(filename);
+	fStatus = file.SetTo(fPath.Path(), B_READ_ONLY);
+	if (fStatus == B_OK) {
+		fStatus = Unflatten(&file);
 	}
 }
 
@@ -33,7 +33,7 @@ Prefs::~Prefs()
 {
 	BFile file;
 
-	if (file.SetTo(path.Path(), B_WRITE_ONLY | B_CREATE_FILE) == B_OK) {
+	if (file.SetTo(fPath.Path(), B_WRITE_ONLY | B_CREATE_FILE) == B_OK) {
 		Flatten(&file);
 	}
 }

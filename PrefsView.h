@@ -20,11 +20,11 @@ public:
 	PrefsView(BRect size);
 	~PrefsView();
 
-	BMenu* Recorders;
-	BMenuField* RecordPop;
-	BCheckBox* DAOOption, *BurnProof;
-	BBox* MiscOpt;
-	IconLabel* MiscLabel;
+	BMenu* fRecordersMenu;
+	BMenuField* fRecordMenuField;
+	BCheckBox* fDAOCheckBox, *fBurnProofCheckBox;
+	BBox* fMiscOptBox;
+	IconLabel* fMiscLabel;
 };
 
 

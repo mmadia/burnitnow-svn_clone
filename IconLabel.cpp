@@ -14,24 +14,24 @@ IconLabel::IconLabel(BRect size, char* labelstring, char* gfx)
 	:
 	BView(size, "IconLabel", B_FOLLOW_NONE, B_WILL_DRAW)
 {
-	strcpy(label, labelstring);
-	bitmap = GetBitmapResource('BBMP', gfx);
+	strcpy(fLabel, labelstring);
+	fBitmap = GetBitmapResource('BBMP', gfx);
 
 }
 
 
 IconLabel::~IconLabel()
 {
-	delete bitmap;
+	delete fBitmap;
 }
 
 
 void IconLabel::Draw(BRect frame)
 {
 	SetLowColor(216, 216, 216);
-	DrawBitmap(bitmap, BPoint(1, 0));
+	DrawBitmap(fBitmap, BPoint(1, 0));
 	SetFont(be_bold_font);
-	DrawString(label, BPoint(19, 12));
+	DrawString(fLabel, BPoint(19, 12));
 }
 
 
@@ -42,7 +42,7 @@ BBitmap* IconLabel::GetBitmapResource(type_code type, const char* name)
 	const void* data = rsrc->LoadResource(type, name, &len);
 
 	if (data == NULL) {
-		strcpy(label, "FAN1");
+		strcpy(fLabel, "FAN1");
 		return NULL;
 	}
 
@@ -53,19 +53,19 @@ BBitmap* IconLabel::GetBitmapResource(type_code type, const char* name)
 	BMessage archive;
 	status_t err = archive.Unflatten(&stream);
 	if (err != B_OK) {
-		strcpy(label, "FAN2");
+		strcpy(fLabel, "FAN2");
 		return NULL;
 	}
 	BBitmap* out = new BBitmap(&archive);
 	if (!out) {
-		strcpy(label, "FAN3");
+		strcpy(fLabel, "FAN3");
 		return NULL;
 	}
 	err = (out)->InitCheck();
 	if (err != B_OK) {
 		delete out;
 		out = NULL;
-		strcpy(label, "FAN4");
+		strcpy(fLabel, "FAN4");
 	}
 
 	return out;

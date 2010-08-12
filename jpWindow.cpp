@@ -277,128 +277,128 @@ jpWindow::jpWindow(BRect frame)
 	BRect r;
 	BMenu* menu;
 	SetTitle("BurnItNow");
-	BurnItPrefs = new Prefs("BurnItNow");
+	fBurnItPrefs = new Prefs("BurnItNow");
 	// Load settings
 	InitBurnIt();
 
 	r = Bounds();
 	r.top = 20;
-	AddChild(BoxAround = new BBox(r, "BoxAround", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER));
+	AddChild(fAroundBox = new BBox(r, "BoxAround", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER));
 	// Size Status and button
-	r = BoxAround->Bounds();
+	r = fAroundBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = r.bottom - 36; // was 30
 	r.right -= 75; // was 55
-	MyStatus = new BStatusBar(r, "MyStatus");
-	MyStatus->SetMaxValue(100.0);
-	BoxAround->AddChild(MyStatus);
-	MyStatus->Reset();
+	fStatusBar = new BStatusBar(r, "fStatusBar");
+	fStatusBar->SetMaxValue(100.0);
+	fAroundBox->AddChild(fStatusBar);
+	fStatusBar->Reset();
 
-	r = BoxAround->Bounds();
+	r = fAroundBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = r.bottom - 17;
 	r.left = r.right - 70; // was 50
-	CalcSize = new jpButton(r, "calcsize", "Calc. Size", new BMessage(CALCULATE_SIZE));
-	BoxAround->AddChild(CalcSize);
+	fCalcSizeButton = new jpButton(r, "calcsize", "Calc. Size", new BMessage(CALCULATE_SIZE));
+	fAroundBox->AddChild(fCalcSizeButton);
 
 	// Tabs
-	r = BoxAround->Bounds();
+	r = fAroundBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.bottom = 210;
 
-	MyTab = new BTabView(r, "mytabview", B_WIDTH_FROM_LABEL);
-	MyTab->SetViewColor(216, 216, 216, 0);
+	fTabView = new BTabView(r, "mytabview", B_WIDTH_FROM_LABEL);
+	fTabView->SetViewColor(216, 216, 216, 0);
 
-	r = MyTab->Bounds();
+	r = fTabView->Bounds();
 	r.InsetBy(5.0, 5.0);
-	r.bottom -= MyTab->TabHeight();
-	MiscTab = new BTab();
-	BurnV = new BurnView(r);
-	MyTab->AddTab(BurnV, MiscTab);
-	MiscTab->SetLabel("Burn");
+	r.bottom -= fTabView->TabHeight();
+	fMiscTab = new BTab();
+	fBurnView = new BurnView(r);
+	fTabView->AddTab(fBurnView, fMiscTab);
+	fMiscTab->SetLabel("Burn");
 
-	MiscTab = new BTab();
-	DataV = new DataView(r);
-	MyTab->AddTab(DataV, MiscTab);
-	MiscTab->SetLabel("Data");
+	fMiscTab = new BTab();
+	fDataView = new DataView(r);
+	fTabView->AddTab(fDataView, fMiscTab);
+	fMiscTab->SetLabel("Data");
 
-	MiscTab = new BTab();
-	AudioV = new AudioView(r);
-	MyTab->AddTab(AudioV, MiscTab);
-	MiscTab->SetLabel("Audio");
-
-
-	MiscTab = new BTab();
-	MyTab->AddTab(new CopyCDView(r, this), MiscTab);
-	MiscTab->SetLabel("CopyCD");
+	fMiscTab = new BTab();
+	fAudioView = new AudioView(r);
+	fTabView->AddTab(fAudioView, fMiscTab);
+	fMiscTab->SetLabel("Audio");
 
 
-	MiscTab = new BTab();
-	CDRWV = new CDRWView(r);
-	MyTab->AddTab(CDRWV, MiscTab);
-	MiscTab->SetLabel("CDRW");
+	fMiscTab = new BTab();
+	fTabView->AddTab(new CopyCDView(r, this), fMiscTab);
+	fMiscTab->SetLabel("CopyCD");
 
-	MiscTab = new BTab();
-	PrefsV = new PrefsView(r);
-	MyTab->AddTab(PrefsV, MiscTab);
-	MiscTab->SetLabel("Prefs");
 
-	MiscTab = new BTab();
-	LogV = new LogView(r);
-	MyTab->AddTab(LogV, MiscTab);
-	MiscTab->SetLabel("Log");
+	fMiscTab = new BTab();
+	fCDRWView = new CDRWView(r);
+	fTabView->AddTab(fCDRWView, fMiscTab);
+	fMiscTab->SetLabel("CDRW");
 
-	BoxAround->AddChild(MyTab);
+	fMiscTab = new BTab();
+	fPrefsView = new PrefsView(r);
+	fTabView->AddTab(fPrefsView, fMiscTab);
+	fMiscTab->SetLabel("Prefs");
+
+	fMiscTab = new BTab();
+	fLogView = new LogView(r);
+	fTabView->AddTab(fLogView, fMiscTab);
+	fMiscTab->SetLabel("Log");
+
+	fAroundBox->AddChild(fTabView);
 
 
 
 
 	// FileList(RightList)
-	r = BoxAround->Bounds();
+	r = fAroundBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = 260;
 	r.bottom = r.bottom - 50;
 	r.left = (r.right / 2) + 3;
 	r.right -= (B_V_SCROLL_BAR_WIDTH + 3);
-	RList = new RightList(r);
+	fRightList = new RightList(r);
 
-	BoxAround->AddChild(new BScrollView("Scroll files/info", RList, B_FOLLOW_LEFT | B_FOLLOW_TOP, 0, false, true));
+	fAroundBox->AddChild(new BScrollView("Scroll files/info", fRightList, B_FOLLOW_LEFT | B_FOLLOW_TOP, 0, false, true));
 
 	// ParentDir button
-	r = BoxAround->Bounds();
+	r = fAroundBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = 220;
 	r.bottom = 240;
 	r.left = (r.right / 2);
 	r.right -= (r.right - r.left) / 2;
-	MakeDir = new jpButton(r, "ParentDir", "ParentDir", new BMessage(PARENT_DIR));
-	BoxAround->AddChild(MakeDir);
+	fMakeDirButton = new jpButton(r, "ParentDir", "ParentDir", new BMessage(PARENT_DIR));
+	fAroundBox->AddChild(fMakeDirButton);
 
 	// MakeDir button
-	r = BoxAround->Bounds();
+	r = fAroundBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = 220;
 	r.bottom = 240;
 	r.left = (r.right / 2) + 2;
 	r.left += (r.right - r.left) / 2 + 2;
 	r.right -= 2;
-	ParentDir = new jpButton(r, "MakeDir", "MakeDir", new BMessage(MAKE_DIR));
-	BoxAround->AddChild(ParentDir);
+	fParentDirButton = new jpButton(r, "MakeDir", "MakeDir", new BMessage(MAKE_DIR));
+	fAroundBox->AddChild(fParentDirButton);
 
 	if (!VRCD) {
-		MakeDir->SetEnabled(false);
-		ParentDir->SetEnabled(false);
+		fMakeDirButton->SetEnabled(false);
+		fParentDirButton->SetEnabled(false);
 	}
 
 	// LeftList
-	r = BoxAround->Bounds();
+	r = fAroundBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = 260;
 	r.bottom = r.bottom - 50;
 	r.right -= ((r.right / 2) + (B_V_SCROLL_BAR_WIDTH) + 3);
-	LList = new LeftList(r);
+	fLeftList = new LeftList(r);
 
-	BoxAround->AddChild(new BScrollView("Scroll LeftListr", LList, B_FOLLOW_LEFT | B_FOLLOW_TOP, 0, false, true));
+	fAroundBox->AddChild(new BScrollView("Scroll LeftListr", fLeftList, B_FOLLOW_LEFT | B_FOLLOW_TOP, 0, false, true));
 
 	// Init
 	if (VRCD) {
@@ -408,54 +408,54 @@ jpWindow::jpWindow(BRect frame)
 		else
 			sprintf(temp_char, "VRCD - [%s]", VOL_NAME);
 
-		LList->AddItem(new LeftListItem(&temp_ref, temp_char, LList->VRCDIcon, NULL), 0);
+		fLeftList->AddItem(new LeftListItem(&temp_ref, temp_char, fLeftList->fVRCDBitmap, NULL), 0);
 	}
 	if (ISOFILE && strcmp(ISOFILE_DIR, "NONE")) {
 		BEntry(ISOFILE_DIR).GetRef(&temp_ref);
-		LList->AddItem(new LeftListItem(&temp_ref, temp_ref.name, LList->ISOIcon, NULL), 0);
+		fLeftList->AddItem(new LeftListItem(&temp_ref, temp_ref.name, fLeftList->fISOBitmap, NULL), 0);
 	}
-	CDRWV->Blank->ItemAt(BLANK_TYPE)->SetMarked(true);
+	fCDRWView->fBlankMenu->ItemAt(BLANK_TYPE)->SetMarked(true);
 
 	// New VRCD
-	r = BoxAround->Bounds();
+	r = fAroundBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = 220;
 	r.bottom = 240;
 	r.right = 120; // was 100
-	NewVRCD = new jpButton(r, "New Virtual CD", "New Virtual CD", new BMessage(NEW_VRCD));
-	BoxAround->AddChild(NewVRCD);
+	fNewVRCDButton = new jpButton(r, "New Virtual CD", "New Virtual CD", new BMessage(NEW_VRCD));
+	fAroundBox->AddChild(fNewVRCDButton);
 
 	// Open ISO
-	r = BoxAround->Bounds();
+	r = fAroundBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = 220;
 	r.bottom = 240;
 	r.left = 125; // was 105
 	r.right -= ((r.right / 2) + (B_V_SCROLL_BAR_WIDTH) + 2);
-	AddISO = new jpButton(r, "Add ISOFile", "Add ISOFile", new BMessage(OPEN_ISO_FILE));
-	BoxAround->AddChild(AddISO);
+	fAddISOButton = new jpButton(r, "Add ISOFile", "Add ISOFile", new BMessage(OPEN_ISO_FILE));
+	fAroundBox->AddChild(fAddISOButton);
 
 	// FilePanel open isofile
-	OpenISOPanel = new BFilePanel(B_OPEN_PANEL, &be_app_messenger, NULL, B_FILE_NODE, false, NULL, NULL, true, true);
-	SaveISOPanel = new BFilePanel(B_SAVE_PANEL, &be_app_messenger, NULL, B_FILE_NODE, false, NULL, NULL, true, true);
+	fISOOpenPanel = new BFilePanel(B_OPEN_PANEL, &be_app_messenger, NULL, B_FILE_NODE, false, NULL, NULL, true, true);
+	fISOSavePanel = new BFilePanel(B_SAVE_PANEL, &be_app_messenger, NULL, B_FILE_NODE, false, NULL, NULL, true, true);
 
-	// MenuBar
+	// FMenuBar
 	r = Bounds();
 	r.top = 0;
 	r.bottom = 19;
-	menubar = new BMenuBar(r, "menu_bar");
-	AddChild(menubar);
+	fMenuBar = new BMenuBar(r, "menu_bar");
+	AddChild(fMenuBar);
 
 	menu = new BMenu("File");
 	menu->AddItem(new BMenuItem("About", new BMessage(MENU_FILE_ABOUT), 'A'));
 	menu->AddItem(new BMenuItem("Quit", new BMessage(B_QUIT_REQUESTED), 'Q'));
-	menubar->AddItem(menu);
-	menubar->AddItem(new BMenuItem("Help", new BMessage(MENU_HELP)));
-	RecorderCount = 0;
-	LogV->LogText->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &red);
-	LogV->LogText->Insert("Welcome to BurnItNow ");
-	LogV->LogText->Insert(VERSION);
-	LogV->LogText->Insert("\n ©2000-2002 Johan Nilsson\n ©2010 BurnItNow maintainers\n\n");
+	fMenuBar->AddItem(menu);
+	fMenuBar->AddItem(new BMenuItem("Help", new BMessage(MENU_HELP)));
+	fRecorderCount = 0;
+	fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &red);
+	fLogView->fLogTextView->Insert("Welcome to BurnItNow ");
+	fLogView->fLogTextView->Insert(VERSION);
+	fLogView->fLogTextView->Insert("\n ©2000-2002 Johan Nilsson\n ©2010 BurnItNow maintainers\n\n");
 
 	CheckForDevices();
 	Show();
@@ -464,8 +464,8 @@ jpWindow::jpWindow(BRect frame)
 
 void jpWindow::AWindow()
 {
-	AboutWin = new AboutWindow();
-	AboutWin->Show();
+	fAboutWindow = new AboutWindow();
+	fAboutWindow->Show();
 }
 
 
@@ -477,7 +477,7 @@ uint64 jpWindow::GetVRCDSize()
 	uint64 tempas = 0;
 	if (IMAGE_TYPE == 0) {
 		FILE* f1;
-		sprintf(command, "mkisofs -print-size %s %s -gui -f -V \"%s\" -C %s \"%s\" 2>&1", DATA_STRING, BOOTSTRING, VOL_NAME, BURNITDEV->scsiid, BURN_DIR);
+		sprintf(command, "mkisofs -print-size %s %s -gui -f -V \"%s\" -C %s \"%s\" 2>&1", DATA_STRING, BOOTSTRING, VOL_NAME, fBurnDevice->scsiid, BURN_DIR);
 		f1 = popen(command, "r");
 		while (!feof(f1) && !ferror(f1)) {
 			buffer[0] = 0;
@@ -512,16 +512,16 @@ void jpWindow::CalculateSize()
 	if (BURN_TYPE == 0) {
 		sprintf(what, "DataCD");
 		total_vrcd = total = total_iso = total_audio = 0;
-		MyStatus->SetBarColor(blue);
-		if (LList->CountItems() > 0) {
-			LeftListItem* item1 = (LeftListItem*)LList->ItemAt(0);
-			if (item1->ficon == LList->ISOIcon) {
-				f1.SetTo(&item1->fref, B_READ_ONLY);
+		fStatusBar->SetBarColor(blue);
+		if (fLeftList->CountItems() > 0) {
+			LeftListItem* item1 = (LeftListItem*)fLeftList->ItemAt(0);
+			if (item1->fIconBitmap == fLeftList->fISOBitmap) {
+				f1.SetTo(&item1->fRef, B_READ_ONLY);
 				f1.GetSize(&temp);
 				total_iso += temp;
 				angle_temp[0] = temp / 1024 / 1024;
 				nrtracks = 1;
-			} else if (item1->ficon == LList->VRCDIcon) {
+			} else if (item1->fIconBitmap == fLeftList->fVRCDBitmap) {
 				nrtracks = 1;
 				total_vrcd = temp = GetVRCDSize();
 				angle_temp[0] = temp / 1024 / 1024;
@@ -533,26 +533,26 @@ void jpWindow::CalculateSize()
 	else if (BURN_TYPE == 1) {
 		sprintf(what, "AudioCD");
 		total_vrcd = total = total_iso = total_audio = temp = 0;
-		MyStatus->SetBarColor(green);
-		if (LList->CountItems() > 0) {
-			LeftListItem* item1 = (LeftListItem*)LList->ItemAt(0);
-			LeftListItem* item2 = (LeftListItem*)LList->ItemAt(1);
-			if (item1->ficon == LList->AudioIcon) {
-				tracks = LList->CountItems();
+		fStatusBar->SetBarColor(green);
+		if (fLeftList->CountItems() > 0) {
+			LeftListItem* item1 = (LeftListItem*)fLeftList->ItemAt(0);
+			LeftListItem* item2 = (LeftListItem*)fLeftList->ItemAt(1);
+			if (item1->fIconBitmap == fLeftList->fAudioBitmap) {
+				tracks = fLeftList->CountItems();
 				for (i = 0; i < tracks; i++) {
-					item1 = (LeftListItem*)LList->ItemAt(i);
-					f1.SetTo(&item1->fref, B_READ_ONLY);
+					item1 = (LeftListItem*)fLeftList->ItemAt(i);
+					f1.SetTo(&item1->fRef, B_READ_ONLY);
 					f1.GetSize(&temp);
 					total_audio += temp;
 					angle_temp[i] = temp / 1024 / 1024;
 					nrtracks++;
 				}
-			} else if (LList->CountItems() > 1)
-				if (item2->ficon == LList->AudioIcon) {
-					tracks = LList->CountItems();
+			} else if (fLeftList->CountItems() > 1)
+				if (item2->fIconBitmap == fLeftList->fAudioBitmap) {
+					tracks = fLeftList->CountItems();
 					for (i = 1; i < tracks; i++) {
-						item1 = (LeftListItem*)LList->ItemAt(i);
-						f1.SetTo(&item1->fref, B_READ_ONLY);
+						item1 = (LeftListItem*)fLeftList->ItemAt(i);
+						f1.SetTo(&item1->fRef, B_READ_ONLY);
 						f1.GetSize(&temp);
 						total_audio += temp;
 						angle_temp[i - 1] = temp / 1024 / 1024;
@@ -563,28 +563,28 @@ void jpWindow::CalculateSize()
 	} else if (BURN_TYPE == 2) {
 		sprintf(what, "MixCD");
 		total_vrcd = total = total_iso = total_audio = 0;
-		MyStatus->SetBarColor(greenblue);
-		if (LList->CountItems() > 0) {
-			LeftListItem* item1 = (LeftListItem*)LList->ItemAt(0);
-			LeftListItem* item2 = (LeftListItem*)LList->ItemAt(1);
-			if (item1->ficon == LList->ISOIcon) {
+		fStatusBar->SetBarColor(greenblue);
+		if (fLeftList->CountItems() > 0) {
+			LeftListItem* item1 = (LeftListItem*)fLeftList->ItemAt(0);
+			LeftListItem* item2 = (LeftListItem*)fLeftList->ItemAt(1);
+			if (item1->fIconBitmap == fLeftList->fISOBitmap) {
 				nrtracks = 1;
-				f1.SetTo(&item1->fref, B_READ_ONLY);
+				f1.SetTo(&item1->fRef, B_READ_ONLY);
 				f1.GetSize(&temp);
 				total_iso = temp;
 				angle_temp[nrtracks - 1] = temp / 1024 / 1024;
-			} else if (item1->ficon == LList->VRCDIcon) {
+			} else if (item1->fIconBitmap == fLeftList->fVRCDBitmap) {
 				nrtracks = 1;
 				total_vrcd = temp = GetVRCDSize();
 				angle_temp[nrtracks - 1] = temp / 1024 / 1024;
 
 			}
 
-			if (item1->ficon == LList->AudioIcon) {
-				tracks = LList->CountItems();
+			if (item1->fIconBitmap == fLeftList->fAudioBitmap) {
+				tracks = fLeftList->CountItems();
 				for (i = 0; i < tracks; i++) {
-					item1 = (LeftListItem*)LList->ItemAt(i);
-					f1.SetTo(&item1->fref, B_READ_ONLY);
+					item1 = (LeftListItem*)fLeftList->ItemAt(i);
+					f1.SetTo(&item1->fRef, B_READ_ONLY);
 					f1.GetSize(&temp);
 					total_audio += temp;
 					nrtracks++;
@@ -593,12 +593,12 @@ void jpWindow::CalculateSize()
 				}
 			}
 
-			else if (LList->CountItems() > 1)
-				if (item2->ficon == LList->AudioIcon) {
-					tracks = LList->CountItems();
+			else if (fLeftList->CountItems() > 1)
+				if (item2->fIconBitmap == fLeftList->fAudioBitmap) {
+					tracks = fLeftList->CountItems();
 					for (i = 1; i < tracks; i++) {
-						item1 = (LeftListItem*)LList->ItemAt(i);
-						f1.SetTo(&item1->fref, B_READ_ONLY);
+						item1 = (LeftListItem*)fLeftList->ItemAt(i);
+						f1.SetTo(&item1->fRef, B_READ_ONLY);
 						f1.GetSize(&temp);
 						total_audio += temp;
 						nrtracks++;
@@ -610,9 +610,9 @@ void jpWindow::CalculateSize()
 
 	total = total_audio + total_iso + total_vrcd;
 	sprintf(temp_char, "%s - [%lld of 650 Mb]", what, total / 1024 / 1024);
-	MyStatus->Reset();
-	MyStatus->SetMaxValue(CDSIZE);
-	MyStatus->Update((total / 1024 / 1024), temp_char);
+	fStatusBar->Reset();
+	fStatusBar->SetMaxValue(CDSIZE);
+	fStatusBar->Update((total / 1024 / 1024), temp_char);
 
 	for (i = 0; i < nrtracks; i++) {
 		if (i == 0)
@@ -652,70 +652,70 @@ void jpWindow::InitBurnIt()
 	strcpy(BURN_DIR, temp_char);
 
 	// Load from pref file
-	if (BurnItPrefs->FindString("ISOFILE_DIR", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("ISOFILE_DIR", &tr) == B_OK) {
 		strcpy(ISOFILE_DIR, tr);
 	} else {
 		strcpy(ISOFILE_DIR, "NONE");
 	}
-	if (BurnItPrefs->FindString("VOL_NAME", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("VOL_NAME", &tr) == B_OK) {
 		strcpy(VOL_NAME, tr);
 	} else {
 		strcpy(VOL_NAME, "BurnItNow");
 	}
-	if (BurnItPrefs->FindBool("VRCD", &VRCD) != B_OK)
+	if (fBurnItPrefs->FindBool("VRCD", &VRCD) != B_OK)
 		VRCD = false;
 
-	if (BurnItPrefs->FindBool("ISOFILE", &ISOFILE) != B_OK)
+	if (fBurnItPrefs->FindBool("ISOFILE", &ISOFILE) != B_OK)
 		ISOFILE = false;
 
-	if (BurnItPrefs->FindInt16("BURN_SPD", &BURN_SPD) != B_OK)
+	if (fBurnItPrefs->FindInt16("BURN_SPD", &BURN_SPD) != B_OK)
 		BURN_SPD = 2;
 
-	if (BurnItPrefs->FindInt16("BLANK_TYPE", &BLANK_TYPE) != B_OK)
+	if (fBurnItPrefs->FindInt16("BLANK_TYPE", &BLANK_TYPE) != B_OK)
 		BLANK_TYPE = 1;
 
-	if (BurnItPrefs->FindInt16("BLANK_SPD", &BLANK_SPD) != B_OK)
+	if (fBurnItPrefs->FindInt16("BLANK_SPD", &BLANK_SPD) != B_OK)
 		BLANK_SPD = 1;
 
-	if (BurnItPrefs->FindInt16("BURN_TYPE", &BURN_TYPE) != B_OK)
+	if (fBurnItPrefs->FindInt16("BURN_TYPE", &BURN_TYPE) != B_OK)
 		BURN_TYPE = 0;
 
-	if (BurnItPrefs->FindBool("ONTHEFLY", &ONTHEFLY) != B_OK)
+	if (fBurnItPrefs->FindBool("ONTHEFLY", &ONTHEFLY) != B_OK)
 		ONTHEFLY = false;
 
-	if (BurnItPrefs->FindString("MULTISESSION", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("MULTISESSION", &tr) == B_OK) {
 		strcpy(MULTISESSION, tr);
 	} else {
 		strcpy(MULTISESSION, " ");
 	}
-	if (BurnItPrefs->FindString("DUMMYMODE", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("DUMMYMODE", &tr) == B_OK) {
 		strcpy(DUMMYMODE, tr);
 	} else {
 		strcpy(DUMMYMODE, " ");
 	}
-	if (BurnItPrefs->FindString("EJECT", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("EJECT", &tr) == B_OK) {
 		strcpy(EJECT, tr);
 	} else {
 		strcpy(EJECT, " ");
 	}
-	if (BurnItPrefs->FindString("DATA_STRING", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("DATA_STRING", &tr) == B_OK) {
 		strcpy(DATA_STRING, tr);
 	} else {
 		strcpy(DATA_STRING, " ");
 	}
-	if (BurnItPrefs->FindInt16("IMAGE_TYPE", &IMAGE_TYPE) != B_OK)
+	if (fBurnItPrefs->FindInt16("IMAGE_TYPE", &IMAGE_TYPE) != B_OK)
 		IMAGE_TYPE = 0;
 
-	if (BurnItPrefs->FindInt16("SCSI_DEV", &SCSI_DEV) != B_OK)
+	if (fBurnItPrefs->FindInt16("SCSI_DEV", &SCSI_DEV) != B_OK)
 		SCSI_DEV = -1;
 
-	if (BurnItPrefs->FindString("PAD", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("PAD", &tr) == B_OK) {
 		strcpy(PAD, tr);
 	} else {
 		strcpy(PAD, "-pad");
 	}
 
-	if (BurnItPrefs->FindString("DAO", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("DAO", &tr) == B_OK) {
 		strcpy(DAO, tr);
 	}
 
@@ -723,7 +723,7 @@ void jpWindow::InitBurnIt()
 		strcpy(DAO, " ");
 	}
 
-	if (BurnItPrefs->FindString("BURNPROOF", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("BURNPROOF", &tr) == B_OK) {
 		strcpy(BURNPROOF, tr);
 	}
 
@@ -732,25 +732,25 @@ void jpWindow::InitBurnIt()
 	}
 
 
-	if (BurnItPrefs->FindString("NOFIX", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("NOFIX", &tr) == B_OK) {
 		strcpy(NOFIX, tr);
 	} else {
 		strcpy(NOFIX, " ");
 	}
 
-	if (BurnItPrefs->FindString("PREEMP", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("PREEMP", &tr) == B_OK) {
 		strcpy(PREEMP, tr);
 	} else {
 		strcpy(PREEMP, " ");
 	}
-	if (BurnItPrefs->FindString("SWAB", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("SWAB", &tr) == B_OK) {
 		strcpy(SWAB, tr);
 	} else {
 		strcpy(SWAB, " ");
 	}
-	if (BurnItPrefs->FindRef("BOOTIMAGEREF", &BOOTIMAGEREF) == B_OK)
+	if (fBurnItPrefs->FindRef("BOOTIMAGEREF", &BOOTIMAGEREF) == B_OK)
 		if (BEntry(&BOOTIMAGEREF, true).Exists())
-			if (BurnItPrefs->FindBool("BOOTABLE", &BOOTABLE) == B_OK) {}
+			if (fBurnItPrefs->FindBool("BOOTABLE", &BOOTABLE) == B_OK) {}
 
 	// End loading from pref file
 
@@ -772,7 +772,7 @@ void jpWindow::CheckForDevices()
 	got_it = false;
 	sprintf(command, "/boot/apps/cdrtools/bin/cdrecord -scanbus");
 	if (BEntry("/boot/apps/cdrtools/bin/cdrecord").Exists() && BEntry("/boot/apps/cdrtools/bin/mkisofs").Exists()) {
-		if (RecorderCount < 100) {
+		if (fRecorderCount < 100) {
 			Lock();
 			f = popen(command, "r");
 			while (!feof(f) && !ferror(f)) {
@@ -789,10 +789,10 @@ void jpWindow::CheckForDevices()
 				}
 				if (got_it) {
 					if (buffer[i + 11] == '\'') {
-						RecorderCount++;
+						fRecorderCount++;
 						// scsiid
-						memset((char*)&scsidevs[RecorderCount - 1].scsiid[0], 0, 7);
-						strncpy(scsidevs[RecorderCount - 1].scsiid, &buffer[i], 6);
+						memset((char*)&fScsiDevices[fRecorderCount - 1].scsiid[0], 0, 7);
+						strncpy(fScsiDevices[fRecorderCount - 1].scsiid, &buffer[i], 6);
 
 						// scsi vendor
 						i += 12;
@@ -800,8 +800,8 @@ void jpWindow::CheckForDevices()
 							if (buffer[i + j] == '\'')
 								break;
 						}
-						memset((char*)&scsidevs[RecorderCount - 1].scsi_vendor[0], 0, 20);
-						strncpy(scsidevs[RecorderCount - 1].scsi_vendor, &buffer[i], j);
+						memset((char*)&fScsiDevices[fRecorderCount - 1].scsi_vendor[0], 0, 20);
+						strncpy(fScsiDevices[fRecorderCount - 1].scsi_vendor, &buffer[i], j);
 
 						// scsi name
 						i += j + 3;
@@ -809,38 +809,38 @@ void jpWindow::CheckForDevices()
 							if (buffer[i + j] == '\'')
 								break;
 						}
-						memset((char*)&scsidevs[RecorderCount - 1].scsi_name[0], 0, 50);
-						strncpy(scsidevs[RecorderCount - 1].scsi_name, &buffer[i], j);
-						msg = 'dev\0' | RecorderCount;
+						memset((char*)&fScsiDevices[fRecorderCount - 1].scsi_name[0], 0, 50);
+						strncpy(fScsiDevices[fRecorderCount - 1].scsi_name, &buffer[i], j);
+						msg = 'dev\0' | fRecorderCount;
 
-						strcpy(buf, scsidevs[RecorderCount - 1].scsi_vendor);
-						strcat(buf, scsidevs[RecorderCount - 1].scsi_name);
-						PrefsV->Recorders->AddItem(new BMenuItem(buf, new BMessage(msg)));
+						strcpy(buf, fScsiDevices[fRecorderCount - 1].scsi_vendor);
+						strcat(buf, fScsiDevices[fRecorderCount - 1].scsi_name);
+						fPrefsView->fRecordersMenu->AddItem(new BMenuItem(buf, new BMessage(msg)));
 					}
 				}
 			}
 			pclose(f);
 
-			LogV->LogText->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &blue);
-			sprintf(buf, "Found %d devices.\n\n", RecorderCount); // TODO: Fix plural text when only one device found
-			LogV->LogText->Insert(buf);
+			fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &blue);
+			sprintf(buf, "Found %d devices.\n\n", fRecorderCount); // TODO: Fix plural text when only one device found
+			fLogView->fLogTextView->Insert(buf);
 			if (SCSI_DEV != -1) {
-				BURNITDEV = &scsidevs[SCSI_DEV - 1];
-				PrefsV->Recorders->ItemAt(SCSI_DEV - 1)->SetMarked(true);
+				fBurnDevice = &fScsiDevices[SCSI_DEV - 1];
+				fPrefsView->fRecordersMenu->ItemAt(SCSI_DEV - 1)->SetMarked(true);
 			} else {
-				BURNITDEV = NULL;
+				fBurnDevice = NULL;
 			}
 			Unlock();
 		}
 	} else {
 		Lock();
-		LogV->LogText->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &blue);
-		LogV->LogText->Insert("Cound not find cdrecord/mkisofs check that itis installed in /boot/apps/cdrtools/bin.\nInstall cdrecord and restart BurnItNow");
+		fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &blue);
+		fLogView->fLogTextView->Insert("Cound not find cdrecord/mkisofs check that itis installed in /boot/apps/cdrtools/bin.\nInstall cdrecord and restart BurnItNow");
 		Unlock();
 		BAlert* MyAlert = new BAlert("BurnItNow", "Could not find cdrecord/mkisofs. You need to install the cdrtools OptionalPackage", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_STOP_ALERT);
 		MyAlert->Go();
-		BurnV->SetButton(false);
-		CDRWV->BlankButton->SetEnabled(false);
+		fBurnView->SetButton(false);
+		fCDRWView->fBlankButton->SetEnabled(false);
 	}
 }
 
@@ -878,8 +878,8 @@ void jpWindow::BurnNOW()
 	char buf[1024];
 	int temp;
 	temp = 0;
-	if (BURNITDEV == NULL) {
-		MyTab->Select(5);
+	if (fBurnDevice == NULL) {
+		fTabView->Select(5);
 		BAlert* MyAlert = new BAlert("BurnItNow", "You have to select device to be able to burn.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 		MyAlert->Go();
 	} else {
@@ -887,11 +887,11 @@ void jpWindow::BurnNOW()
 		if (BURN_TYPE == 0) {
 			if (VRCD && !ISOFILE) {
 				if (strcmp(BURN_DIR, "NONE")) {
-					if (BurnV->OnTheFly->Value() == 1) {
+					if (fBurnView->fOnTheFlyCheckBox->Value() == 1) {
 						ONTHEFLY = true;
 						BurnWithCDRecord();
 					} else {
-						if (BurnV->Multi->Value() == 1) {
+						if (fBurnView->fMultiCheckBox->Value() == 1) {
 							temp = CheckMulti(buf);
 						}
 						if (temp != -1) {
@@ -924,11 +924,11 @@ void jpWindow::BurnNOW()
 			BPath temp_path;
 			int32 count;
 			int32 i;
-			count = LList->CountItems();
+			count = fLeftList->CountItems();
 			for (i = 0; i < count; i++) {
-				LeftListItem* item = (LeftListItem*)LList->ItemAt(i);
-				if (item->isAudio) {
-					BEntry(&item->fref).GetPath(&temp_path);
+				LeftListItem* item = (LeftListItem*)fLeftList->ItemAt(i);
+				if (item->fIsAudio) {
+					BEntry(&item->fRef).GetPath(&temp_path);
 					sprintf(AUDIO_FILES, "%s \"%s\"", AUDIO_FILES , temp_path.Path());
 				}
 			}
@@ -939,21 +939,21 @@ void jpWindow::BurnNOW()
 			BPath temp_path;
 			int32 count;
 			int32 i;
-			count = LList->CountItems();
+			count = fLeftList->CountItems();
 			for (i = 0; i < count; i++) {
-				LeftListItem* item = (LeftListItem*)LList->ItemAt(i);
-				if (item->isAudio) {
-					BEntry(&item->fref).GetPath(&temp_path);
+				LeftListItem* item = (LeftListItem*)fLeftList->ItemAt(i);
+				if (item->fIsAudio) {
+					BEntry(&item->fRef).GetPath(&temp_path);
 					sprintf(AUDIO_FILES, "%s \"%s\"", AUDIO_FILES , temp_path.Path());
 				}
 			}
 			if (VRCD && !ISOFILE) {
 				if (strcmp(BURN_DIR, "NONE")) {
-					if (BurnV->OnTheFly->Value() == 1) {
+					if (fBurnView->fOnTheFlyCheckBox->Value() == 1) {
 						ONTHEFLY = true;
 						BurnWithCDRecord();
 					} else {
-						if (BurnV->Multi->Value() == 1) {
+						if (fBurnView->fMultiCheckBox->Value() == 1) {
 							temp = CheckMulti(buf);
 						}
 						if (temp != -1) {
@@ -989,8 +989,8 @@ void jpWindow::BurnNOW()
 void jpWindow::BlankNOW()
 {
 	int Result;
-	if (BURNITDEV == NULL) {
-		MyTab->Select(5);
+	if (fBurnDevice == NULL) {
+		fTabView->Select(5);
 		BAlert* MyAlert = new BAlert("BurnItNow", "You have to select device to be able to blank.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 		MyAlert->Go();
 	} else {
@@ -998,17 +998,17 @@ void jpWindow::BlankNOW()
 		Result = MyAlert->Go();
 		if (Result) {
 			CalculateSize();
-			StatusWin = new StatusWindow(VOL_NAME);
-			StatusWin->SetAngles(angles, 0);
-			StatusWin->Show();
+			fStatusWindow = new StatusWindow(VOL_NAME);
+			fStatusWindow->SetAngles(angles, 0);
+			fStatusWindow->Show();
 
 			SetButtons(false);
 			char command[2000];
-			sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d blank=%s 2>&1", BURNITDEV->scsiid, BLANK_SPD, BlType[BLANK_TYPE]);
+			sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d blank=%s 2>&1", fBurnDevice->scsiid, BLANK_SPD, BlType[BLANK_TYPE]);
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Blanking", 15, command));
 			snooze(500000);
-			resume_thread(OPBlank = spawn_thread(OutPutBlank, "OutPutBlank", 15, StatusWin));
+			resume_thread(OPBlank = spawn_thread(OutPutBlank, "OutPutBlank", 15, fStatusWindow));
 			snooze(500000);
 			Unlock();
 
@@ -1022,12 +1022,12 @@ void jpWindow::BlankNOW()
 void jpWindow::PutLog(char* string)
 {
 	Lock();
-	LogV->LogText->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &red2);
-	LogV->LogText->Insert("*******\n");
-	LogV->LogText->Insert(string);
-	LogV->LogText->Insert("\n*******\n");
-	LogV->LogText->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &black);
-	LogV->LogText->ScrollToOffset(LogV->LogText->CountLines() * 100);
+	fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &red2);
+	fLogView->fLogTextView->Insert("*******\n");
+	fLogView->fLogTextView->Insert(string);
+	fLogView->fLogTextView->Insert("\n*******\n");
+	fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &black);
+	fLogView->fLogTextView->ScrollToOffset(fLogView->fLogTextView->CountLines() * 100);
 	Unlock();
 }
 
@@ -1035,11 +1035,11 @@ void jpWindow::PutLog(char* string)
 void jpWindow::MessageLog(char* string)
 {
 	Lock();
-	LogV->LogText->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &green);
-	LogV->LogText->Insert(string);
-	LogV->LogText->Insert("\n");
-	LogV->LogText->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &black);
-	LogV->LogText->ScrollToOffset(LogV->LogText->CountLines() * 100);
+	fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &green);
+	fLogView->fLogTextView->Insert(string);
+	fLogView->fLogTextView->Insert("\n");
+	fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &black);
+	fLogView->fLogTextView->ScrollToOffset(fLogView->fLogTextView->CountLines() * 100);
 	Unlock();
 }
 
@@ -1096,152 +1096,152 @@ void jpWindow::MessageReceived(BMessage* message)
 		case DATA_VIRTUALCD:
 			VRCD = true;
 			ISOFILE = false;
-			DataV->BootableCD->SetEnabled(true);
-			if (DataV->BootableCD->Value() == 1) {
-				DataV->ChooseBootImage->SetEnabled(true);
+			fDataView->fBootableCDCheckBox->SetEnabled(true);
+			if (fDataView->fBootableCDCheckBox->Value() == 1) {
+				fDataView->fChooseBootImageButton->SetEnabled(true);
 			}
 			break;
 		case DATA_ISOFILE:
 			VRCD = false;
 			ISOFILE = true;
-			DataV->BootableCD->SetEnabled(false);
-			DataV->ChooseBootImage->SetEnabled(false);
+			fDataView->fBootableCDCheckBox->SetEnabled(false);
+			fDataView->fChooseBootImageButton->SetEnabled(false);
 			break;
 		case DATA_ISO9660:
 			IMAGE_TYPE = 0;
 			sprintf(DATA_STRING, " ");
 			if (BURN_TYPE == 0 || BURN_TYPE == 2) {
-				BurnV->OnTheFly->SetEnabled(false);
-				DataV->BootableCD->SetEnabled(true);
-				if (DataV->BootableCD->Value() == 1)
-					DataV->ChooseBootImage->SetEnabled(false);
+				fBurnView->fOnTheFlyCheckBox->SetEnabled(false);
+				fDataView->fBootableCDCheckBox->SetEnabled(true);
+				if (fDataView->fBootableCDCheckBox->Value() == 1)
+					fDataView->fChooseBootImageButton->SetEnabled(false);
 			}
 			if (BURN_TYPE == 1)
-				BurnV->Multi->SetEnabled(false);
+				fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
 		case DATA_BFS:
 			IMAGE_TYPE = 1;
-			DataV->BootableCD->SetEnabled(false);
-			DataV->ChooseBootImage->SetEnabled(false);
-			BurnV->OnTheFly->SetEnabled(false);
-			BurnV->Multi->SetEnabled(false);
+			fDataView->fBootableCDCheckBox->SetEnabled(false);
+			fDataView->fChooseBootImageButton->SetEnabled(false);
+			fBurnView->fOnTheFlyCheckBox->SetEnabled(false);
+			fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
 		case DATA_HFS:
 			sprintf(DATA_STRING, "-hfs");
 			IMAGE_TYPE = 0;
 			if (BURN_TYPE == 0 || BURN_TYPE == 2) {
-				BurnV->OnTheFly->SetEnabled(false);
-				DataV->BootableCD->SetEnabled(true);
-				if (DataV->BootableCD->Value() == 1)
-					DataV->ChooseBootImage->SetEnabled(false);
+				fBurnView->fOnTheFlyCheckBox->SetEnabled(false);
+				fDataView->fBootableCDCheckBox->SetEnabled(true);
+				if (fDataView->fBootableCDCheckBox->Value() == 1)
+					fDataView->fChooseBootImageButton->SetEnabled(false);
 			}
 			if (BURN_TYPE == 1)
-				BurnV->Multi->SetEnabled(false);
+				fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
 		case DATA_JOLIET:
 			sprintf(DATA_STRING, "-l -D -J");
 			IMAGE_TYPE = 0;
 			if (BURN_TYPE == 0 || BURN_TYPE == 2) {
-				BurnV->OnTheFly->SetEnabled(false);
-				DataV->BootableCD->SetEnabled(true);
-				if (DataV->BootableCD->Value() == 1)
-					DataV->ChooseBootImage->SetEnabled(false);
+				fBurnView->fOnTheFlyCheckBox->SetEnabled(false);
+				fDataView->fBootableCDCheckBox->SetEnabled(true);
+				if (fDataView->fBootableCDCheckBox->Value() == 1)
+					fDataView->fChooseBootImageButton->SetEnabled(false);
 			}
 			if (BURN_TYPE == 1)
-				BurnV->Multi->SetEnabled(false);
+				fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
 		case DATA_ROCK:
 			sprintf(DATA_STRING, "-l -L -r");
 			IMAGE_TYPE = 0;
 			if (BURN_TYPE == 0 || BURN_TYPE == 2) {
-				BurnV->OnTheFly->SetEnabled(false);
-				DataV->BootableCD->SetEnabled(true);
-				if (DataV->BootableCD->Value() == 1)
-					DataV->ChooseBootImage->SetEnabled(false);
+				fBurnView->fOnTheFlyCheckBox->SetEnabled(false);
+				fDataView->fBootableCDCheckBox->SetEnabled(true);
+				if (fDataView->fBootableCDCheckBox->Value() == 1)
+					fDataView->fChooseBootImageButton->SetEnabled(false);
 			}
 			if (BURN_TYPE == 1)
-				BurnV->Multi->SetEnabled(false);
+				fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
 		case DATA_WINDOWS:
 			sprintf(DATA_STRING, "-D -l");
 			IMAGE_TYPE = 0;
 			if (BURN_TYPE == 0 || BURN_TYPE == 2) {
-				BurnV->OnTheFly->SetEnabled(false);
-				DataV->BootableCD->SetEnabled(true);
-				if (DataV->BootableCD->Value() == 1)
-					DataV->ChooseBootImage->SetEnabled(false);
+				fBurnView->fOnTheFlyCheckBox->SetEnabled(false);
+				fDataView->fBootableCDCheckBox->SetEnabled(true);
+				if (fDataView->fBootableCDCheckBox->Value() == 1)
+					fDataView->fChooseBootImageButton->SetEnabled(false);
 			}
 			if (BURN_TYPE == 1)
-				BurnV->Multi->SetEnabled(false);
+				fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
 		case DATA_REALROCK:
 			sprintf(DATA_STRING, "-l -L -R");
 			IMAGE_TYPE = 0;
 			if (BURN_TYPE == 0 || BURN_TYPE == 2) {
-				BurnV->OnTheFly->SetEnabled(false);
-				DataV->BootableCD->SetEnabled(true);
-				if (DataV->BootableCD->Value() == 1)
-					DataV->ChooseBootImage->SetEnabled(false);
+				fBurnView->fOnTheFlyCheckBox->SetEnabled(false);
+				fDataView->fBootableCDCheckBox->SetEnabled(true);
+				if (fDataView->fBootableCDCheckBox->Value() == 1)
+					fDataView->fChooseBootImageButton->SetEnabled(false);
 			}
 			if (BURN_TYPE == 1)
-				BurnV->Multi->SetEnabled(false);
+				fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
 
 
 		case BURN_DATA_CD:
 			BURN_TYPE = 0;
-			if (DataV->BeOS->Value() != 1) {
-				if (BurnV->OnTheFly->Value() != 1) {
-					BurnV->Multi->SetEnabled(true);
+			if (fDataView->fBeOSRadio->Value() != 1) {
+				if (fBurnView->fOnTheFlyCheckBox->Value() != 1) {
+					fBurnView->fMultiCheckBox->SetEnabled(true);
 				}
-				BurnV->OnTheFly->SetEnabled(true);
-				DataV->BootableCD->SetEnabled(true);
-				if (DataV->BootableCD->Value() == 1) {
-					DataV->ChooseBootImage->SetEnabled(true);
+				fBurnView->fOnTheFlyCheckBox->SetEnabled(true);
+				fDataView->fBootableCDCheckBox->SetEnabled(true);
+				if (fDataView->fBootableCDCheckBox->Value() == 1) {
+					fDataView->fChooseBootImageButton->SetEnabled(true);
 				}
 			}
 			break;
 		case BURN_AUDIO_CD:
 			BURN_TYPE = 1;
-			BurnV->OnTheFly->SetEnabled(false);
-			BurnV->Multi->SetEnabled(false);
-			DataV->BootableCD->SetEnabled(false);
-			DataV->ChooseBootImage->SetEnabled(false);
+			fBurnView->fOnTheFlyCheckBox->SetEnabled(false);
+			fBurnView->fMultiCheckBox->SetEnabled(false);
+			fDataView->fBootableCDCheckBox->SetEnabled(false);
+			fDataView->fChooseBootImageButton->SetEnabled(false);
 			break;
 		case BURN_MIX_CD:
 			BURN_TYPE = 2;
-			if (DataV->BeOS->Value() != 1) {
-				BurnV->OnTheFly->SetEnabled(true);
-				BurnV->Multi->SetEnabled(false);
-				DataV->BootableCD->SetEnabled(true);
-				if (DataV->BootableCD->Value() == 1) {
-					DataV->ChooseBootImage->SetEnabled(true);
+			if (fDataView->fBeOSRadio->Value() != 1) {
+				fBurnView->fOnTheFlyCheckBox->SetEnabled(true);
+				fBurnView->fMultiCheckBox->SetEnabled(false);
+				fDataView->fBootableCDCheckBox->SetEnabled(true);
+				if (fDataView->fBootableCDCheckBox->Value() == 1) {
+					fDataView->fChooseBootImageButton->SetEnabled(true);
 				}
 			}
 			break;
 		case AUDIO_PAD:
-			if (AudioV->Pad->Value() == 1) {
+			if (fAudioView->fPadCheckBox->Value() == 1) {
 				strcpy(PAD, "-pad");
 			} else {
 				strcpy(PAD, " ");
 			}
 			break;
 		case AUDIO_SWAB:
-			if (AudioV->Swab->Value() == 1) {
+			if (fAudioView->fSwabCheckBox->Value() == 1) {
 				strcpy(SWAB, "-swab");
 			} else {
 				strcpy(SWAB, " ");
 			}
 			break;
 		case AUDIO_NOFIX:
-			if (AudioV->Nofix->Value() == 1) {
+			if (fAudioView->fNoFixCheckBox->Value() == 1) {
 				strcpy(NOFIX, "-nofix");
 			} else {
 				strcpy(NOFIX, " ");
 			}
 			break;
 		case AUDIO_PREEMP:
-			if (AudioV->Preemp->Value() == 1) {
+			if (fAudioView->fPreEmpCheckBox->Value() == 1) {
 				strcpy(PREEMP, "-preemp");
 			} else {
 				strcpy(PREEMP, " ");
@@ -1249,38 +1249,38 @@ void jpWindow::MessageReceived(BMessage* message)
 			break;
 
 		case BURN_MULTI:
-			if (BurnV->Multi->Value() == 1) {
+			if (fBurnView->fMultiCheckBox->Value() == 1) {
 				strcpy(MULTISESSION, "-multi");
 			} else {
 				strcpy(MULTISESSION, " ");
 			}
 			break;
 		case BURN_DUMMY_MODE:
-			if (BurnV->DummyMode->Value() == 1) {
+			if (fBurnView->fDummyModeCheckBox->Value() == 1) {
 				strcpy(DUMMYMODE, "-dummy");
 			} else {
 				strcpy(DUMMYMODE, " ");
 			}
 			break;
 		case BURN_ONTHEFLY:
-			if (BurnV->OnTheFly->Value() == 1) {
-				BurnV->Multi->SetEnabled(false);
+			if (fBurnView->fOnTheFlyCheckBox->Value() == 1) {
+				fBurnView->fMultiCheckBox->SetEnabled(false);
 				ONTHEFLY = true;
 			} else {
 				if (BURN_TYPE == 0)
-					BurnV->Multi->SetEnabled(true);
+					fBurnView->fMultiCheckBox->SetEnabled(true);
 				ONTHEFLY = false;
 			}
 			break;
 		case BURN_EJECT:
-			if (BurnV->Eject->Value() == 1) {
+			if (fBurnView->fEjectCheckBox->Value() == 1) {
 				strcpy(EJECT, "-eject");
 			} else {
 				strcpy(EJECT, " ");
 			}
 			break;
 		case MISC_DAO:
-			if (PrefsV->DAOOption->Value() == 1) {
+			if (fPrefsView->fDAOCheckBox->Value() == 1) {
 				strcpy(DAO, "-dao");
 			} else {
 				strcpy(DAO, " ");
@@ -1288,7 +1288,7 @@ void jpWindow::MessageReceived(BMessage* message)
 
 			break;
 		case MISC_BURNPROOF:
-			if (PrefsV->BurnProof->Value() == 1) {
+			if (fPrefsView->fBurnProofCheckBox->Value() == 1) {
 				strcpy(BURNPROOF, "driveropts = burnproof");
 			} else {
 				strcpy(BURNPROOF, " ");
@@ -1299,14 +1299,14 @@ void jpWindow::MessageReceived(BMessage* message)
 			AWindow();
 			break;
 		case OPEN_ISO_FILE:
-			OpenISOPanel->Show();
+			fISOOpenPanel->Show();
 			break;
 		case MAKE_IMAGE:
 			BurnNOW();
 			break;
 		case MAKE_AND_SAVE_IMAGE:
 			if (VRCD && !ISOFILE) {
-				SaveISOPanel->Show();
+				fISOSavePanel->Show();
 			} else {
 				BAlert* MyAlert = new BAlert("BurnItNow", "You have to Add an \"Virtual CD Directory\" able to make an ISOfile.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 				MyAlert->Go();
@@ -1348,30 +1348,30 @@ void jpWindow::MessageReceived(BMessage* message)
 			break;
 
 		case SPEED_CHANGE:
-			temp = (int)BurnV->Speed->Value();
+			temp = (int)fBurnView->fSpeedSlider->Value();
 			BURN_SPD = (int)(temp + 1) * 2;
 			sprintf(buf, "Burning Speed [%dx]", BURN_SPD);
-			BurnV->Speed->SetLabel(buf);
+			fBurnView->fSpeedSlider->SetLabel(buf);
 			break;
 
 		case BLANK_SPEED_CHANGE:
-			temp = (int)CDRWV->BlankSpeed->Value();
+			temp = (int)fCDRWView->fBlankSpeedSlider->Value();
 			BLANK_SPD = (int)(temp + 1) * 2;
 			sprintf(buf, "Blank Speed [%dx]", BLANK_SPD);
-			CDRWV->BlankSpeed->SetLabel(buf);
+			fCDRWView->fBlankSpeedSlider->SetLabel(buf);
 			break;
 
 		case PARENT_DIR:
-			RList->ParentDir();
+			fRightList->ParentDir();
 			break;
 		case MAKE_DIR:
-			RList->CreateDir();
+			fRightList->CreateDir();
 			break;
 		case MAKE_DIRECTORY:
 			const char* temp_char;
 			message->FindString("DirName", &temp_char);
 			if (strcmp(temp_char, "boot.catalog")) {
-				RList->MakeDir(temp_char);
+				fRightList->MakeDir(temp_char);
 			} else {
 				BAlert* MyAlert = new BAlert("BurnItNow", "You cannot create a directory named boot.catalog,\nit is reserved for making bootable CDs.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 				MyAlert->Go();
@@ -1379,19 +1379,19 @@ void jpWindow::MessageReceived(BMessage* message)
 			break;
 		case NEW_VRCD:
 			if (!ISOFILE && !VRCD) {
-				LList->AddItem(new LeftListItem(&temp_ref, "VRCD - []", LList->VRCDIcon, NULL), 0);
+				fLeftList->AddItem(new LeftListItem(&temp_ref, "VRCD - []", fLeftList->fVRCDBitmap, NULL), 0);
 				ISOFILE = false;
 				VRCD = true;
-				NewVRCD->SetEnabled(false);
-				AddISO->SetEnabled(false);
-				MakeDir->SetEnabled(true);
-				ParentDir->SetEnabled(true);
+				fNewVRCDButton->SetEnabled(false);
+				fAddISOButton->SetEnabled(false);
+				fMakeDirButton->SetEnabled(true);
+				fParentDirButton->SetEnabled(true);
 
-				VolumeNameWindow = new AskName(BRect(200, 200, 440, 240), "Volume name", VOLUME_NAME, VOL_NAME);
-				VolumeNameWindow->Show();
-				DataV->BootableCD->SetEnabled(true);
-				if (DataV->BootableCD->Value() == 1) {
-					DataV->ChooseBootImage->SetEnabled(true);
+				fVolumeNameWindow = new AskName(BRect(200, 200, 440, 240), "Volume name", VOLUME_NAME, VOL_NAME);
+				fVolumeNameWindow->Show();
+				fDataView->fBootableCDCheckBox->SetEnabled(true);
+				if (fDataView->fBootableCDCheckBox->Value() == 1) {
+					fDataView->fChooseBootImageButton->SetEnabled(true);
 				}
 			} else {
 				BAlert* MyAlert = new BAlert("BurnItNow", "You can only have one ISOfile/VirtualCD on a CD.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
@@ -1403,16 +1403,16 @@ void jpWindow::MessageReceived(BMessage* message)
 				strcpy(VOL_NAME, temp_char);
 				LeftListItem* item;
 
-				if ((item = (LeftListItem*)LList->ItemAt(0)) != NULL) {
-					if (item->ficon == LList->VRCDIcon) {
+				if ((item = (LeftListItem*)fLeftList->ItemAt(0)) != NULL) {
+					if (item->fIconBitmap == fLeftList->fVRCDBitmap) {
 						if (BOOTABLE)
-							sprintf(item->fname, "VRCD(Boot) - [%s]", temp_char);
+							sprintf(item->fName, "VRCD(Boot) - [%s]", temp_char);
 						else
-							sprintf(item->fname, "VRCD - [%s]", temp_char);
+							sprintf(item->fName, "VRCD - [%s]", temp_char);
 
-						item->fname[27] = 0;
-						item->fname[26] = ']';
-						LList->InvalidateItem(0);
+						item->fName[27] = 0;
+						item->fName[26] = ']';
+						fLeftList->InvalidateItem(0);
 					}
 				}
 			}
@@ -1420,22 +1420,22 @@ void jpWindow::MessageReceived(BMessage* message)
 			// BOOT
 		case BOOT_CHECKED: {
 				LeftListItem* item;
-				if (DataV->BootableCD->Value() == 1) {
-					DataV->BootableCD->SetValue(0);
-					DataV->ChooseBootImage->SetEnabled(false);
+				if (fDataView->fBootableCDCheckBox->Value() == 1) {
+					fDataView->fBootableCDCheckBox->SetValue(0);
+					fDataView->fChooseBootImageButton->SetEnabled(false);
 					BOOTABLE = false;
-					DataV->FilePanel->Show();
+					fDataView->fFilePanel->Show();
 
 				} else {
 					BOOTABLE = false;
 					sprintf(BOOTSTRING, " ");
-					DataV->ChooseBootImage->SetEnabled(false);
-					if ((item = (LeftListItem*)LList->ItemAt(0)) != NULL) {
-						if (item->ficon == LList->VRCDIcon) {
-							sprintf(item->fname, "VRCD - [%s]", VOL_NAME);
-							item->fname[27] = 0;
-							item->fname[26] = ']';
-							LList->InvalidateItem(0);
+					fDataView->fChooseBootImageButton->SetEnabled(false);
+					if ((item = (LeftListItem*)fLeftList->ItemAt(0)) != NULL) {
+						if (item->fIconBitmap == fLeftList->fVRCDBitmap) {
+							sprintf(item->fName, "VRCD - [%s]", VOL_NAME);
+							item->fName[27] = 0;
+							item->fName[26] = ']';
+							fLeftList->InvalidateItem(0);
 						}
 					}
 
@@ -1443,10 +1443,10 @@ void jpWindow::MessageReceived(BMessage* message)
 			}
 			break;
 		case BOOT_FILE_PANEL:
-			DataV->BootableCD->SetValue(0);
-			DataV->ChooseBootImage->SetEnabled(false);
+			fDataView->fBootableCDCheckBox->SetValue(0);
+			fDataView->fChooseBootImageButton->SetEnabled(false);
 			BOOTABLE = false;
-			DataV->FilePanel->Show();
+			fDataView->fFilePanel->Show();
 			break;
 		case BOOT_CHANGE_IMAGE_NAME: {
 				LeftListItem* item;
@@ -1456,21 +1456,21 @@ void jpWindow::MessageReceived(BMessage* message)
 				if (BEntry(&ref, true).GetSize(&size) == B_OK)
 					if (size < (2880 * 1024)) {
 						BOOTIMAGEREF = ref;
-						DataV->BootableCD->SetValue(1);
-						DataV->ChooseBootImage->SetEnabled(true);
+						fDataView->fBootableCDCheckBox->SetValue(1);
+						fDataView->fChooseBootImageButton->SetEnabled(true);
 						BOOTABLE = true;
-						if ((item = (LeftListItem*)LList->ItemAt(0)) != NULL) {
-							if (item->ficon == LList->VRCDIcon) {
-								sprintf(item->fname, "VRCD(Boot) - [%s]", VOL_NAME);
-								item->fname[27] = 0;
-								item->fname[26] = ']';
-								LList->InvalidateItem(0);
+						if ((item = (LeftListItem*)fLeftList->ItemAt(0)) != NULL) {
+							if (item->fIconBitmap == fLeftList->fVRCDBitmap) {
+								sprintf(item->fName, "VRCD(Boot) - [%s]", VOL_NAME);
+								item->fName[27] = 0;
+								item->fName[26] = ']';
+								fLeftList->InvalidateItem(0);
 							}
 						}
 					} else {
 						sprintf(BOOTSTRING, " ");
-						DataV->BootableCD->SetValue(0);
-						DataV->ChooseBootImage->SetEnabled(false);
+						fDataView->fBootableCDCheckBox->SetValue(0);
+						fDataView->fChooseBootImageButton->SetEnabled(false);
 						BOOTABLE = false;
 						BAlert* MyAlert = new BAlert("BurnItNow", "The bootimage cannot be bigger than 2.88 Mb", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 						MyAlert->Go();
@@ -1480,8 +1480,8 @@ void jpWindow::MessageReceived(BMessage* message)
 			}
 			break;
 		case CHANGE_VOL_NAME: {
-				VolumeNameWindow = new AskName(BRect(200, 200, 440, 240), "Volume name", VOLUME_NAME, VOL_NAME);
-				VolumeNameWindow->Show();
+				fVolumeNameWindow = new AskName(BRect(200, 200, 440, 240), "Volume name", VOLUME_NAME, VOL_NAME);
+				fVolumeNameWindow->Show();
 			}
 			break;
 		default:
@@ -1492,7 +1492,7 @@ void jpWindow::MessageReceived(BMessage* message)
 	if ((message->what & 0xffffff00) == 'dev\0') {
 		count = (uint8)(message->what & 0xff);
 		SCSI_DEV = count;
-		BURNITDEV = &scsidevs[count - 1];
+		fBurnDevice = &fScsiDevices[count - 1];
 	}
 }
 
@@ -1500,32 +1500,32 @@ void jpWindow::MessageReceived(BMessage* message)
 void jpWindow::SaveData()
 {
 	// Save all prefs
-	BurnItPrefs->SetBool("BOOTABLE", BOOTABLE);
-	BurnItPrefs->SetRef("BOOTIMAGEREF", &BOOTIMAGEREF);
-	BurnItPrefs->SetString("ISOFILE_DIR", ISOFILE_DIR);
-	BurnItPrefs->SetString("VOL_NAME", VOL_NAME);
-	BurnItPrefs->SetBool("VRCD", VRCD);
-	BurnItPrefs->SetBool("ISOFILE", ISOFILE);
-	BurnItPrefs->SetInt16("BURN_SPD", BURN_SPD);
-	BurnItPrefs->SetInt16("BLANK_TYPE", BLANK_TYPE);
-	BurnItPrefs->SetInt16("BLANK_SPD", BLANK_SPD);
-	BurnItPrefs->SetInt16("BURN_TYPE", BURN_TYPE);
-	BurnItPrefs->SetBool("ONTHEFLY", ONTHEFLY);
-	BurnItPrefs->SetString("MULTISESSION", MULTISESSION);
-	BurnItPrefs->SetString("DUMMYMODE", DUMMYMODE);
-	BurnItPrefs->SetString("EJECT", EJECT);
-	BurnItPrefs->SetString("DATA_STRING", DATA_STRING);
-	BurnItPrefs->SetString("PAD", PAD);
-	BurnItPrefs->SetString("DAO", DAO);
-	BurnItPrefs->SetString("BURNPROOF", BURNPROOF);
-	BurnItPrefs->SetString("SWAB", SWAB);
-	BurnItPrefs->SetString("NOFIX", NOFIX);
-	BurnItPrefs->SetString("PREEMP", PREEMP);
-	BurnItPrefs->SetInt16("IMAGE_TYPE", IMAGE_TYPE);
-	BurnItPrefs->SetInt16("SCSI_DEV", SCSI_DEV);
+	fBurnItPrefs->SetBool("BOOTABLE", BOOTABLE);
+	fBurnItPrefs->SetRef("BOOTIMAGEREF", &BOOTIMAGEREF);
+	fBurnItPrefs->SetString("ISOFILE_DIR", ISOFILE_DIR);
+	fBurnItPrefs->SetString("VOL_NAME", VOL_NAME);
+	fBurnItPrefs->SetBool("VRCD", VRCD);
+	fBurnItPrefs->SetBool("ISOFILE", ISOFILE);
+	fBurnItPrefs->SetInt16("BURN_SPD", BURN_SPD);
+	fBurnItPrefs->SetInt16("BLANK_TYPE", BLANK_TYPE);
+	fBurnItPrefs->SetInt16("BLANK_SPD", BLANK_SPD);
+	fBurnItPrefs->SetInt16("BURN_TYPE", BURN_TYPE);
+	fBurnItPrefs->SetBool("ONTHEFLY", ONTHEFLY);
+	fBurnItPrefs->SetString("MULTISESSION", MULTISESSION);
+	fBurnItPrefs->SetString("DUMMYMODE", DUMMYMODE);
+	fBurnItPrefs->SetString("EJECT", EJECT);
+	fBurnItPrefs->SetString("DATA_STRING", DATA_STRING);
+	fBurnItPrefs->SetString("PAD", PAD);
+	fBurnItPrefs->SetString("DAO", DAO);
+	fBurnItPrefs->SetString("BURNPROOF", BURNPROOF);
+	fBurnItPrefs->SetString("SWAB", SWAB);
+	fBurnItPrefs->SetString("NOFIX", NOFIX);
+	fBurnItPrefs->SetString("PREEMP", PREEMP);
+	fBurnItPrefs->SetInt16("IMAGE_TYPE", IMAGE_TYPE);
+	fBurnItPrefs->SetInt16("SCSI_DEV", SCSI_DEV);
 
 	// All saved
-	delete BurnItPrefs;
+	delete fBurnItPrefs;
 }
 
 
@@ -1543,9 +1543,9 @@ void jpWindow::SetISOFile(char* string)
 	if (!VRCD && !ISOFILE) {
 		strcpy(ISOFILE_DIR, string);
 		BEntry(string).GetRef(&temp_ref);
-		LList->AddItem(new LeftListItem(&temp_ref, temp_ref.name, LList->ISOIcon, NULL), 0);
-		NewVRCD->SetEnabled(false);
-		AddISO->SetEnabled(false);
+		fLeftList->AddItem(new LeftListItem(&temp_ref, temp_ref.name, fLeftList->fISOBitmap, NULL), 0);
+		fNewVRCDButton->SetEnabled(false);
+		fAddISOButton->SetEnabled(false);
 		ISOFILE = true;
 		VRCD = false;
 
@@ -1568,29 +1568,29 @@ void jpWindow::MakeImageNOW(int Multi, char* str)
 		kill_thread(Cntrl);
 		kill_thread(OPMkImage);
 		system("kill -9 mkisofs");
-		BurnV->BurnButton->SetLabel("Burn");
+		fBurnView->fBurnButton->SetLabel("Burn");
 		OPMkImage = 0;
 		Cntrl = 0;
 		PutLog("User Aborted burning (Makeing Image)");
-		StatusWin->Lock();
-		StatusWin->MyStatus->SetBarColor(red);
-		temp1 = MyStatus->CurrentValue();
-		StatusWin->MyStatus->Reset();
-		StatusWin->MyStatus->Update(temp1);
-		StatusWin->Unlock();
+		fStatusWindow->Lock();
+		fStatusWindow->fStatusBar->SetBarColor(red);
+		temp1 = fStatusBar->CurrentValue();
+		fStatusWindow->fStatusBar->Reset();
+		fStatusWindow->fStatusBar->Update(temp1);
+		fStatusWindow->Unlock();
 		BEntry(IMAGE_NAME, true).Remove();
 	} else {*/
 	int Result;
 	BAlert* MyAlert = new BAlert("Burn?", "Do you want to make the image?", "I changed my mind.", "Do it.", NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 	Result = MyAlert->Go();
 	if (Result) {
-		StatusWin = new StatusWindow(VOL_NAME);
-		StatusWin->Show();
+		fStatusWindow = new StatusWindow(VOL_NAME);
+		fStatusWindow->Show();
 
-		StatusWin->Lock();
-		StatusWin->MyStatus->Reset();
-		StatusWin->MyStatus->SetBarColor(blue);
-		StatusWin->Unlock();
+		fStatusWindow->Lock();
+		fStatusWindow->fStatusBar->Reset();
+		fStatusWindow->fStatusBar->SetBarColor(blue);
+		fStatusWindow->Unlock();
 		char command[2000];
 		if (BOOTABLE) {
 			MakeBootImage();
@@ -1601,22 +1601,22 @@ void jpWindow::MakeImageNOW(int Multi, char* str)
 				sprintf(command, "mkisofs -o \"%s\" %s %s -gui -f -V \"%s\" \"%s\" 2>&1", IMAGE_NAME, DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR);
 			}
 			if (Multi == 1) {
-				sprintf(command, "mkisofs -o \"%s\" %s %s -gui -f -V \"%s\" -C %s -M %s \"%s\" 2>&1", IMAGE_NAME, DATA_STRING, BOOTSTRING, VOL_NAME, str, BURNITDEV->scsiid, BURN_DIR);
+				sprintf(command, "mkisofs -o \"%s\" %s %s -gui -f -V \"%s\" -C %s -M %s \"%s\" 2>&1", IMAGE_NAME, DATA_STRING, BOOTSTRING, VOL_NAME, str, fBurnDevice->scsiid, BURN_DIR);
 			}
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "MakeingIMAGE", 5, command));
 			snooze(500000);
-			resume_thread(OPMkImage = spawn_thread(OutPutMkImage, "OutPutMakeingIMAGE", 5, StatusWin));
+			resume_thread(OPMkImage = spawn_thread(OutPutMkImage, "OutPutMakeingIMAGE", 5, fStatusWindow));
 			snooze(500000);
-			BurnV->BurnButton->SetLabel("Cancel");
+			fBurnView->fBurnButton->SetLabel("Cancel");
 			Unlock();
 
 		}
 		if (IMAGE_TYPE == 1) { // BFS
 			MessageLog("Begin making and copying to bfs file...");
-			StatusWin->Lock();
-			StatusWin->StatusSetText("Making BFS image this can take several minutes..");
-			StatusWin->Unlock();
+			fStatusWindow->Lock();
+			fStatusWindow->StatusSetText("Making BFS image this can take several minutes..");
+			fStatusWindow->Unlock();
 			MakeBFS();
 			MountBFS();
 			BFSDir = new BDirectory("/BurnItNowTempMount");
@@ -1628,9 +1628,9 @@ void jpWindow::MakeImageNOW(int Multi, char* str)
 				BurnWithCDRecord();
 			else {
 				sprintf(IMAGE_NAME, "%s/tmp/BurnItNow.raw", BURNIT_PATH);
-				StatusWin->Lock();
-				StatusWin->Ready();
-				StatusWin->Unlock();
+				fStatusWindow->Lock();
+				fStatusWindow->Ready();
+				fStatusWindow->Unlock();
 			}
 		}
 	}
@@ -1670,20 +1670,20 @@ void jpWindow::BurnWithCDRecord()
 	Result = MyAlert->Go();
 	if (Result) {
 		if (ONTHEFLY || ISOFILE || (BURN_TYPE == 1)) {
-			StatusWin = new StatusWindow(VOL_NAME);
-			StatusWin->Show();
+			fStatusWindow = new StatusWindow(VOL_NAME);
+			fStatusWindow->Show();
 		}
-		StatusWin->Lock();
-		StatusWin->MyStatus->Reset();
-		StatusWin->MyStatus->SetBarColor(blue);
-		StatusWin->Unlock();
+		fStatusWindow->Lock();
+		fStatusWindow->fStatusBar->Reset();
+		fStatusWindow->fStatusBar->SetBarColor(blue);
+		fStatusWindow->Unlock();
 
 		SetButtons(false);
 		char command[2000];
 		if (BURN_TYPE == 0) {
-			StatusWin->Lock();
-			StatusWin->SetAngles(angles, 1);
-			StatusWin->Unlock();
+			fStatusWindow->Lock();
+			fStatusWindow->SetAngles(angles, 1);
+			fStatusWindow->Unlock();
 
 			if (ONTHEFLY && !ISOFILE && VRCD) {
 				if (BOOTABLE) {
@@ -1691,47 +1691,47 @@ void jpWindow::BurnWithCDRecord()
 				}
 
 				GetTsize(tsize);
-				sprintf(command, "/boot/apps/cdrtools/bin/mkisofs %s -quiet %s -f -V \"%s\" \"%s\" | /boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s tsize=%s %s -data %s %s -v -", DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR, BURNITDEV->scsiid, BURN_SPD, BURNPROOF, tsize, DAO, DUMMYMODE, EJECT);
+				sprintf(command, "/boot/apps/cdrtools/bin/mkisofs %s -quiet %s -f -V \"%s\" \"%s\" | /boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s tsize=%s %s -data %s %s -v -", DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR, fBurnDevice->scsiid, BURN_SPD, BURNPROOF, tsize, DAO, DUMMYMODE, EJECT);
 			} else {
-				sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s -data %s %s %s -v \"%s\"", BURNITDEV->scsiid, BURN_SPD, BURNPROOF, DAO, DUMMYMODE, EJECT, MULTISESSION, IMAGE_NAME);
+				sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s -data %s %s %s -v \"%s\"", fBurnDevice->scsiid, BURN_SPD, BURNPROOF, DAO, DUMMYMODE, EJECT, MULTISESSION, IMAGE_NAME);
 			}
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
 			snooze(500000);
-			resume_thread(OPBurn = spawn_thread(OutPutBurn, "OutPutBurning", 15, StatusWin));
+			resume_thread(OPBurn = spawn_thread(OutPutBurn, "OutPutBurning", 15, fStatusWindow));
 			snooze(500000);
 			Unlock();
 		} else if (BURN_TYPE == 1) {
-			StatusWin->Lock();
-			StatusWin->SetAngles(angles, nrtracks);
-			StatusWin->Unlock();
+			fStatusWindow->Lock();
+			fStatusWindow->SetAngles(angles, nrtracks);
+			fStatusWindow->Unlock();
 
-			sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s %s %s %s %s -audio %s %s -v %s", BURNITDEV->scsiid, BURN_SPD, BURNPROOF, DAO, PAD, PREEMP, SWAB, NOFIX, DUMMYMODE, EJECT, AUDIO_FILES);
+			sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s %s %s %s %s -audio %s %s -v %s", fBurnDevice->scsiid, BURN_SPD, BURNPROOF, DAO, PAD, PREEMP, SWAB, NOFIX, DUMMYMODE, EJECT, AUDIO_FILES);
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
 			snooze(500000);
-			resume_thread(OPBurn = spawn_thread(OutPutBurn, "OutPutBurning", 15, StatusWin));
+			resume_thread(OPBurn = spawn_thread(OutPutBurn, "OutPutBurning", 15, fStatusWindow));
 			snooze(500000);
 			Unlock();
 		} else if (BURN_TYPE == 2) {
-			StatusWin->Lock();
-			StatusWin->SetAngles(angles, nrtracks);
-			StatusWin->Unlock();
+			fStatusWindow->Lock();
+			fStatusWindow->SetAngles(angles, nrtracks);
+			fStatusWindow->Unlock();
 
 			if (ONTHEFLY && !ISOFILE && VRCD) {
 				GetTsize(tsize);
-				if (DataV->BootableCD->Value() == 1) {
+				if (fDataView->fBootableCDCheckBox->Value() == 1) {
 					MakeBootImage();
 				}
-				sprintf(command, "/boot/apps/cdrtools/bin/mkisofs %s %s -quiet -f -V \"%s\" \"%s\" | /boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s tsize=%s %s %s %s -v %s %s %s %s -data - -audio %s", DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR, BURNITDEV->scsiid, BURN_SPD, BURNPROOF, tsize, DAO, DUMMYMODE, EJECT, PAD, PREEMP, SWAB, NOFIX, AUDIO_FILES);
+				sprintf(command, "/boot/apps/cdrtools/bin/mkisofs %s %s -quiet -f -V \"%s\" \"%s\" | /boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s tsize=%s %s %s %s -v %s %s %s %s -data - -audio %s", DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR, fBurnDevice->scsiid, BURN_SPD, BURNPROOF, tsize, DAO, DUMMYMODE, EJECT, PAD, PREEMP, SWAB, NOFIX, AUDIO_FILES);
 				MessageLog(command);
 			} else {
-				sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s %s %s %s %s %s %s -v -data \"%s\" -audio %s", BURNITDEV->scsiid, BURN_SPD, BURNPROOF, DAO, PAD, PREEMP, SWAB, NOFIX, DUMMYMODE, EJECT, IMAGE_NAME, AUDIO_FILES);
+				sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s %s %s %s %s %s %s -v -data \"%s\" -audio %s", fBurnDevice->scsiid, BURN_SPD, BURNPROOF, DAO, PAD, PREEMP, SWAB, NOFIX, DUMMYMODE, EJECT, IMAGE_NAME, AUDIO_FILES);
 			}
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
 			snooze(500000);
-			resume_thread(OPBurn = spawn_thread(OutPutBurn, "OutPutBurning", 15, StatusWin));
+			resume_thread(OPBurn = spawn_thread(OutPutBurn, "OutPutBurning", 15, fStatusWindow));
 			snooze(500000);
 			Unlock();
 		}
@@ -1748,7 +1748,7 @@ void jpWindow::StatusSetMax(float t1)
 
 void jpWindow::UpdateStatus(float delta, char* str)
 {
-	MyStatus->Update(delta - MyStatus->CurrentValue(), str);
+	fStatusBar->Update(delta - fStatusBar->CurrentValue(), str);
 }
 
 
@@ -1769,8 +1769,8 @@ void jpWindow::StatusUpdateReset()
 
 void jpWindow::SetButtons(bool what)
 {
-	BurnV->SetButton(what);
-	CDRWV->BlankButton->SetEnabled(what);
+	fBurnView->SetButton(what);
+	fCDRWView->fBlankButton->SetEnabled(what);
 }
 
 
@@ -1792,8 +1792,8 @@ void jpWindow::MakeBootImage()
 		system(temp2);
 	} else {
 		sprintf(BOOTSTRING, " ");
-		DataV->BootableCD->SetValue(0);
-		DataV->ChooseBootImage->SetEnabled(false);
+		fDataView->fBootableCDCheckBox->SetValue(0);
+		fDataView->fChooseBootImageButton->SetEnabled(false);
 		BOOTABLE = false;
 		BAlert* MyAlert = new BAlert("BurnItNow", "The boot image you chose doesn't exist.\n BurnItNow will burn this CD without a bootimage.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 		MyAlert->Go();

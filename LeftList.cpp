@@ -36,20 +36,20 @@ LeftListItem::LeftListItem(entry_ref* ref, char* name, BBitmap* icon, struct Aud
 	:
 	BListItem()
 {
-	fref = *ref;
-	strcpy(fname, name);
-	ficon = icon;
+	fRef = *ref;
+	strcpy(fName, name);
+	fIconBitmap = icon;
 
 	if (Info != NULL) {
-		isAudio = true;
-		AInfo.bps = Info->bps;
-		AInfo.frame_rate = Info->frame_rate;
-		AInfo.channels = Info->channels;
-		AInfo.total_time = Info->total_time;
-		strcpy(AInfo.pretty_name, Info->pretty_name);
-		strcpy(AInfo.short_name, Info->short_name);
+		fIsAudio = true;
+		fAudioInfo.bps = Info->bps;
+		fAudioInfo.frame_rate = Info->frame_rate;
+		fAudioInfo.channels = Info->channels;
+		fAudioInfo.total_time = Info->total_time;
+		strcpy(fAudioInfo.pretty_name, Info->pretty_name);
+		strcpy(fAudioInfo.short_name, Info->short_name);
 	} else {
-		isAudio = false;
+		fIsAudio = false;
 	}
 
 
@@ -74,7 +74,7 @@ void LeftListItem::DrawItem(BView* owner, BRect frame, bool complete)
 	if (IsSelected()) {
 		rgbColor = rgbSelectedColor;
 	} else {
-		if (!isAudio)
+		if (!fIsAudio)
 			rgbColor = rgbPatternColor;
 	};
 
@@ -85,13 +85,13 @@ void LeftListItem::DrawItem(BView* owner, BRect frame, bool complete)
 	owner->SetHighColor(black);
 
 
-	owner->DrawBitmap(ficon, BPoint(1, frame.top + 1));
+	owner->DrawBitmap(fIconBitmap, BPoint(1, frame.top + 1));
 	owner->MovePenTo(BPoint(21, frame.bottom - 1));
-	if (isAudio) {
-		sprintf(temp_char, "%s - %d:%d", fname, (int)(AInfo.total_time / 1000000) / 60, (int)(AInfo.total_time / 1000000) % 60);
+	if (fIsAudio) {
+		sprintf(temp_char, "%s - %d:%d", fName, (int)(fAudioInfo.total_time / 1000000) / 60, (int)(fAudioInfo.total_time / 1000000) % 60);
 		owner->DrawString(temp_char);
 	} else {
-		owner->DrawString(fname);
+		owner->DrawString(fName);
 	}
 }
 
@@ -102,33 +102,33 @@ LeftList::LeftList(BRect size)
 {
 	SetViewColor(255, 255, 255, 0);
 
-	VRCDIcon = GetBitmapResource('BBMP', "BMP:VRCDICON");
-	ISOIcon = GetBitmapResource('BBMP', "BMP:ISOICON");
-	AudioIcon = GetBitmapResource('BBMP', "BMP:AUDIOICON");
+	fVRCDBitmap = GetBitmapResource('BBMP', "BMP:VRCDICON");
+	fISOBitmap = GetBitmapResource('BBMP', "BMP:ISOICON");
+	fAudioBitmap = GetBitmapResource('BBMP', "BMP:AUDIOICON");
 
-	TrackPop = new BPopUpMenu("Tracks Popup");
-	TrackPop->SetRadioMode(false);
-	TrackPop->AddItem(new BMenuItem("Move Up", new BMessage('mvup')));
-	TrackPop->AddItem(new BMenuItem("Remove", new BMessage('remt')));
-	TrackPop->AddItem(new BMenuItem("Move Down", new BMessage('mvdn')));
-	TrackPop->AddItem(new BMenuItem("Play", new BMessage('play')));
+	fTrackPopUpMenu = new BPopUpMenu("Tracks Popup");
+	fTrackPopUpMenu->SetRadioMode(false);
+	fTrackPopUpMenu->AddItem(new BMenuItem("Move Up", new BMessage('mvup')));
+	fTrackPopUpMenu->AddItem(new BMenuItem("Remove", new BMessage('remt')));
+	fTrackPopUpMenu->AddItem(new BMenuItem("Move Down", new BMessage('mvdn')));
+	fTrackPopUpMenu->AddItem(new BMenuItem("Play", new BMessage('play')));
 
 }
 
 
 LeftList::~LeftList()
 {
-	delete VRCDIcon;
-	delete ISOIcon;
-	delete AudioIcon;
+	delete fVRCDBitmap;
+	delete fISOBitmap;
+	delete fAudioBitmap;
 }
 
 
 void LeftList::MessageReceived(BMessage* msg)
 {
-	struct AudioInfo AInfo;
+	struct AudioInfo fAudioInfo;
 	BMediaFile* testfile;
-	bool isAudio = false;
+	bool fIsAudio = false;
 	BMediaTrack* track;
 	media_codec_info codecInfo;
 	media_format format;
@@ -150,24 +150,24 @@ void LeftList::MessageReceived(BMessage* msg)
 							memset(&format, 0, sizeof(format));
 							format.type = B_MEDIA_RAW_AUDIO;
 							track->DecodedFormat(&format);
-							AInfo.total_time = track->Duration();
+							fAudioInfo.total_time = track->Duration();
 							media_raw_audio_format* raf = &(format.u.raw_audio);
-							AInfo.bps = (int32)(raf->format & 0xf);
-							AInfo.frame_rate = (int32)raf->frame_rate;
-							AInfo.channels = (int32)raf->channel_count;
+							fAudioInfo.bps = (int32)(raf->format & 0xf);
+							fAudioInfo.frame_rate = (int32)raf->frame_rate;
+							fAudioInfo.channels = (int32)raf->channel_count;
 							track->GetCodecInfo(&codecInfo);
-							strcpy(AInfo.pretty_name, codecInfo.pretty_name);
-							strcpy(AInfo.short_name, codecInfo.short_name);
-							isAudio = true;
+							strcpy(fAudioInfo.pretty_name, codecInfo.pretty_name);
+							strcpy(fAudioInfo.short_name, codecInfo.short_name);
+							fIsAudio = true;
 						}
 					}
 				} else {
 					WriteLog("MediaFile NULL (file doesnt exists!?)");
 				}
 				delete testfile;
-				if (isAudio) {
-					if (!strcmp(AInfo.pretty_name, "Raw Audio") && (AInfo.channels == 2) && (AInfo.frame_rate == 44100) && (AInfo.bps == 2)) {
-						AddItem(new LeftListItem(&ref, ref.name, AudioIcon, &AInfo));
+				if (fIsAudio) {
+					if (!strcmp(fAudioInfo.pretty_name, "Raw Audio") && (fAudioInfo.channels == 2) && (fAudioInfo.frame_rate == 44100) && (fAudioInfo.bps == 2)) {
+						AddItem(new LeftListItem(&ref, ref.name, fAudioBitmap, &fAudioInfo));
 					} else {
 						BAlert* MyAlert = new BAlert("BurnItNow", "You can only burn 16 bits stereo 44.1 kHz Raw Audio files.\n (More audio files will be supported in the future)", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 						MyAlert->Go();
@@ -202,17 +202,17 @@ void LeftList::KeyDown(const char* bytes, int32 numBytes)
 					result = MyAlert->Go();
 					if (result == 0) {
 						LeftListItem* item = (LeftListItem*)RemoveItem(selection);
-						if (!item->isAudio) {
+						if (!item->fIsAudio) {
 							VRCD = false;
 							ISOFILE = false;
 							jpWindow* win = dynamic_cast<jpWindow*>(Window());
 							if (win != NULL) {
-								win->MakeDir->SetEnabled(false);
-								win->ParentDir->SetEnabled(false);
-								win->NewVRCD->SetEnabled(true);
-								win->AddISO->SetEnabled(true);
-								win->DataV->BootableCD->SetEnabled(false);
-								win->DataV->ChooseBootImage->SetEnabled(false);
+								win->fMakeDirButton->SetEnabled(false);
+								win->fParentDirButton->SetEnabled(false);
+								win->fNewVRCDButton->SetEnabled(true);
+								win->fAddISOButton->SetEnabled(true);
+								win->fDataView->fBootableCDCheckBox->SetEnabled(false);
+								win->fDataView->fChooseBootImageButton->SetEnabled(false);
 							}
 
 						}
@@ -245,12 +245,12 @@ void LeftList::MouseDown(BPoint point)
 	uint32 button = msg->FindInt32("buttons");
 
 
-	if ((button == mLastButton) && (clicks > 1)) {
-		mClickCount++;
+	if ((button == fLastButton) && (clicks > 1)) {
+		fClickCount++;
 	} else {
-		mClickCount = 1;
+		fClickCount = 1;
 	}
-	mLastButton = button;
+	fLastButton = button;
 
 	if ((button == B_SECONDARY_MOUSE_BUTTON)) {
 		int32 itemn = IndexOf(point);
@@ -259,25 +259,25 @@ void LeftList::MouseDown(BPoint point)
 			BPoint p = point;
 			ConvertToScreen(&p);
 			Select(itemn);
-			selected = TrackPop->Go(p);
+			selected = fTrackPopUpMenu->Go(p);
 			if (selected) {
 				int32 selection = CurrentSelection();
 				if (!strcmp(selected->Label(), "Move Up")) {
 					LeftListItem* item = (LeftListItem*)ItemAt(selection - 1);
 					LeftListItem* item2 = (LeftListItem*)ItemAt(selection);
-					if ((selection - 1 > 0) && (item->isAudio) && (item2->isAudio))
+					if ((selection - 1 > 0) && (item->fIsAudio) && (item2->fIsAudio))
 						SwapItems(selection, selection - 1);
 
 
 				} else if (!strcmp(selected->Label(), "Move Down")) {
 					LeftListItem* item = (LeftListItem*)ItemAt(selection);
-					if ((selection + 1 <= CountItems()) && (item->ficon == AudioIcon))
+					if ((selection + 1 <= CountItems()) && (item->fIconBitmap == fAudioBitmap))
 						SwapItems(selection, selection + 1);
 
 				} else if (!strcmp(selected->Label(), "Play")) {
 					LeftListItem* item = (LeftListItem*)ItemAt(selection);
-					if (item->ficon == AudioIcon)
-						be_roster->Launch(&item->fref);
+					if (item->fIconBitmap == fAudioBitmap)
+						be_roster->Launch(&item->fRef);
 				} else if (!strcmp(selected->Label(), "Remove")) {
 					int32 result;
 					BAlert* MyAlert = new BAlert("BurnItNow", "Are you sure you want to delete this selection", "Yes", "No", NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
@@ -285,15 +285,15 @@ void LeftList::MouseDown(BPoint point)
 					result = MyAlert->Go();
 					if (result == 0) {
 						LeftListItem* item = (LeftListItem*)RemoveItem(itemn);
-						if (!item->isAudio) {
+						if (!item->fIsAudio) {
 							VRCD = false;
 							ISOFILE = false;
 							jpWindow* win = dynamic_cast<jpWindow*>(Window());
 							if (win != NULL) {
-								win->MakeDir->SetEnabled(false);
-								win->ParentDir->SetEnabled(false);
-								win->NewVRCD->SetEnabled(true);
-								win->AddISO->SetEnabled(true);
+								win->fMakeDirButton->SetEnabled(false);
+								win->fParentDirButton->SetEnabled(false);
+								win->fNewVRCDButton->SetEnabled(true);
+								win->fAddISOButton->SetEnabled(true);
 
 							}
 
@@ -308,38 +308,38 @@ void LeftList::MouseDown(BPoint point)
 			return;
 		}
 	}
-	if ((button == B_PRIMARY_MOUSE_BUTTON) && (mClickCount == 2)) {
+	if ((button == B_PRIMARY_MOUSE_BUTTON) && (fClickCount == 2)) {
 		int32 selection = CurrentSelection();
 		if (selection >= 0) {
 			LeftListItem* item = (LeftListItem*)ItemAt(selection);
-			if (item->isAudio) {
-				sprintf(temp1, "%s", item->AInfo.pretty_name);
-				sprintf(temp2, "%d Channels", (int)item->AInfo.channels);
-				sprintf(temp3, "%.1f kHz", ((float)item->AInfo.frame_rate / (float)1000));
-				sprintf(temp4, "%d bits", (int)item->AInfo.bps * 8);
+			if (item->fIsAudio) {
+				sprintf(temp1, "%s", item->fAudioInfo.pretty_name);
+				sprintf(temp2, "%d Channels", (int)item->fAudioInfo.channels);
+				sprintf(temp3, "%.1f kHz", ((float)item->fAudioInfo.frame_rate / (float)1000));
+				sprintf(temp4, "%d bits", (int)item->fAudioInfo.bps * 8);
 				sprintf(temp5, "Info on AudioFile");
 				jpWindow* win = dynamic_cast<jpWindow*>(Window());
 				if (win != NULL) {
-					win->RList->UpdateInfo(temp5, temp1, temp2, temp3, temp4);
+					win->fRightList->UpdateInfo(temp5, temp1, temp2, temp3, temp4);
 				}
 			}
-			if (item->ficon == VRCDIcon) {
+			if (item->fIconBitmap == fVRCDBitmap) {
 				jpWindow* win = dynamic_cast<jpWindow*>(Window());
 				if (win != NULL) {
-					win->RList->UpdateDir();
+					win->fRightList->UpdateDir();
 				}
 			}
-			if (item->ficon == ISOIcon) {
+			if (item->fIconBitmap == fISOBitmap) {
 				sprintf(temp1, "Info on ISOFile");
-				sprintf(temp2, "%s", item->fname);
+				sprintf(temp2, "%s", item->fName);
 				sprintf(temp3, "X Mb");
 				jpWindow* win = dynamic_cast<jpWindow*>(Window());
 				if (win != NULL) {
-					win->RList->UpdateInfo(temp1, temp2, temp3, NULL, NULL);
+					win->fRightList->UpdateInfo(temp1, temp2, temp3, NULL, NULL);
 				}
 			}
 		}
-		mClickCount = 0;
+		fClickCount = 0;
 
 	} else {
 		BListView::MouseDown(point);

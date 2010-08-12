@@ -19,8 +19,8 @@ public:
 	~AboutView();
 	virtual void Draw(BRect updateRect);
 
-	BFont* f1;
-	BBitmap* burnbitmap, *burnproof, *cdrecord;
+	BFont* fViewFont;
+	BBitmap* fBurnBitmap, *fBurnProofBitmap, *fCDRecordBitmap;
 };
 
 
@@ -29,9 +29,9 @@ public:
 	AboutWindow();
 	virtual void MessageReceived(BMessage* msg);
 
-	BView* Around;
-	AboutView* AView;
-	jpButton* Close;
+	BView* fAroundView;
+	AboutView* fAboutView;
+	jpButton* fCloseButton;
 };
 
 

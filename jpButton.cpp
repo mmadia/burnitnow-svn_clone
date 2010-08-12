@@ -11,10 +11,10 @@ jpButton::jpButton(BRect frame, char* name, char* title, BMessage* msg, uint32 r
 	:
 	BControl(frame, name, title, msg, resizingMode, flags)
 {
-	strcpy(ftitle, title);
+	strcpy(fTitle, title);
 	SetFont(be_plain_font);
-	enabled = true;
-	down = false;
+	fEnabled = true;
+	fDown = false;
 }
 
 
@@ -25,7 +25,7 @@ jpButton::~jpButton()
 
 void jpButton::SetTitle(char* title)
 {
-	strcpy(ftitle, title);
+	strcpy(fTitle, title);
 	Invalidate();
 }
 
@@ -36,8 +36,8 @@ void jpButton::Draw(BRect updateRect)
 	BRect r;
 	r = Bounds();
 	SetPenSize(1.0);
-	if (enabled) {
-		if (down) {
+	if (fEnabled) {
+		if (fDown) {
 			SetHighColor(190, 190, 190);
 			FillRect(r);
 			SetHighColor(100, 100, 100);
@@ -59,14 +59,14 @@ void jpButton::Draw(BRect updateRect)
 	}
 
 	be_plain_font->GetHeight(&fh);
-	MovePenTo((Bounds().right / 2) - ((be_plain_font->StringWidth(ftitle) / 2)), (Bounds().bottom / 2) + (fh.ascent / 2));
-	DrawString(ftitle);
-	if (BControl::IsFocus() && enabled) {
+	MovePenTo((Bounds().right / 2) - ((be_plain_font->StringWidth(fTitle) / 2)), (Bounds().bottom / 2) + (fh.ascent / 2));
+	DrawString(fTitle);
+	if (BControl::IsFocus() && fEnabled) {
 		SetHighColor(120, 120, 120);
 		BPoint p1, p2;
-		p1.x = (Bounds().right / 2) - ((be_plain_font->StringWidth(ftitle) / 2)) - 1;
+		p1.x = (Bounds().right / 2) - ((be_plain_font->StringWidth(fTitle) / 2)) - 1;
 		p1.y = (Bounds().bottom / 2) + (fh.ascent / 2) + 1;
-		p2.x =  p1.x + be_plain_font->StringWidth(ftitle);
+		p2.x =  p1.x + be_plain_font->StringWidth(fTitle);
 		p2.y = p1.y;
 		StrokeLine(p1, p2);
 	}
@@ -76,8 +76,8 @@ void jpButton::Draw(BRect updateRect)
 
 void jpButton::MouseDown(BPoint p)
 {
-	if (enabled) {
-		down = true;
+	if (fEnabled) {
+		fDown = true;
 		Invalidate();
 	}
 }
@@ -85,8 +85,8 @@ void jpButton::MouseDown(BPoint p)
 
 void jpButton::MouseUp(BPoint p)
 {
-	if (enabled) {
-		down = false;
+	if (fEnabled) {
+		fDown = false;
 		Invalidate();
 		Invoke();
 	}
@@ -99,8 +99,8 @@ void jpButton::MouseMoved(BPoint p, uint32 code, const BMessage* a_message)
 	uint32 buttons;
 
 	if (code == B_EXITED_VIEW)
-		if (enabled && down) {
-			down = false;
+		if (fEnabled && fDown) {
+			fDown = false;
 			Invalidate();
 		}
 	if (code == B_ENTERED_VIEW) {
@@ -115,7 +115,7 @@ void jpButton::MouseMoved(BPoint p, uint32 code, const BMessage* a_message)
 
 void jpButton::SetEnabled(bool what)
 {
-	enabled = what;
+	fEnabled = what;
 	Invalidate();
 }
 
@@ -129,8 +129,8 @@ void jpButton::MakeFocus(bool focusState = true)
 
 void jpButton::KeyDown(const char* bytes, int32 numBytes)
 {
-	if (BControl::IsFocus() && enabled && bytes[0] == B_SPACE) {
-		down = true;
+	if (BControl::IsFocus() && fEnabled && bytes[0] == B_SPACE) {
+		fDown = true;
 		Invalidate();
 	}
 	BControl::KeyDown(bytes, numBytes);
@@ -139,8 +139,8 @@ void jpButton::KeyDown(const char* bytes, int32 numBytes)
 
 void jpButton::KeyUp(const char* bytes, int32 numBytes)
 {
-	if (BControl::IsFocus() && enabled && bytes[0] == B_SPACE) {
-		down = false;
+	if (BControl::IsFocus() && fEnabled && bytes[0] == B_SPACE) {
+		fDown = false;
 		Invalidate();
 		Invoke();
 	}

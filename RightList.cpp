@@ -114,12 +114,12 @@ RightList::RightList(BRect size)
 	BListView(size, "RightList", B_MULTIPLE_SELECTION_LIST, B_FOLLOW_NONE, B_WILL_DRAW)
 {
 	SetViewColor(255, 255, 255, 0);
-	BDir = new BDirectory(BURN_DIR);
-	TDir = new BDirectory(BURN_DIR);
+	fBDirectory = new BDirectory(BURN_DIR);
+	fTDirectory = new BDirectory(BURN_DIR);
 
-	FileIcon = GetBitmapResource('BBMP', "BMP:FILEICON");
-	DirIcon = GetBitmapResource('BBMP', "BMP:DIRICON");
-	InfoIcon = GetBitmapResource('BBMP', "BMP:INFOICON");
+	fFileBitmap = GetBitmapResource('BBMP', "BMP:FILEICON");
+	fDirectoryBitmap = GetBitmapResource('BBMP', "BMP:DIRICON");
+	fInfoBitmap = GetBitmapResource('BBMP', "BMP:INFOICON");
 	UpdateDir();
 
 }
@@ -127,11 +127,11 @@ RightList::RightList(BRect size)
 
 RightList::~RightList()
 {
-	delete BDir;
-	delete TDir;
-	delete FileIcon;
-	delete DirIcon;
-	delete InfoIcon;
+	delete fBDirectory;
+	delete fTDirectory;
+	delete fFileBitmap;
+	delete fDirectoryBitmap;
+	delete fInfoBitmap;
 }
 
 
@@ -232,22 +232,22 @@ void RightList::MouseDown(BPoint point)
 	BMessage* msg = Window()->CurrentMessage();
 	uint32 clicks = msg->FindInt32("clicks");
 	uint32 button = msg->FindInt32("buttons");
-	if ((button == mLastButton) && (clicks > 1)) {
-		mClickCount++;
+	if ((button == fLastButton) && (clicks > 1)) {
+		fClickCount++;
 	} else {
-		mClickCount = 1;
+		fClickCount = 1;
 	}
-	mLastButton = button;
-	if ((button == B_PRIMARY_MOUSE_BUTTON) && (mClickCount == 2)) {
+	fLastButton = button;
+	if ((button == B_PRIMARY_MOUSE_BUTTON) && (fClickCount == 2)) {
 		int32 selection = CurrentSelection();
 		if (selection >= 0) {
 			FileListItem* item = (FileListItem*)ItemAt(selection);
-			if (item->ficon != NULL && item->ficon != InfoIcon)
-				if (BDir->SetTo(&item->fref) == B_OK) {
+			if (item->ficon != NULL && item->ficon != fInfoBitmap)
+				if (fBDirectory->SetTo(&item->fref) == B_OK) {
 					UpdateDir();
 				}
 		}
-		mClickCount = 0;
+		fClickCount = 0;
 
 	} else {
 		BListView::MouseDown(point);
@@ -259,7 +259,7 @@ void RightList::UpdateInfo(char* str1 = NULL, char* str2 = NULL, char* str3 = NU
 {
 	MakeEmpty();
 	if (str1 != NULL) {
-		AddItem(new FileListItem(NULL, str1, InfoIcon));
+		AddItem(new FileListItem(NULL, str1, fInfoBitmap));
 	}
 	if (str2 != NULL) {
 		AddItem(new FileListItem(NULL, str2, NULL));
@@ -282,13 +282,13 @@ void RightList::UpdateDir()
 	BEntry temp_entry;
 	entry_ref temp_ref;
 	MakeEmpty();
-	BDir->GetEntry(&temp_entry);
-	BDir->SetTo(&temp_entry);
-	while (BDir->GetNextRef(&temp_ref) != B_ENTRY_NOT_FOUND) {
+	fBDirectory->GetEntry(&temp_entry);
+	fBDirectory->SetTo(&temp_entry);
+	while (fBDirectory->GetNextRef(&temp_ref) != B_ENTRY_NOT_FOUND) {
 		if (BEntry(&temp_ref, true).IsDirectory()) {
-			AddItem(new FileListItem(&temp_ref, temp_ref.name, DirIcon));
+			AddItem(new FileListItem(&temp_ref, temp_ref.name, fDirectoryBitmap));
 		} else {
-			AddItem(new FileListItem(&temp_ref, temp_ref.name, FileIcon));
+			AddItem(new FileListItem(&temp_ref, temp_ref.name, fFileBitmap));
 		}
 
 	}
@@ -305,11 +305,11 @@ void RightList::ParentDir()
 {
 	BEntry temp_entry, temp_entry2;
 	BPath temp_path;
-	if (BDir->GetEntry(&temp_entry) == B_OK) {
+	if (fBDirectory->GetEntry(&temp_entry) == B_OK) {
 		temp_entry.GetParent(&temp_entry2);
 		if (temp_entry2.GetPath(&temp_path) == B_OK)
 			if (!strncmp(temp_path.Path(), BURN_DIR, strlen(BURN_DIR))) {
-				temp_entry.GetParent(BDir);
+				temp_entry.GetParent(fBDirectory);
 				UpdateDir();
 			} else {
 			}
@@ -319,8 +319,8 @@ void RightList::ParentDir()
 
 void RightList::CreateDir()
 {
-	MakeDirWindow = new AskName(BRect(200, 200, 440, 240), "Make directory", MAKE_DIRECTORY, "");
-	MakeDirWindow->Show();
+	fMakeDirWindow = new AskName(BRect(200, 200, 440, 240), "Make directory", MAKE_DIRECTORY, "");
+	fMakeDirWindow->Show();
 }
 
 
@@ -329,11 +329,11 @@ void RightList::MakeDir(const char* name)
 	char temp_char[2048];
 	BEntry temp_entry;
 	BPath temp_path;
-	BDir->GetEntry(&temp_entry);
+	fBDirectory->GetEntry(&temp_entry);
 	temp_entry.GetPath(&temp_path);
 	sprintf(temp_char, "%s/%s", temp_path.Path(), name);
 	if (!BEntry(temp_char).Exists()) {
-		BDir->CreateDirectory(temp_char, NULL);
+		fBDirectory->CreateDirectory(temp_char, NULL);
 		UpdateDir();
 	} else {
 		BAlert* MyAlert = new BAlert("BurnItNow", "The directory is already exists!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
@@ -354,24 +354,24 @@ void RightList::MakeDir(entry_ref* ref)
 	temp_dir = new BDirectory(ref);
 	while (temp_dir->GetNextRef(&temp_ref) == B_OK) {
 		if (BEntry(&temp_ref, false).IsDirectory()) {
-			TDir->GetEntry(&temp_entry);
+			fTDirectory->GetEntry(&temp_entry);
 			temp_entry.GetPath(&temp_path);
 			memset(temp_char, 0, sizeof(temp_char));
 			sprintf(temp_char, "%s/%s", temp_path.Path(), temp_ref.name);
-			if (TDir->CreateDirectory(temp_char, NULL) == B_OK)
-				if (TDir->SetTo(temp_char) == B_OK) {
+			if (fTDirectory->CreateDirectory(temp_char, NULL) == B_OK)
+				if (fTDirectory->SetTo(temp_char) == B_OK) {
 					MakeDir(&temp_ref);
-					TDir->SetTo(temp_path.Path());
+					fTDirectory->SetTo(temp_path.Path());
 				}
 
 
 		} else {
 			if (!BEntry(&temp_ref, true).IsDirectory()) {
-				if (TDir->GetEntry(&temp_entry) == B_OK)
+				if (fTDirectory->GetEntry(&temp_entry) == B_OK)
 					if (temp_entry.GetPath(&temp_path) == B_OK) {
 						sprintf(temp_char, "%s/%s", temp_path.Path(), temp_ref.name);
 						if (BEntry(&temp_ref, false).GetPath(&temp_path) == B_OK) {
-							if (TDir->CreateSymLink(temp_char, temp_path.Path(), NULL) == B_OK) {
+							if (fTDirectory->CreateSymLink(temp_char, temp_path.Path(), NULL) == B_OK) {
 							}
 						}
 					}
@@ -394,21 +394,21 @@ void RightList::MakeLink(entry_ref* ref)
 	BEntry temp_entry;
 
 	if (BEntry(ref, false).IsDirectory()) {
-		BDir->GetEntry(&temp_entry);
+		fBDirectory->GetEntry(&temp_entry);
 		temp_entry.GetPath(&temp_path);
 		sprintf(temp_char, "%s/%s", temp_path.Path(), ref->name);
-		if (TDir->CreateDirectory(temp_char, NULL) == B_OK)
-			if (TDir->SetTo(temp_char) == B_OK) {
+		if (fTDirectory->CreateDirectory(temp_char, NULL) == B_OK)
+			if (fTDirectory->SetTo(temp_char) == B_OK) {
 				MakeDir(ref);
-				TDir->Rewind();
+				fTDirectory->Rewind();
 			}
 	} else {
 		if (!BEntry(ref, true).IsDirectory()) {
-			if (BDir->GetEntry(&temp_entry) == B_OK) {
+			if (fBDirectory->GetEntry(&temp_entry) == B_OK) {
 				if (temp_entry.GetPath(&temp_path) == B_OK) {
 					sprintf(temp_char, "%s/%s", temp_path.Path(), ref->name);
 					if (BEntry(ref, false).GetPath(&temp_path) == B_OK) {
-						if (BDir->CreateSymLink(temp_char, temp_path.Path(), NULL) == B_OK) {
+						if (fBDirectory->CreateSymLink(temp_char, temp_path.Path(), NULL) == B_OK) {
 						}
 					}
 				}

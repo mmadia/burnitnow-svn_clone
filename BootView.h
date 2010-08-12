@@ -20,11 +20,11 @@ public:
 	BootView(BRect size);
 	~BootView();
 
-	BMenu* Recorders;
-	BMenuField* RecordPop;
-	BCheckBox* DAOOption;
-	BBox* MiscOpt;
-	IconLabel* MiscLabel;
+	BMenu* fRecordersMenu;
+	BMenuField* fRecordMenuField;
+	BCheckBox* fDAOCheckBox;
+	BBox* fMiscOptBox;
+	IconLabel* fMiscLabel;
 };
 
 

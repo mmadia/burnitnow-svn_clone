@@ -25,20 +25,20 @@ AboutView::AboutView(BRect r, char* title)
 	:
 	BView(r, title, B_FOLLOW_NONE, B_WILL_DRAW)
 {
-	f1 = new BFont(be_plain_font);
-	SetFont(f1);
-	burnbitmap = GetBitmapResource('BBMP', "BMP:BACKGROUND");
-	burnproof = GetBitmapResource('BBMP', "BMP:BURNPROOF");
-	cdrecord = GetBitmapResource('BBMP', "BMP:CDRECORD");
+	fViewFont = new BFont(be_plain_font);
+	SetFont(fViewFont);
+	fBurnBitmap = GetBitmapResource('BBMP', "BMP:BACKGROUND");
+	fBurnProofBitmap = GetBitmapResource('BBMP', "BMP:BURNPROOF");
+	fCDRecordBitmap = GetBitmapResource('BBMP', "BMP:CDRECORD");
 }
 
 
 AboutView::~AboutView()
 {
-	delete f1;
-	delete burnbitmap;
-	delete burnproof;
-	delete cdrecord;
+	delete fViewFont;
+	delete fBurnBitmap;
+	delete fBurnProofBitmap;
+	delete fCDRecordBitmap;
 }
 
 
@@ -52,30 +52,30 @@ void AboutView::Draw(BRect updateRect)
 	FillRect(r);
 	p1.x = (r.right / 2) - 32;
 	p1.y = r.top + 10;
-	DrawBitmap(burnbitmap, p1);
-	f1->SetSize(15);
-	f1->SetFace(B_BOLD_FACE);
-	SetFont(f1);
-	p1.x = (r.right / 2) - (f1->StringWidth(ABOUT_STRING) / 2);
+	DrawBitmap(fBurnBitmap, p1);
+	fViewFont->SetSize(15);
+	fViewFont->SetFace(B_BOLD_FACE);
+	SetFont(fViewFont);
+	p1.x = (r.right / 2) - (fViewFont->StringWidth(ABOUT_STRING) / 2);
 	p1.y = r.top + 20;
 	MovePenTo(p1);
 	SetHighColor(0, 0, 0);
 	DrawString(ABOUT_STRING);
-	f1->SetSize(10);
-	f1->SetFace(B_REGULAR_FACE);
-	SetFont(f1);
-	p1.x = (r.right / 2) - (f1->StringWidth(ABOUT_STRING2) / 2);
+	fViewFont->SetSize(10);
+	fViewFont->SetFace(B_REGULAR_FACE);
+	SetFont(fViewFont);
+	p1.x = (r.right / 2) - (fViewFont->StringWidth(ABOUT_STRING2) / 2);
 	p1.y += 15;
 	MovePenTo(p1);
 	SetHighColor(0, 0, 0);
 	DrawString(ABOUT_STRING2);
 	p1.x = r.left + 100;
 	p1.y = r.top + 85;
-	DrawBitmap(burnproof, p1);
+	DrawBitmap(fBurnProofBitmap, p1);
 
 	p1.x = r.left + 15;
 	p1.y = r.top + 70;
-	DrawBitmap(cdrecord, p1);
+	DrawBitmap(fCDRecordBitmap, p1);
 
 }
 
@@ -88,21 +88,21 @@ AboutWindow::AboutWindow()
 	SetTitle("About");
 
 	r = Bounds();
-	Around = new BView(r, "Around", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);
-	Around->SetViewColor(216, 216, 216, 0);
-	AddChild(Around);
+	fAroundView = new BView(r, "fAroundView", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);
+	fAroundView->SetViewColor(216, 216, 216, 0);
+	AddChild(fAroundView);
 
-	r = Around->Bounds();
+	r = fAroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = r.bottom - 20;
 	r.left = r.right - 35;
-	Close = new jpButton(r, "close", "Close", new BMessage('ClWi'));
-	Around->AddChild(Close);
-	r = Around->Bounds();
+	fCloseButton = new jpButton(r, "close", "Close", new BMessage('ClWi'));
+	fAroundView->AddChild(fCloseButton);
+	r = fAroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.bottom = r.bottom - 25;
-	AView = new AboutView(r, "AboutView");
-	Around->AddChild(AView);
+	fAboutView = new AboutView(r, "AboutView");
+	fAroundView->AddChild(fAboutView);
 }
 
 

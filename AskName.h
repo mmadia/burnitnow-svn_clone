@@ -21,10 +21,10 @@ public:
 	virtual void MessageReceived(BMessage* msg);
 
 private:
-	BView* Around;
-	jpButton* Ok;
-	BTextView* Name;
-	uint32 message;
+	BView* fAroundView;
+	jpButton* fOkButton;
+	BTextView* fNameTextView;
+	uint32 fMessageWhat;
 };
 
 

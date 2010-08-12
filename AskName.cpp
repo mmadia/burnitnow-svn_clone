@@ -23,36 +23,36 @@ AskName::AskName(BRect frame, char* title, uint32 mess, char* what)
 	else
 		SetTitle("BurnItNow");
 
-	message = mess;
+	fMessageWhat = mess;
 
 	r = Bounds();
-	Around = new BView(r, "Around", B_FOLLOW_NONE, B_WILL_DRAW);
-	Around->SetViewColor(216, 216, 216, 0);
-	AddChild(Around);
+	fAroundView = new BView(r, "Around", B_FOLLOW_NONE, B_WILL_DRAW);
+	fAroundView->SetViewColor(216, 216, 216, 0);
+	AddChild(fAroundView);
 
-	r = Around->Bounds();
+	r = fAroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.right -= 70;
 	r.bottom = 23;
-	Name = new BTextView(r, "Name_", r, B_FOLLOW_NONE, B_WILL_DRAW);
-	Name->SetWordWrap(false);
-	Name->DisallowChar('\n');
-	if (message == VOLUME_NAME) {
+	fNameTextView = new BTextView(r, "Name_", r, B_FOLLOW_NONE, B_WILL_DRAW);
+	fNameTextView->SetWordWrap(false);
+	fNameTextView->DisallowChar('\n');
+	if (fMessageWhat == VOLUME_NAME) {
 		//Name->DisallowChar(' ');
 	}
-	Around->AddChild(new BScrollView("NameScroll", Name, B_FOLLOW_NONE, 0, false, false, B_FANCY_BORDER));
-	r2 = Around->Bounds();
+	fAroundView->AddChild(new BScrollView("NameScroll", fNameTextView, B_FOLLOW_NONE, 0, false, false, B_FANCY_BORDER));
+	r2 = fAroundView->Bounds();
 	r2.InsetBy(5.0, 5.0);
 	r2.left = r.right + 5;
 	r2.top -= 3;
 	r2.bottom = 25;
-	Ok = new jpButton(r2, "Ok", "Ok", new BMessage('STxt'));
-	Around->AddChild(Ok);
+	fOkButton = new jpButton(r2, "Ok", "Ok", new BMessage('STxt'));
+	fAroundView->AddChild(fOkButton);
 
-	Name->MakeFocus();
+	fNameTextView->MakeFocus();
 	if (what != NULL) {
-		Name->Insert(what);
-		Name->SelectAll();
+		fNameTextView->Insert(what);
+		fNameTextView->SelectAll();
 	}
 }
 
@@ -60,8 +60,8 @@ AskName::AskName(BRect frame, char* title, uint32 mess, char* what)
 void AskName::SendText()
 {
 	BMessage* temp_msg;
-	temp_msg = new BMessage(message);
-	temp_msg->AddString("DirName", Name->Text());
+	temp_msg = new BMessage(fMessageWhat);
+	temp_msg->AddString("DirName", fNameTextView->Text());
 	be_app->PostMessage(temp_msg);
 	Quit();
 }

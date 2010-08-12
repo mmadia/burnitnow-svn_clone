@@ -22,16 +22,16 @@ public:
 	DataView(BRect size);
 	~DataView();
 
-	jpButton* ChooseDir;
-	jpButton* ChooseBootImage;
-	char ChooseLabel[1024];
-	BCheckBox* BootableCD;
-	BFilePanel* FilePanel;
+	jpButton* fChooseDirButton;
+	jpButton* fChooseBootImageButton;
+	char fChooseLabel[1024];
+	BCheckBox* fBootableCDCheckBox;
+	BFilePanel* fFilePanel;
 
-	IconLabel* FSLabel, *BootLabel;
-	BBox* FSBox, *BootBox;
-	BRadioButton* ISO9660, *Joliet, *Windows, *Mac, *BeOS, *Rock, *RealRock, *Own;
-	jpButton* ChangeVolName;
+	IconLabel* fFileSystemLabel, *fBootLabel;
+	BBox* fFileSystemBox, *fBootBox;
+	BRadioButton* fISO9660Radio, *fJolietRadio, *fWindowsRadio, *fMacRadio, *fBeOSRadio, *fRockRadio, *fRealRockRadio, *fOwnRadio;
+	jpButton* fChangeVolNameButton;
 };
 
 

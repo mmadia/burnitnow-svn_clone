@@ -24,9 +24,9 @@ public:
 	virtual void KeyDown(const char* bytes, int32 numBytes);
 	virtual void KeyUp(const char* bytes, int32 numBytes);
 
-	bool down;
-	bool enabled;
-	char ftitle[100];
+	bool fDown;
+	bool fEnabled;
+	char fTitle[100];
 };
 
 

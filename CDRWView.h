@@ -21,12 +21,12 @@ public:
 	CDRWView(BRect size);
 	~CDRWView();
 
-	BSlider* BlankSpeed;
-	BBox* CDRWBox;
-	IconLabel* CDRWLabel;
-	BMenu* Blank;
-	BMenuField* BlankPop;
-	jpButton* BlankButton;
+	BSlider* fBlankSpeedSlider;
+	BBox* fCDRWBox;
+	IconLabel* fCDRWLabel;
+	BMenu* fBlankMenu;
+	BMenuField* fBlankMenuField;
+	jpButton* fBlankButton;
 };
 
 

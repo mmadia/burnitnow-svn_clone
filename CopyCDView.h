@@ -20,8 +20,8 @@ public:
 	void MessageReceived(BMessage* message);
 
 private:
-	BWindow* tempwin;
-	jpButton* OpenDir;
+	BWindow* fTempWindow;
+	jpButton* fOpenDirButton;
 };
 
 

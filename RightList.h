@@ -46,12 +46,12 @@ public:
 	virtual void DeleteFromVRCD(entry_ref* ref);
 	virtual void DeleteDirFromVRCD(entry_ref* ref);
 
-	BDirectory* BDir, *TDir;
-	uint32 mLastButton, mClickCount;
-	AskName* MakeDirWindow;
-	BBitmap* FileIcon;
-	BBitmap* DirIcon;
-	BBitmap* InfoIcon;
+	BDirectory* fBDirectory, *fTDirectory;
+	uint32 fLastButton, fClickCount;
+	AskName* fMakeDirWindow;
+	BBitmap* fFileBitmap;
+	BBitmap* fDirectoryBitmap;
+	BBitmap* fInfoBitmap;
 };
 
 

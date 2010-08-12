@@ -26,16 +26,16 @@ public:
 	// CDRW public
 
 	// Burn public
-	BSlider* BurnSpeed;
-	jpButton* BurnButton, *MakeImage;
-	BCheckBox* Multi, *OnTheFly, *Eject, *DummyMode;
-	BSlider* Speed;
+	BSlider* fBurnSpeedSlider;
+	jpButton* fBurnButton, *fMakeImageButton;
+	BCheckBox* fMultiCheckBox, *fOnTheFlyCheckBox, *fEjectCheckBox, *fDummyModeCheckBox;
+	BSlider* fSpeedSlider;
 
 private:
 	// BurnBox
-	BBox* BurnBox;
-	IconLabel* BurnLabel, *DataCDLabel, *AudioCDLabel, *MixCDLabel, *bg;
-	BRadioButton* RadioAudioCD, *RadioDataCD, *RadioMixCD;
+	BBox* fBurnBox;
+	IconLabel* fBurnLabel, *fDataCDLabel, *fAudioCDLabel, *fMixCDLabel, *fBGLabel;
+	BRadioButton* fAudioCDRadio, *fDataCDRadio, *fMixCDRadio;
 };
 
 

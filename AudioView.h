@@ -20,11 +20,11 @@ public:
 	AudioView(BRect size);
 	~AudioView();
 
-	BCheckBox* Swab, *Nofix, *Preemp, *Pad;
-	BBox* AdvOptions, *Info;
-	IconLabel* AdvLabel;
-	BTextView* InfoText;
-	BScrollView* InfoScroll;
+	BCheckBox* fSwabCheckBox, *fNoFixCheckBox, *fPreEmpCheckBox, *fPadCheckBox;
+	BBox* fAdvOptionsBox, *fInfoBox;
+	IconLabel* fAdvLabel;
+	BTextView* fInfoTextView;
+	BScrollView* fInfoScrollView;
 };
 
 

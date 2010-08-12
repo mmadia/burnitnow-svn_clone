@@ -62,36 +62,36 @@ public:
 	virtual void CalculateSize();
 	virtual uint64 GetVRCDSize();
 
-	jpButton* ParentDir, *MakeDir, *NewVRCD, *AddISO, *CalcSize;
-	RightList* RList;
-	Prefs* BurnItPrefs;
+	jpButton* fParentDirButton, *fMakeDirButton, *fNewVRCDButton, *fAddISOButton, *fCalcSizeButton;
+	RightList* fRightList;
+	Prefs* fBurnItPrefs;
 
-	BSlider* Speed;
-	BMenuBar* menubar;
-	BBox* BoxAround;
-	AskName* VolumeNameWindow;
-	StatusWindow* StatusWin;
-	AboutWindow* AboutWin;
+	BSlider* fSpeedSlider;
+	BMenuBar* fMenuBar;
+	BBox* fAroundBox;
+	AskName* fVolumeNameWindow;
+	StatusWindow* fStatusWindow;
+	AboutWindow* fAboutWindow;
 
-	BFilePanel* OpenISOPanel, *SaveISOPanel;
-	BStatusBar* MyStatus;
-	BTabView* MyTab;
-	BTab* MiscTab;
+	BFilePanel* fISOOpenPanel, *fISOSavePanel;
+	BStatusBar* fStatusBar;
+	BTabView* fTabView;
+	BTab* fMiscTab;
 
-	BurnView* BurnV;
-	DataView* DataV;
-	AudioView* AudioV;
-	PrefsView* PrefsV;
-	LogView* LogV;
-	CDRWView* CDRWV;
-
-
-	LeftList* LList;
+	BurnView* fBurnView;
+	DataView* fDataView;
+	AudioView* fAudioView;
+	PrefsView* fPrefsView;
+	LogView* fLogView;
+	CDRWView* fCDRWView;
 
 
-	struct cdrecorder scsidevs[100];
-	int RecorderCount;
-	struct cdrecorder* BURNITDEV;
+	LeftList* fLeftList;
+
+
+	struct cdrecorder fScsiDevices[100];
+	int fRecorderCount;
+	struct cdrecorder* fBurnDevice;
 };
 
 

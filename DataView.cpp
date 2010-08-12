@@ -26,107 +26,107 @@ DataView::DataView(BRect size)
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.bottom = 90; // was 85
-	FSLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Filesystem"), 19), " Filesystem", "BMP:FS");
-	FSLabel->SetViewColor(grey);
-	FSBox = new BBox(r, "FSBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
-	FSBox->SetLabel(FSLabel);
-	AddChild(FSBox);
-	r = FSBox->Bounds();
+	fFileSystemLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Filesystem"), 19), " Filesystem", "BMP:FS");
+	fFileSystemLabel->SetViewColor(grey);
+	fFileSystemBox = new BBox(r, "fFileSystemBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
+	fFileSystemBox->SetLabel(fFileSystemLabel);
+	AddChild(fFileSystemBox);
+	r = fFileSystemBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 10;
 	r.right = 220; // was 170
 	r.bottom = 25;
-	ISO9660 = new BRadioButton(r, "ISO-9660", "ISO-9660", new BMessage(DATA_ISO9660));
+	fISO9660Radio = new BRadioButton(r, "ISO-9660", "ISO-9660", new BMessage(DATA_ISO9660));
 	if (!strcmp(DATA_STRING, " ") && IMAGE_TYPE == 0)
-		ISO9660->SetValue(B_CONTROL_ON);
-	FSBox->AddChild(ISO9660);
+		fISO9660Radio->SetValue(B_CONTROL_ON);
+	fFileSystemBox->AddChild(fISO9660Radio);
 
 
 	r.bottom += 15;
 	r.top += 15;
-	Windows = new BRadioButton(r, "ISO-9660 with long filenames", "ISO-9660 with long filenames", new BMessage(DATA_WINDOWS));
+	fWindowsRadio = new BRadioButton(r, "ISO-9660 with long filenames", "ISO-9660 with long filenames", new BMessage(DATA_WINDOWS));
 	if (!strcmp(DATA_STRING, "-D -l") && IMAGE_TYPE == 0)
-		Windows->SetValue(B_CONTROL_ON);
-	FSBox->AddChild(Windows);
+		fWindowsRadio->SetValue(B_CONTROL_ON);
+	fFileSystemBox->AddChild(fWindowsRadio);
 
 	r.bottom += 15;
 	r.top += 15;
-	Joliet = new BRadioButton(r, "Joliet", "Windows (Joliet)", new BMessage(DATA_JOLIET));
+	fJolietRadio = new BRadioButton(r, "fJolietRadio", "Windows (Joliet)", new BMessage(DATA_JOLIET));
 	if (!strcmp(DATA_STRING, "-l -D -J") && IMAGE_TYPE == 0)
-		Joliet->SetValue(B_CONTROL_ON);
-	FSBox->AddChild(Joliet);
+		fJolietRadio->SetValue(B_CONTROL_ON);
+	fFileSystemBox->AddChild(fJolietRadio);
 
 	r.bottom += 15;
 	r.top += 15;
-	BeOS = new BRadioButton(r, "Haiku", "Haiku (bfs)", new BMessage(DATA_BFS));
+	fBeOSRadio = new BRadioButton(r, "Haiku", "Haiku (bfs)", new BMessage(DATA_BFS));
 	if (IMAGE_TYPE == 1)
-		BeOS->SetValue(B_CONTROL_ON);
+		fBeOSRadio->SetValue(B_CONTROL_ON);
 
-	FSBox->AddChild(BeOS);
+	fFileSystemBox->AddChild(fBeOSRadio);
 
 
-	r = FSBox->Bounds();
+	r = fFileSystemBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 10;
 	r.bottom = 25;
 	r.left = 230; // was 175
-	Rock = new BRadioButton(r, "RockRidge (UNIX Multiuser)", "RockRidge (UNIX Singeluser)", new BMessage(DATA_ROCK));
+	fRockRadio = new BRadioButton(r, "RockRidge (UNIX Multiuser)", "RockRidge (UNIX Singeluser)", new BMessage(DATA_ROCK));
 	if (!strcmp(DATA_STRING, "-l -L -r") && IMAGE_TYPE == 0)
-		Rock->SetValue(B_CONTROL_ON);
-	FSBox->AddChild(Rock);
+		fRockRadio->SetValue(B_CONTROL_ON);
+	fFileSystemBox->AddChild(fRockRadio);
 
 	r.bottom += 15;
 	r.top += 15;
-	RealRock = new BRadioButton(r, "Real RockRidge (UNIX Multiuser)", "Real RockRidge (UNIX Multiuser)", new BMessage(DATA_REALROCK));
+	fRealRockRadio = new BRadioButton(r, "Real RockRidge (UNIX Multiuser)", "Real RockRidge (UNIX Multiuser)", new BMessage(DATA_REALROCK));
 	if (!strcmp(DATA_STRING, "-l -L -R") && IMAGE_TYPE == 0)
-		RealRock->SetValue(B_CONTROL_ON);
-	FSBox->AddChild(RealRock);
+		fRealRockRadio->SetValue(B_CONTROL_ON);
+	fFileSystemBox->AddChild(fRealRockRadio);
 
 	r.bottom += 15;
 	r.top += 15;
-	Mac = new BRadioButton(r, "Mac", "Mac (hfs)", new BMessage(DATA_HFS));
+	fMacRadio = new BRadioButton(r, "fMacRadio", "Mac (hfs)", new BMessage(DATA_HFS));
 	if (!strcmp(DATA_STRING, "-hfs") && IMAGE_TYPE == 0)
-		Mac->SetValue(B_CONTROL_ON);
-	FSBox->AddChild(Mac);
+		fMacRadio->SetValue(B_CONTROL_ON);
+	fFileSystemBox->AddChild(fMacRadio);
 
 	r.bottom += 15;
 	r.top += 15;
-	Own = new BRadioButton(r, "own", "Own (choose mkisofs options)", new BMessage(DATA_HFS));
+	fOwnRadio = new BRadioButton(r, "own", "Own (choose mkisofs options)", new BMessage(DATA_HFS));
 	//if(!strcmp(DATA_STRING,"-hfs"))
-	//	Mac->SetValue(B_CONTROL_ON);
-	Own->SetEnabled(false);
-	FSBox->AddChild(Own);
+	//	fMacRadio->SetValue(B_CONTROL_ON);
+	fOwnRadio->SetEnabled(false);
+	fFileSystemBox->AddChild(fOwnRadio);
 
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = 95;
 	r.right = r.right - 160; // was 130
 
-	BootLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" El Torito Bootable CD"), 19), " El Torito Bootable CD", "BMP:BOOTABLE");
-	BootLabel->SetViewColor(grey);
-	BootBox = new BBox(r, "BootBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
-	BootBox->SetLabel(BootLabel);
-	AddChild(BootBox);
+	fBootLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" El Torito Bootable CD"), 19), " El Torito Bootable CD", "BMP:BOOTABLE");
+	fBootLabel->SetViewColor(grey);
+	fBootBox = new BBox(r, "BootBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
+	fBootBox->SetLabel(fBootLabel);
+	AddChild(fBootBox);
 
-	r = BootBox->Bounds();
+	r = fBootBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 10;
 	r.bottom = r.top + 15;
-	BootableCD = new BCheckBox(r, "Enable BootableCD", "Enable BootableCD", new BMessage(BOOT_CHECKED));
+	fBootableCDCheckBox = new BCheckBox(r, "fBootableCDCheckBox", "Enable BootableCD", new BMessage(BOOT_CHECKED));
 	if (BOOTABLE)
-		BootableCD->SetValue(B_CONTROL_ON);
+		fBootableCDCheckBox->SetValue(B_CONTROL_ON);
 	if (!VRCD)
-		BootableCD->SetEnabled(false);
+		fBootableCDCheckBox->SetEnabled(false);
 
-	BootBox->AddChild(BootableCD);
+	fBootBox->AddChild(fBootableCDCheckBox);
 
-	r = BootBox->Bounds();
+	r = fBootBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 35;
-	ChooseBootImage = new jpButton(r, "ChooseBootImage", "Choose boot image", new BMessage(BOOT_FILE_PANEL));
+	fChooseBootImageButton = new jpButton(r, "fChooseBootImageButton", "Choose boot image", new BMessage(BOOT_FILE_PANEL));
 	if (!BOOTABLE || !VRCD)
-		ChooseBootImage->SetEnabled(false);
-	BootBox->AddChild(ChooseBootImage);
+		fChooseBootImageButton->SetEnabled(false);
+	fBootBox->AddChild(fChooseBootImageButton);
 
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
@@ -134,11 +134,11 @@ DataView::DataView(BRect size)
 	r.left = r.right - 150; // was 120
 	r.bottom = 165;
 
-	ChangeVolName = new jpButton(r, "Change Volume Name", "Change Volume Name", new BMessage(CHANGE_VOL_NAME));
-	AddChild(ChangeVolName);
+	fChangeVolNameButton = new jpButton(r, "Change Volume Name", "Change Volume Name", new BMessage(CHANGE_VOL_NAME));
+	AddChild(fChangeVolNameButton);
 
-	FilePanel = new BFilePanel(B_OPEN_PANEL);
-	FilePanel->SetMessage(new BMessage(BOOT_CHANGE_IMAGE_NAME));
+	fFilePanel = new BFilePanel(B_OPEN_PANEL);
+	fFilePanel->SetMessage(new BMessage(BOOT_CHANGE_IMAGE_NAME));
 
 }
 
