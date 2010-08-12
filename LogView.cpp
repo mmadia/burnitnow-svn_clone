@@ -6,6 +6,11 @@
 
 #include "LogView.h"
 
+#include "const.h"
+#include "IconLabel.h"
+
+#include <ScrollView.h>
+
 
 LogView::LogView(BRect size)
 	:

@@ -6,10 +6,15 @@
 #define _DATAVIEW_H_
 
 
-#include <Be.h>
-#include "IconLabel.h"
-#include "const.h"
-#include "jpButton.h"
+#include <Box.h>
+#include <CheckBox.h>
+#include <FilePanel.h>
+#include <RadioButton.h>
+
+
+// Forward declaration of IconLabel and jpButton classes
+class IconLabel;
+class jpButton;
 
 
 class DataView : public BView {

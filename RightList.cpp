@@ -5,7 +5,18 @@
 
 
 #include "RightList.h"
+
+#include "AskName.h"
 #include "jpWindow.h"
+
+#include <Alert.h>
+#include <Application.h>
+#include <Bitmap.h>
+#include <Directory.h>
+#include <Path.h>
+#include <Resources.h>
+
+#include <stdio.h>
 
 
 bool GlobalPattern = true;

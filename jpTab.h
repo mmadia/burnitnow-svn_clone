@@ -6,8 +6,7 @@
 #define _JPTAB_H_
 
 
-#include <Tab.h>
-#include <View.h>
+#include <TabView.h>
 
 
 class jpTab : public BTab {

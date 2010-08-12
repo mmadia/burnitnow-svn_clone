@@ -6,9 +6,11 @@
 #define _COPYCDVIEW_H_
 
 
-#include <Be.h>
-#include "const.h"
-#include "jpButton.h"
+#include <Window.h>
+
+
+// Forward declaration of jpButton class
+class jpButton;
 
 
 class CopyCDView : public BView {

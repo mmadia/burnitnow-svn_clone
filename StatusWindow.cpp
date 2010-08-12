@@ -5,7 +5,14 @@
 
 
 #include "StatusWindow.h"
+
 #include "const.h"
+#include "jpButton.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <Application.h>
 
 
 extern char VOL_NAME[25];

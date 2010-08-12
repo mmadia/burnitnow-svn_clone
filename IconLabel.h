@@ -6,7 +6,8 @@
 #define _ICONLABEL_H_
 
 
-#include <Be.h>
+#include <Bitmap.h>
+#include <View.h>
 
 
 class IconLabel : public BView {

@@ -6,6 +6,12 @@
 
 #include "jpWindow.h"
 
+#include "const.h"
+
+#include <Application.h>
+#include <Entry.h>
+#include <Path.h>
+
 
 extern char* IMAGE_NAME;
 extern char* BURNIT_PATH;

@@ -6,6 +6,15 @@
 
 #include "MakeBFS.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <Directory.h>
+#include <File.h>
+#include <fs_attr.h>
+#include <Path.h>
+
 
 extern char* IMAGE_NAME;
 extern char* BURN_DIR;

@@ -6,6 +6,13 @@
 
 #include "AudioView.h"
 
+#include "const.h"
+#include "IconLabel.h"
+
+#include <string.h>
+
+#include <ScrollView.h>
+
 
 extern char PAD[10]; //-pad (audio)
 extern char NOFIX[10]; // -nofix (audio)

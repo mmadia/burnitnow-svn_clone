@@ -6,6 +6,9 @@
 
 #include "Prefs.h"
 
+#include <File.h>
+#include <FindDirectory.h>
+
 
 Prefs::Prefs(char* filename)
 	:

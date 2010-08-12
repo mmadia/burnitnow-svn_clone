@@ -6,8 +6,9 @@
 #define _LEFTLIST_H_
 
 
-#include <Be.h>
-#include "const.h"
+#include <Entry.h>
+#include <ListView.h>
+#include <PopUpMenu.h>
 
 
 struct AudioInfo {

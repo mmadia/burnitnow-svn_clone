@@ -6,6 +6,9 @@
 
 #include "CopyCDView.h"
 
+#include "const.h"
+#include "jpButton.h"
+
 
 CopyCDView::CopyCDView(BRect size, BWindow* twin)
 	:

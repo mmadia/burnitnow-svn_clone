@@ -6,8 +6,8 @@
 #define _PREFS_H_
 
 
-#include <Be.h>
-#include "const.h"
+#include <Message.h>
+#include <Path.h>
 
 
 class Prefs : public BMessage {

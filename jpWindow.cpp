@@ -6,15 +6,36 @@
  */
 
 
-#include <TextView.h>
-#include <String.h>
+#include "jpWindow.h"
+
+#include "AboutWindow.h"
+#include "AskName.h"
+#include "AudioView.h"
+#include "BurnView.h"
+#include "CDRWView.h"
+#include "CopyCDView.h"
+#include "DataView.h"
+#include "jpButton.h"
+#include "LeftList.h"
+#include "LogView.h"
+#include "MakeBFS.h"
+#include "Prefs.h"
+#include "PrefsView.h"
+#include "RightList.h"
+#include "StatusWindow.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <FindDirectory.h>
-#include <OS.h>
-#include "jpWindow.h"
-#include "MakeBFS.h"
 
+#include <Alert.h>
+#include <Application.h>
+#include <File.h>
+#include <Entry.h>
+#include <MenuBar.h>
+#include <MenuItem.h>
+#include <Path.h>
+#include <Roster.h>
+#include <ScrollView.h>
 
 
 #define VERSION "beta 3"

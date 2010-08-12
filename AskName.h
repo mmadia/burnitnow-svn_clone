@@ -6,8 +6,12 @@
 #define _ASKNAME_H_
 
 
-#include <Be.h>
-#include "jpButton.h"
+#include <TextView.h>
+#include <Window.h>
+
+
+// Forward declaration of jpButton class
+class jpButton;
 
 
 class AskName : public BWindow {

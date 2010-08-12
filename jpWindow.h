@@ -6,24 +6,31 @@
 #define _JPWINDOW_H_
 
 
-#include <string.h>
-#include <Be.h>
-#include "DataView.h"
-#include "BurnView.h"
-#include "AudioView.h"
-#include "CopyCDView.h"
-#include "PrefsView.h"
+#include <Box.h>
+#include <Slider.h>
+#include <StatusBar.h>
+#include <TabView.h>
+#include <Window.h>
+
 #include "const.h"
-#include "IconLabel.h"
-#include "LogView.h"
-#include "CDRWView.h"
-#include "RightList.h"
-#include "LeftList.h"
-#include "AskName.h"
-#include "Prefs.h"
-#include "StatusWindow.h"
-#include "jpButton.h"
-#include "AboutWindow.h"
+
+
+// Forward declarations
+class DataView;
+class BurnView;
+class AudioView;
+class CopyCDView;
+class PrefsView;
+class IconLabel;
+class LogView;
+class CDRWView;
+class RightList;
+class LeftList;
+class AskName;
+class Prefs;
+class StatusWindow;
+class jpButton;
+class AboutWindow;
 
 
 class jpWindow : public BWindow {

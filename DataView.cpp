@@ -6,6 +6,10 @@
 
 #include "DataView.h"
 
+#include "const.h"
+#include "IconLabel.h"
+#include "jpButton.h"
+
 
 extern char DATA_STRING[100];
 extern bool BOOTABLE;

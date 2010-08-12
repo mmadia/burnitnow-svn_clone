@@ -5,7 +5,12 @@
 
 
 #include "AskName.h"
+
 #include "const.h"
+#include "jpButton.h"
+
+#include <Application.h>
+#include <ScrollView.h>
 
 
 AskName::AskName(BRect frame, char* title, uint32 mess, char* what)

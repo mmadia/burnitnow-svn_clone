@@ -6,9 +6,13 @@
 #define _AUDIOVIEW_H_
 
 
-#include <Be.h>
-#include "IconLabel.h"
-#include "const.h"
+#include <Box.h>
+#include <CheckBox.h>
+#include <TextView.h>
+
+
+// Forward declaration of IconLabel class
+class IconLabel;
 
 
 class AudioView : public BView {

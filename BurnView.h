@@ -6,10 +6,15 @@
 #define _BURNVIEW_H_
 
 
-#include <Be.h>
-#include "const.h"
-#include "IconLabel.h"
-#include "jpButton.h"
+#include <Box.h>
+#include <CheckBox.h>
+#include <RadioButton.h>
+#include <Slider.h>
+
+
+// Forward declaration of IconLabel and jpButton classes
+class IconLabel;
+class jpButton;
 
 
 class BurnView : public BView {

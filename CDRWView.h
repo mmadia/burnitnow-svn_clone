@@ -6,10 +6,14 @@
 #define _CDRWVIEW_H_
 
 
-#include <Be.h>
-#include "const.h"
-#include "IconLabel.h"
-#include "jpButton.h"
+#include <Box.h>
+#include <MenuField.h>
+#include <Slider.h>
+
+
+// Forward declaration of IconLabel and jpButton classes
+class IconLabel;
+class jpButton;
 
 
 class CDRWView : public BView {

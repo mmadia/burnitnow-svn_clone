@@ -6,9 +6,11 @@
 #define _ABOUTWINDOW_H_
 
 
-#include <Be.h>
-#include "jpButton.h"
-#include "const.h"
+#include <Window.h>
+
+
+// Forward declaration of jpButton class
+class jpButton;
 
 
 class AboutView : public BView {

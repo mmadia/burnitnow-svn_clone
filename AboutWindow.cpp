@@ -5,7 +5,12 @@
 
 
 #include "AboutWindow.h"
+
 #include "const.h"
+#include "jpButton.h"
+
+#include <Button.h>
+#include <Bitmap.h>
 
 
 #define  ABOUT_STRING "BurnItNow beta 3"

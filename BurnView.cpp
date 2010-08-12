@@ -6,6 +6,13 @@
 
 #include "BurnView.h"
 
+#include "const.h"
+#include "IconLabel.h"
+#include "jpButton.h"
+
+#include <stdio.h>
+#include <string.h>
+
 
 extern int16 BURN_SPD;
 extern int16 BURN_TYPE;

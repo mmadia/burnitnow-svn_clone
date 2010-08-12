@@ -6,9 +6,13 @@
 #define _BOOTVIEW_H_
 
 
-#include <Be.h>
-#include "const.h"
-#include "IconLabel.h"
+#include <Box.h>
+#include <CheckBox.h>
+#include <MenuField.h>
+
+
+// Forward declaration of IconLabel class
+class IconLabel;
 
 
 class BootView : public BView {

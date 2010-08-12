@@ -6,9 +6,12 @@
 #define _STATUSWINDOW_H_
 
 
-#include <Be.h>
-#include "jpButton.h"
-#include "const.h"
+#include <StatusBar.h>
+#include <Window.h>
+
+
+// Forward declaration of jpButton class
+class jpButton;
 
 
 class StatusView : public BView {

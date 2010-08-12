@@ -6,6 +6,14 @@
 
 #include "CDRWView.h"
 
+#include "const.h"
+#include "IconLabel.h"
+#include "jpButton.h"
+
+#include <stdio.h>
+
+#include <MenuItem.h>
+
 
 extern int16 BLANK_SPD;
 

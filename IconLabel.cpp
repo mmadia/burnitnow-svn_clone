@@ -6,6 +6,9 @@
 
 #include "IconLabel.h"
 
+#include <Application.h>
+#include <Resources.h>
+
 
 IconLabel::IconLabel(BRect size, char* labelstring, char* gfx)
 	:

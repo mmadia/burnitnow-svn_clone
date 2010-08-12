@@ -6,8 +6,7 @@
 #define _JPBUTTON_H_
 
 
-#include <Be.h>
-#include <string.h>
+#include <Control.h>
 
 
 class jpButton : public BControl {

@@ -6,9 +6,12 @@
 #define _LOGVIEW_H_
 
 
-#include <Be.h>
-#include "const.h"
-#include "IconLabel.h"
+#include <Box.h>
+#include <TextView.h>
+
+
+// Forward declaration of IconLabel class
+class IconLabel;
 
 
 class LogView : public BView {

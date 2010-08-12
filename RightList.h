@@ -6,9 +6,12 @@
 #define _RIGHTLIST_H_
 
 
-#include <Be.h>
-#include "AskName.h"
-#include "const.h"
+#include <Entry.h>
+#include <ListView.h>
+
+
+// Forward declaration of AskName class
+class AskName;
 
 
 class FileListItem : public BListItem {

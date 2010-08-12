@@ -6,6 +6,11 @@
 
 #include "PrefsView.h"
 
+#include "const.h"
+#include "IconLabel.h"
+
+#include <string.h>
+
 
 extern char DAO[10];
 extern char BURNPROOF[30];

@@ -6,7 +6,7 @@
 #define _MAKEBFS_H_
 
 
-#include <Be.h>
+#include <Entry.h>
 
 
 #define BUFFERLEN 1024 * 512
