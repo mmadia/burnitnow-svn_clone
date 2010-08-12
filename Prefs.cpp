@@ -16,7 +16,7 @@ Prefs::Prefs(char* filename)
 {
 	BFile file;
 
-	status = find_directory(B_COMMON_SETTINGS_DIRECTORY, &path);
+	status = find_directory(B_USER_SETTINGS_DIRECTORY, &path);
 	if (status != B_OK) {
 		return;
 	}
