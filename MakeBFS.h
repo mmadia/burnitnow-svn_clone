@@ -14,13 +14,13 @@
 
 status_t CopyFile(const entry_ref& source, const entry_ref& dest);
 
-int CopyFiles();
+status_t CopyFiles();
 
-int MountBFS();
+status_t MountBFS();
 
-int UnmountBFS();
+status_t UnmountBFS();
 
-int MakeBFS();
+status_t MakeBFS();
 
 uint64 GetBFSSize();
 

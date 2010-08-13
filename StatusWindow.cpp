@@ -19,7 +19,7 @@ extern char VOL_NAME[25];
 int32 TRACK_FIN;
 
 
-StatusView::StatusView(BRect r, char* title)
+StatusView::StatusView(BRect r, const char* title)
 	:
 	BView(r, title, B_FOLLOW_NONE, B_WILL_DRAW)
 {
@@ -110,7 +110,7 @@ void StatusView::Draw(BRect updateRect)
 }
 
 
-StatusWindow::StatusWindow(char* title)
+StatusWindow::StatusWindow(const char* title)
 	:
 	BWindow(BRect(220, 200, 500, 270), "StatusWindow", B_FLOATING_WINDOW_LOOK, B_MODAL_APP_WINDOW_FEEL, B_NOT_ZOOMABLE | B_NOT_RESIZABLE | B_NOT_CLOSABLE)
 {
@@ -166,7 +166,7 @@ void StatusWindow::StatusSetMax(float t1)
 }
 
 
-void StatusWindow::UpdateStatus(float delta, char* str)
+void StatusWindow::UpdateStatus(float delta, const char* str)
 {
 	char temp[1024];
 	char temp_char[5];
@@ -185,7 +185,7 @@ void StatusWindow::UpdateStatus(float delta, char* str)
 }
 
 
-void StatusWindow::StatusSetText(char* str)
+void StatusWindow::StatusSetText(const char* str)
 {
 	char temp[1024];
 	char temp_char[5];

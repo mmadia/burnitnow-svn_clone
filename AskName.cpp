@@ -13,7 +13,7 @@
 #include <ScrollView.h>
 
 
-AskName::AskName(BRect frame, char* title, uint32 mess, char* what)
+AskName::AskName(BRect frame, const char* title, uint32 mess, const char* what)
 	:
 	BWindow(frame, "AskName", B_FLOATING_WINDOW_LOOK, B_NORMAL_WINDOW_FEEL, B_NOT_ZOOMABLE | B_NOT_RESIZABLE)
 {

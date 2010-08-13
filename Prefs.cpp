@@ -10,7 +10,7 @@
 #include <FindDirectory.h>
 
 
-Prefs::Prefs(char* filename)
+Prefs::Prefs(const char* filename)
 	:
 	BMessage('pref')
 {

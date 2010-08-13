@@ -12,7 +12,7 @@
 
 class Prefs : public BMessage {
 public:
-	Prefs(char* filename);
+	Prefs(const char* filename);
 	~Prefs();
 	status_t		InitCheck(void);
 

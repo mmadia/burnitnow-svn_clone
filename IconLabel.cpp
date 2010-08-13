@@ -6,11 +6,13 @@
 
 #include "IconLabel.h"
 
+#include <string.h>
+
 #include <Application.h>
 #include <Resources.h>
 
 
-IconLabel::IconLabel(BRect size, char* labelstring, char* gfx)
+IconLabel::IconLabel(BRect size, const char* labelstring, const char* gfx)
 	:
 	BView(size, "IconLabel", B_FOLLOW_NONE, B_WILL_DRAW)
 {

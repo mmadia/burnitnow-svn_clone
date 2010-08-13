@@ -870,6 +870,8 @@ int jpWindow::CheckMulti(char* str)
 			return 1;
 		}
 	}
+
+	return 1;
 }
 
 
@@ -1019,7 +1021,7 @@ void jpWindow::BlankNOW()
 }
 
 
-void jpWindow::PutLog(char* string)
+void jpWindow::PutLog(const char* string)
 {
 	Lock();
 	fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &red2);
@@ -1032,7 +1034,7 @@ void jpWindow::PutLog(char* string)
 }
 
 
-void jpWindow::MessageLog(char* string)
+void jpWindow::MessageLog(const char* string)
 {
 	Lock();
 	fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &green);
@@ -1453,7 +1455,7 @@ void jpWindow::MessageReceived(BMessage* message)
 				off_t size;
 				entry_ref ref;
 				message->FindRef("refs", &ref);
-				if (BEntry(&ref, true).GetSize(&size) == B_OK)
+				if (BEntry(&ref, true).GetSize(&size) == B_OK) {
 					if (size < (2880 * 1024)) {
 						BOOTIMAGEREF = ref;
 						fDataView->fBootableCDCheckBox->SetValue(1);
@@ -1475,8 +1477,7 @@ void jpWindow::MessageReceived(BMessage* message)
 						BAlert* MyAlert = new BAlert("BurnItNow", "The bootimage cannot be bigger than 2.88 Mb", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 						MyAlert->Go();
 					}
-
-
+				}
 			}
 			break;
 		case CHANGE_VOL_NAME: {
@@ -1561,7 +1562,7 @@ void jpWindow::SetProgDir(char* string)
 }
 
 
-void jpWindow::MakeImageNOW(int Multi, char* str)
+void jpWindow::MakeImageNOW(int Multi, const char* str)
 {
 	/*float temp1
 	if ( Cntrl != 0 && OPMkImage != 0) {
@@ -1752,7 +1753,7 @@ void jpWindow::UpdateStatus(float delta, char* str)
 }
 
 
-void jpWindow::StatusSetText(char* str)
+void jpWindow::StatusSetText(const char* str)
 {
 }
 

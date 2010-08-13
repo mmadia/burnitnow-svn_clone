@@ -32,7 +32,7 @@ extern char* BURN_DIR;
 
 BBitmap* GetBitmapResource(type_code type, const char* name);
 
-LeftListItem::LeftListItem(entry_ref* ref, char* name, BBitmap* icon, struct AudioInfo* Info)
+LeftListItem::LeftListItem(entry_ref* ref, const char* name, BBitmap* icon, struct AudioInfo* Info)
 	:
 	BListItem()
 {
@@ -347,7 +347,7 @@ void LeftList::MouseDown(BPoint point)
 }
 
 
-void LeftList::WriteLog(char* string)
+void LeftList::WriteLog(const char* string)
 {
 	jpWindow* win = dynamic_cast<jpWindow*>(Window());
 	if (win != NULL) {

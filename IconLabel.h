@@ -12,7 +12,7 @@
 
 class IconLabel : public BView {
 public:
-	IconLabel(BRect size, char* labelstring, char* gfx);
+	IconLabel(BRect size, const char* labelstring, const char* gfx);
 	~IconLabel();
 	virtual void Draw(BRect frame);
 	BBitmap* GetBitmapResource(type_code type, const char* name);

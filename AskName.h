@@ -12,7 +12,7 @@
 
 class AskName : public BWindow {
 public:
-	AskName(BRect frame, char* title, uint32 mess, char* what);
+	AskName(BRect frame, const char* title, uint32 mess, const char* what);
 	virtual void SendText();
 	virtual void MessageReceived(BMessage* msg);
 

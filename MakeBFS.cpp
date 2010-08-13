@@ -24,7 +24,7 @@ BDirectory* BFSDir;
 off_t total_size;
 
 
-int copy_data(const entry_ref& source, const entry_ref& dest)
+status_t copy_data(const entry_ref& source, const entry_ref& dest)
 {
 	status_t err;
 	unsigned char* buffer;
@@ -47,10 +47,12 @@ int copy_data(const entry_ref& source, const entry_ref& dest)
 		if (err < 0) return err;
 	}
 	delete buffer;
+
+	return B_OK;
 }
 
 
-int copy_attributes(const entry_ref& source, const entry_ref& dest)
+status_t copy_attributes(const entry_ref& source, const entry_ref& dest)
 {
 	status_t err;
 	unsigned char* buffer;
@@ -84,6 +86,8 @@ int copy_attributes(const entry_ref& source, const entry_ref& dest)
 
 
 	delete buffer;
+
+	return B_OK;
 }
 
 
@@ -91,7 +95,7 @@ status_t CopyFile(const entry_ref& source, const entry_ref& dest)
 {
 	copy_data(source, dest);
 	copy_attributes(source, dest);
-	return 0;
+	return B_OK;
 }
 
 
@@ -133,7 +137,7 @@ uint64 GetBFSSize()
 }
 
 
-int MakeBFS()
+status_t MakeBFS()
 {
 	FILE* f1;
 	char temp[1024], buffer[1024];
@@ -149,21 +153,24 @@ int MakeBFS()
 		fgets(buffer, 1024, f1);
 	}
 	pclose(f1);
+
+	return B_OK;
 }
 
 
-int UnmountBFS()
+status_t UnmountBFS()
 {
 	char temp[1024];
 	sprintf(temp, "sync; unmount /BurnItNowTempMount");
 	system(temp);
 	sprintf(temp, "rmdir /BurnItNowTempMount");
 	system(temp);
-	return 0;
+
+	return B_OK;
 }
 
 
-int MountBFS()
+status_t MountBFS()
 {
 	FILE* f1;
 	entry_ref temp_ref;
@@ -180,6 +187,8 @@ int MountBFS()
 	}
 	pclose(f1);
 	delete temp_dir;
+
+	return B_OK;
 }
 
 
@@ -220,10 +229,10 @@ void Copy_Loop(entry_ref* ref)
 }
 
 
-int CopyFiles()
+status_t CopyFiles()
 {
 	entry_ref temp_ref;
 	BEntry(BURN_DIR).GetRef(&temp_ref);
 	Copy_Loop(&temp_ref);
-	return 0;
+	return B_OK;
 }

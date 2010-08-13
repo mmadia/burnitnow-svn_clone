@@ -7,6 +7,7 @@
 
 
 #include <Box.h>
+#include <FilePanel.h>
 #include <Slider.h>
 #include <StatusBar.h>
 #include <TabView.h>
@@ -41,15 +42,15 @@ public:
 	virtual void CheckForDevices();
 	virtual void SetISOFile(char* string);
 	virtual void SetProgDir(char* string);
-	virtual void PutLog(char*);
-	virtual void MessageLog(char*);
-	virtual void MakeImageNOW(int, char*);
+	virtual void PutLog(const char*);
+	virtual void MessageLog(const char*);
+	virtual void MakeImageNOW(int, const char*);
 	virtual void BurnNOW();
 	virtual void BlankNOW();
 	virtual void BurnWithCDRecord();
 	virtual void UpdateStatus(float delta, char* str);
 	virtual void StatusSetMax(float t1);
-	virtual void StatusSetText(char* str);
+	virtual void StatusSetText(const char* str);
 	virtual void StatusSetColor(rgb_color color);
 	virtual void StatusUpdateReset();
 	virtual void SetButtons(bool);

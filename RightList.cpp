@@ -307,12 +307,13 @@ void RightList::ParentDir()
 	BPath temp_path;
 	if (fBDirectory->GetEntry(&temp_entry) == B_OK) {
 		temp_entry.GetParent(&temp_entry2);
-		if (temp_entry2.GetPath(&temp_path) == B_OK)
+		if (temp_entry2.GetPath(&temp_path) == B_OK) {
 			if (!strncmp(temp_path.Path(), BURN_DIR, strlen(BURN_DIR))) {
 				temp_entry.GetParent(fBDirectory);
 				UpdateDir();
 			} else {
 			}
+		}
 	}
 }
 
@@ -422,7 +423,7 @@ void RightList::MakeLink(entry_ref* ref)
 }
 
 
-void RightList::WriteLog(char* string)
+void RightList::WriteLog(const char* string)
 {
 	jpWindow* win = dynamic_cast<jpWindow*>(Window());
 	if (win != NULL) {

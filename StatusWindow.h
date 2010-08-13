@@ -12,7 +12,7 @@
 
 class StatusView : public BView {
 public:
-	StatusView(BRect r, char* name);
+	StatusView(BRect r, const char* name);
 	virtual void Draw(BRect updateRect);
 	virtual void SetAngles(float* ang, int tracks);
 
@@ -24,11 +24,11 @@ public:
 
 class StatusWindow : public BWindow {
 public:
-	StatusWindow(char* title);
-	virtual void UpdateStatus(float delta, char* str);
+	StatusWindow(const char* title);
+	virtual void UpdateStatus(float delta, const char* str);
 	virtual void MessageReceived(BMessage* msg);
 	virtual void StatusSetMax(float t1);
-	virtual void StatusSetText(char* str);
+	virtual void StatusSetText(const char* str);
 	virtual void StatusSetColor(rgb_color color);
 	virtual void StatusUpdateReset();
 	virtual void SetAngles(float* ang, int tracks);

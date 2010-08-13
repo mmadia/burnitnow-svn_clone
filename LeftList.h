@@ -23,7 +23,7 @@ struct AudioInfo {
 
 class LeftListItem : public BListItem {
 public:
-	LeftListItem(entry_ref* ref, char* name, BBitmap* icon, struct AudioInfo* Info);
+	LeftListItem(entry_ref* ref, const char* name, BBitmap* icon, struct AudioInfo* Info);
 	~LeftListItem();
 	virtual void DrawItem(BView* owner, BRect frame, bool complete);
 
@@ -41,7 +41,7 @@ public:
 	~LeftList();
 	virtual void KeyDown(const char* bytes, int32 numBytes);
 	virtual void MouseDown(BPoint point);
-	virtual void WriteLog(char* string);
+	virtual void WriteLog(const char* string);
 	virtual void MessageReceived(BMessage* message);
 
 	uint32 fLastButton, fClickCount;

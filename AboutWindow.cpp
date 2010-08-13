@@ -20,7 +20,7 @@
 BBitmap* GetBitmapResource(type_code type, const char* name);
 
 
-AboutView::AboutView(BRect r, char* title)
+AboutView::AboutView(BRect r, const char* title)
 	:
 	BView(r, title, B_FOLLOW_NONE, B_WILL_DRAW)
 {

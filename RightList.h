@@ -37,7 +37,7 @@ public:
 	virtual void MakeLink(entry_ref* ref);
 	virtual void MakeDir(entry_ref* ref);
 	virtual void MakeDir(const char* name);
-	virtual void WriteLog(char* string);
+	virtual void WriteLog(const char* string);
 	virtual void MessageReceived(BMessage* message);
 	virtual void DeleteFromVRCD(entry_ref* ref);
 	virtual void DeleteDirFromVRCD(entry_ref* ref);

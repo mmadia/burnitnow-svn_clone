@@ -9,6 +9,8 @@
 #include "const.h"
 #include "IconLabel.h"
 
+#include <string.h>
+
 #include <Box.h>
 
 

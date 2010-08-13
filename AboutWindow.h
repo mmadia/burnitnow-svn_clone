@@ -11,7 +11,7 @@
 
 class AboutView : public BView {
 public:
-	AboutView(BRect r, char* name);
+	AboutView(BRect r, const char* name);
 	~AboutView();
 	virtual void Draw(BRect updateRect);
 
