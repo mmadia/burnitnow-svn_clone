@@ -7,14 +7,14 @@
 
 
 #include <Box.h>
+#include <Button.h>
 #include <CheckBox.h>
 #include <FilePanel.h>
 #include <RadioButton.h>
 
 
-// Forward declaration of IconLabel and jpButton classes
+// Forward declaration of IconLabel
 class IconLabel;
-class jpButton;
 
 
 class DataView : public BView {
@@ -22,8 +22,8 @@ public:
 	DataView(BRect size);
 	~DataView();
 
-	jpButton* fChooseDirButton;
-	jpButton* fChooseBootImageButton;
+	BButton* fChooseDirButton;
+	BButton* fChooseBootImageButton;
 	char fChooseLabel[1024];
 	BCheckBox* fBootableCDCheckBox;
 	BFilePanel* fFilePanel;
@@ -31,7 +31,7 @@ public:
 	IconLabel* fFileSystemLabel, *fBootLabel;
 	BBox* fFileSystemBox, *fBootBox;
 	BRadioButton* fISO9660Radio, *fJolietRadio, *fWindowsRadio, *fMacRadio, *fBeOSRadio, *fRockRadio, *fRealRockRadio, *fOwnRadio;
-	jpButton* fChangeVolNameButton;
+	BButton* fChangeVolNameButton;
 };
 
 

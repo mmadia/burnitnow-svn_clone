@@ -7,14 +7,14 @@
 
 
 #include <Box.h>
+#include <Button.h>
 #include <CheckBox.h>
 #include <RadioButton.h>
 #include <Slider.h>
 
 
-// Forward declaration of IconLabel and jpButton classes
+// Forward declaration of IconLabel
 class IconLabel;
-class jpButton;
 
 
 class BurnView : public BView {
@@ -27,7 +27,7 @@ public:
 
 	// Burn public
 	BSlider* fBurnSpeedSlider;
-	jpButton* fBurnButton, *fMakeImageButton;
+	BButton* fBurnButton, *fMakeImageButton;
 	BCheckBox* fMultiCheckBox, *fOnTheFlyCheckBox, *fEjectCheckBox, *fDummyModeCheckBox;
 	BSlider* fSpeedSlider;
 

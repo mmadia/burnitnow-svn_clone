@@ -9,10 +9,6 @@
 #include <Window.h>
 
 
-// Forward declaration of jpButton class
-class jpButton;
-
-
 class AboutView : public BView {
 public:
 	AboutView(BRect r, char* name);
@@ -31,7 +27,7 @@ public:
 
 	BView* fAroundView;
 	AboutView* fAboutView;
-	jpButton* fCloseButton;
+	BButton* fCloseButton;
 };
 
 

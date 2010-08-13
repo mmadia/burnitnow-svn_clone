@@ -7,13 +7,13 @@
 
 
 #include <Box.h>
+#include <Button.h>
 #include <MenuField.h>
 #include <Slider.h>
 
 
-// Forward declaration of IconLabel and jpButton classes
+// Forward declaration of IconLabel
 class IconLabel;
-class jpButton;
 
 
 class CDRWView : public BView {
@@ -26,7 +26,7 @@ public:
 	IconLabel* fCDRWLabel;
 	BMenu* fBlankMenu;
 	BMenuField* fBlankMenuField;
-	jpButton* fBlankButton;
+	BButton* fBlankButton;
 };
 
 

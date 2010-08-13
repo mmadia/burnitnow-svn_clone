@@ -10,10 +10,6 @@
 #include <Window.h>
 
 
-// Forward declaration of jpButton class
-class jpButton;
-
-
 class AskName : public BWindow {
 public:
 	AskName(BRect frame, char* title, uint32 mess, char* what);
@@ -22,7 +18,7 @@ public:
 
 private:
 	BView* fAroundView;
-	jpButton* fOkButton;
+	BButton* fOkButton;
 	BTextView* fNameTextView;
 	uint32 fMessageWhat;
 };

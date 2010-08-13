@@ -15,7 +15,6 @@
 #include "CDRWView.h"
 #include "CopyCDView.h"
 #include "DataView.h"
-#include "jpButton.h"
 #include "LeftList.h"
 #include "LogView.h"
 #include "MakeBFS.h"
@@ -29,6 +28,7 @@
 
 #include <Alert.h>
 #include <Application.h>
+#include <Button.h>
 #include <File.h>
 #include <Entry.h>
 #include <MenuBar.h>
@@ -288,17 +288,17 @@ jpWindow::jpWindow(BRect frame)
 	r = fAroundBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = r.bottom - 36; // was 30
-	r.right -= 75; // was 55
+	r.right -= 85; // was 55
 	fStatusBar = new BStatusBar(r, "fStatusBar");
 	fStatusBar->SetMaxValue(100.0);
 	fAroundBox->AddChild(fStatusBar);
 	fStatusBar->Reset();
 
 	r = fAroundBox->Bounds();
-	r.InsetBy(5.0, 5.0);
+	r.InsetBy(10.0, 10.0);
 	r.top = r.bottom - 17;
-	r.left = r.right - 70; // was 50
-	fCalcSizeButton = new jpButton(r, "calcsize", "Calc. Size", new BMessage(CALCULATE_SIZE));
+	r.left = r.right - 80; // was 50
+	fCalcSizeButton = new BButton(r, "calcsize", "Calc. Size", new BMessage(CALCULATE_SIZE));
 	fAroundBox->AddChild(fCalcSizeButton);
 
 	// Tabs
@@ -371,7 +371,7 @@ jpWindow::jpWindow(BRect frame)
 	r.bottom = 240;
 	r.left = (r.right / 2);
 	r.right -= (r.right - r.left) / 2;
-	fMakeDirButton = new jpButton(r, "ParentDir", "ParentDir", new BMessage(PARENT_DIR));
+	fMakeDirButton = new BButton(r, "ParentDir", "ParentDir", new BMessage(PARENT_DIR));
 	fAroundBox->AddChild(fMakeDirButton);
 
 	// MakeDir button
@@ -382,7 +382,7 @@ jpWindow::jpWindow(BRect frame)
 	r.left = (r.right / 2) + 2;
 	r.left += (r.right - r.left) / 2 + 2;
 	r.right -= 2;
-	fParentDirButton = new jpButton(r, "MakeDir", "MakeDir", new BMessage(MAKE_DIR));
+	fParentDirButton = new BButton(r, "MakeDir", "MakeDir", new BMessage(MAKE_DIR));
 	fAroundBox->AddChild(fParentDirButton);
 
 	if (!VRCD) {
@@ -422,7 +422,7 @@ jpWindow::jpWindow(BRect frame)
 	r.top = 220;
 	r.bottom = 240;
 	r.right = 120; // was 100
-	fNewVRCDButton = new jpButton(r, "New Virtual CD", "New Virtual CD", new BMessage(NEW_VRCD));
+	fNewVRCDButton = new BButton(r, "New Virtual CD", "New Virtual CD", new BMessage(NEW_VRCD));
 	fAroundBox->AddChild(fNewVRCDButton);
 
 	// Open ISO
@@ -432,7 +432,7 @@ jpWindow::jpWindow(BRect frame)
 	r.bottom = 240;
 	r.left = 125; // was 105
 	r.right -= ((r.right / 2) + (B_V_SCROLL_BAR_WIDTH) + 2);
-	fAddISOButton = new jpButton(r, "Add ISOFile", "Add ISOFile", new BMessage(OPEN_ISO_FILE));
+	fAddISOButton = new BButton(r, "Add ISOFile", "Add ISOFile", new BMessage(OPEN_ISO_FILE));
 	fAroundBox->AddChild(fAddISOButton);
 
 	// FilePanel open isofile

@@ -29,7 +29,6 @@ class LeftList;
 class AskName;
 class Prefs;
 class StatusWindow;
-class jpButton;
 class AboutWindow;
 
 
@@ -62,7 +61,7 @@ public:
 	virtual void CalculateSize();
 	virtual uint64 GetVRCDSize();
 
-	jpButton* fParentDirButton, *fMakeDirButton, *fNewVRCDButton, *fAddISOButton, *fCalcSizeButton;
+	BButton* fParentDirButton, *fMakeDirButton, *fNewVRCDButton, *fAddISOButton, *fCalcSizeButton;
 	RightList* fRightList;
 	Prefs* fBurnItPrefs;
 

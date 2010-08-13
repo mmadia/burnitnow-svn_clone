@@ -26,7 +26,6 @@ set(BURNITNOW_SRCS
 	PrefsView.cpp
 	RightList.cpp
 	StatusWindow.cpp
-	jpButton.cpp
 	jpWindow.cpp
 	BurnItNow.rdef
 	gfx.rdef

@@ -10,10 +10,6 @@
 #include <Window.h>
 
 
-// Forward declaration of jpButton class
-class jpButton;
-
-
 class StatusView : public BView {
 public:
 	StatusView(BRect r, char* name);
@@ -41,7 +37,7 @@ public:
 
 	BView* fAroundView;
 	StatusView* fStatusView;
-	jpButton* fCloseButton, *fMoreButton;
+	BButton* fCloseButton, *fMoreButton;
 	BStatusBar* fStatusBar;
 	bool fFullView;
 };

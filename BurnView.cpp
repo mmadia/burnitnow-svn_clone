@@ -8,7 +8,6 @@
 
 #include "const.h"
 #include "IconLabel.h"
-#include "jpButton.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -137,7 +136,7 @@ BurnView::BurnView(BRect size)
 	r.bottom -= 5;
 	r.left = 370; // was 260
 	r.right = 460; // was 350
-	fBurnButton = new jpButton(r, "fBurnButton", "Burn!", new BMessage(MAKE_IMAGE));
+	fBurnButton = new BButton(r, "fBurnButton", "Burn!", new BMessage(MAKE_IMAGE));
 	fBurnBox->AddChild(fBurnButton);
 
 	r = fBurnBox->Bounds();
@@ -146,7 +145,7 @@ BurnView::BurnView(BRect size)
 	r.bottom -= 5;
 	r.left = 270; //was 160
 	r.right = 360; //was 250
-	fMakeImageButton = new jpButton(r, "fMakeImageButton", "Make Image", new BMessage(MAKE_AND_SAVE_IMAGE));
+	fMakeImageButton = new BButton(r, "fMakeImageButton", "Make Image", new BMessage(MAKE_AND_SAVE_IMAGE));
 	fBurnBox->AddChild(fMakeImageButton);
 	// BurningSpeed
 	r = fBurnBox->Bounds();

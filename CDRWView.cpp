@@ -8,10 +8,10 @@
 
 #include "const.h"
 #include "IconLabel.h"
-#include "jpButton.h"
 
 #include <stdio.h>
 
+#include <Button.h>
 #include <MenuItem.h>
 
 
@@ -72,7 +72,7 @@ CDRWView::CDRWView(BRect size)
 	r.top += 10;
 	r.left = 300;
 	r.right = 365;
-	fBlankButton = new jpButton(r, "BlankButton", "Blank!", new BMessage(BLANK_IT_NOW));
+	fBlankButton = new BButton(r, "BlankButton", "Blank!", new BMessage(BLANK_IT_NOW));
 	fCDRWBox->AddChild(fBlankButton);
 
 }

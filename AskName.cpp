@@ -7,9 +7,9 @@
 #include "AskName.h"
 
 #include "const.h"
-#include "jpButton.h"
 
 #include <Application.h>
+#include <Button.h>
 #include <ScrollView.h>
 
 
@@ -46,7 +46,7 @@ AskName::AskName(BRect frame, char* title, uint32 mess, char* what)
 	r2.left = r.right + 5;
 	r2.top -= 3;
 	r2.bottom = 25;
-	fOkButton = new jpButton(r2, "Ok", "Ok", new BMessage('STxt'));
+	fOkButton = new BButton(r2, "Ok", "Ok", new BMessage('STxt'));
 	fAroundView->AddChild(fOkButton);
 
 	fNameTextView->MakeFocus();

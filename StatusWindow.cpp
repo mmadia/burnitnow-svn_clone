@@ -7,12 +7,12 @@
 #include "StatusWindow.h"
 
 #include "const.h"
-#include "jpButton.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <Application.h>
+#include <Button.h>
 
 
 extern char VOL_NAME[25];
@@ -138,12 +138,12 @@ StatusWindow::StatusWindow(char* title)
 	r.InsetBy(5.0, 5.0);
 	r.top = r.bottom - 20;
 	r.left = r.right - 35;
-	fCloseButton = new jpButton(r, "close", "Close", new BMessage('ClWi'));
+	fCloseButton = new BButton(r, "close", "Close", new BMessage('ClWi'));
 	fAroundView->AddChild(fCloseButton);
 	fCloseButton->SetEnabled(false);
 	r.right = r.left - 5;
 	r.left = r.right - 35;
-	fMoreButton = new jpButton(r, "more", "More..", new BMessage('More'));
+	fMoreButton = new BButton(r, "more", "More..", new BMessage('More'));
 	fAroundView->AddChild(fMoreButton);
 	r = fAroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
@@ -225,11 +225,11 @@ void StatusWindow::MessageReceived(BMessage* msg)
 				if (!fFullView) {
 					fFullView = !fFullView;
 					ResizeBy(0.0, 150.0);
-					fMoreButton->SetTitle("Less..");
+					fMoreButton->SetLabel("Less..");
 				} else {
 					fFullView = !fFullView;
 					ResizeBy(0.0, -150.0);
-					fMoreButton->SetTitle("More..");
+					fMoreButton->SetLabel("More..");
 				}
 			}
 			break;

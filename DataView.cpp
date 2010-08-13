@@ -8,7 +8,6 @@
 
 #include "const.h"
 #include "IconLabel.h"
-#include "jpButton.h"
 
 
 extern char DATA_STRING[100];
@@ -123,7 +122,7 @@ DataView::DataView(BRect size)
 	r = fBootBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 35;
-	fChooseBootImageButton = new jpButton(r, "fChooseBootImageButton", "Choose boot image", new BMessage(BOOT_FILE_PANEL));
+	fChooseBootImageButton = new BButton(r, "fChooseBootImageButton", "Choose boot image", new BMessage(BOOT_FILE_PANEL));
 	if (!BOOTABLE || !VRCD)
 		fChooseBootImageButton->SetEnabled(false);
 	fBootBox->AddChild(fChooseBootImageButton);
@@ -134,7 +133,7 @@ DataView::DataView(BRect size)
 	r.left = r.right - 150; // was 120
 	r.bottom = 165;
 
-	fChangeVolNameButton = new jpButton(r, "Change Volume Name", "Change Volume Name", new BMessage(CHANGE_VOL_NAME));
+	fChangeVolNameButton = new BButton(r, "Change Volume Name", "Change Volume Name", new BMessage(CHANGE_VOL_NAME));
 	AddChild(fChangeVolNameButton);
 
 	fFilePanel = new BFilePanel(B_OPEN_PANEL);

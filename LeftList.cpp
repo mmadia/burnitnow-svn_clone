@@ -7,13 +7,13 @@
 #include "LeftList.h"
 
 #include "DataView.h"
-#include "jpButton.h"
 #include "jpWindow.h"
 #include "RightList.h"
 
 #include <stdio.h>
 
 #include <Alert.h>
+#include <Button.h>
 #include <MediaFile.h>
 #include <MediaTrack.h>
 #include <MenuItem.h>

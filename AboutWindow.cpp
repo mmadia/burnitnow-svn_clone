@@ -7,7 +7,6 @@
 #include "AboutWindow.h"
 
 #include "const.h"
-#include "jpButton.h"
 
 #include <Button.h>
 #include <Bitmap.h>
@@ -93,10 +92,10 @@ AboutWindow::AboutWindow()
 	AddChild(fAroundView);
 
 	r = fAroundView->Bounds();
-	r.InsetBy(5.0, 5.0);
+	r.InsetBy(10.0, 10.0);
 	r.top = r.bottom - 20;
-	r.left = r.right - 35;
-	fCloseButton = new jpButton(r, "close", "Close", new BMessage('ClWi'));
+	r.left = r.right - 45;
+	fCloseButton = new BButton(r, "close", "Close", new BMessage('ClWi'));
 	fAroundView->AddChild(fCloseButton);
 	r = fAroundView->Bounds();
 	r.InsetBy(5.0, 5.0);

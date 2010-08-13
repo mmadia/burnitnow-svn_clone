@@ -9,10 +9,6 @@
 #include <Window.h>
 
 
-// Forward declaration of jpButton class
-class jpButton;
-
-
 class CopyCDView : public BView {
 public:
 	CopyCDView(BRect size, BWindow* twin);
@@ -21,7 +17,7 @@ public:
 
 private:
 	BWindow* fTempWindow;
-	jpButton* fOpenDirButton;
+	BButton* fOpenDirButton;
 };
 
 

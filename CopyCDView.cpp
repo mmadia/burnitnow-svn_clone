@@ -7,7 +7,8 @@
 #include "CopyCDView.h"
 
 #include "const.h"
-#include "jpButton.h"
+
+#include <Button.h>
 
 
 CopyCDView::CopyCDView(BRect size, BWindow* twin)
@@ -18,7 +19,7 @@ CopyCDView::CopyCDView(BRect size, BWindow* twin)
 	BRect r;
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
-	fOpenDirButton = new jpButton(r, "About!", "About", new BMessage(MENU_FILE_ABOUT));
+	fOpenDirButton = new BButton(r, "About!", "About", new BMessage(MENU_FILE_ABOUT));
 
 	AddChild(fOpenDirButton);
 	fTempWindow = twin;
