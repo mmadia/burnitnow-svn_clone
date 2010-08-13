@@ -45,26 +45,26 @@ AudioView::AudioView(BRect size)
 	r.right = 120;
 	r.bottom = 25;
 	fPadCheckBox = new BCheckBox(r, "pad", "Padding", new BMessage(AUDIO_PAD));
-	if (!strncmp(PAD, "-pad", 4)) {
+	if (!strncmp(PAD, "-pad", 4))
 		fPadCheckBox->SetValue(B_CONTROL_ON);
-	}
+
 	advOptionsBox->AddChild(fPadCheckBox);
 
 	r.bottom += 15;
 	r.top += 15;
 	r.right = 120;
 	fNoFixCheckBox = new BCheckBox(r, "nofix", "No fixate", new BMessage(AUDIO_NOFIX));
-	if (!strncmp(NOFIX, "-nofix", 6)) {
+	if (!strncmp(NOFIX, "-nofix", 6))
 		fNoFixCheckBox->SetValue(B_CONTROL_ON);
-	}
+
 	advOptionsBox->AddChild(fNoFixCheckBox);
 
 	r.bottom += 15;
 	r.top += 15;
 	fPreEmpCheckBox = new BCheckBox(r, "preemp", "Preemp", new BMessage(AUDIO_PREEMP));
-	if (!strncmp(PREEMP, "-preemp", 7)) {
+	if (!strncmp(PREEMP, "-preemp", 7))
 		fPreEmpCheckBox->SetValue(B_CONTROL_ON);
-	}
+
 	advOptionsBox->AddChild(fPreEmpCheckBox);
 
 	r = advOptionsBox->Bounds();
@@ -74,9 +74,9 @@ AudioView::AudioView(BRect size)
 	r.bottom = 25;
 
 	fSwabCheckBox = new BCheckBox(r, "swab", "Swab", new BMessage(AUDIO_SWAB));
-	if (!strncmp(SWAB, "-swab", 5)) {
+	if (!strncmp(SWAB, "-swab", 5))
 		fSwabCheckBox->SetValue(B_CONTROL_ON);
-	}
+
 	advOptionsBox->AddChild(fSwabCheckBox);
 
 

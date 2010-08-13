@@ -33,9 +33,8 @@ BBitmap* GetBitmapResource(type_code type, const char* name)
 	BResources* rsrc = BApplication::AppResources();
 	const void* data = rsrc->LoadResource(type, name, &len);
 
-	if (data == NULL) {
+	if (data == NULL)
 		return NULL;
-	}
 
 	BMemoryIO stream(data, len);
 
@@ -43,13 +42,13 @@ BBitmap* GetBitmapResource(type_code type, const char* name)
 	stream.Seek(0, SEEK_SET);
 	BMessage archive;
 	status_t err = archive.Unflatten(&stream);
-	if (err != B_OK) {
+	if (err != B_OK)
 		return NULL;
-	}
+
 	BBitmap* out = new BBitmap(&archive);
-	if (!out) {
+	if (!out)
 		return NULL;
-	}
+
 	err = (out)->InitCheck();
 	if (err != B_OK) {
 		delete out;
@@ -87,12 +86,11 @@ void FileListItem::DrawItem(BView* owner, BRect frame, bool complete)
 	rgb_color rgbfPatternColor = {244, 244, 255, 255};
 	rgb_color black = {0, 0, 0, 255};
 
-	if (IsSelected()) {
+	if (IsSelected())
 		rgbColor = rgbSelectedColor;
-	} else {
+	else
 		if (fPattern)
 			rgbColor = rgbfPatternColor;
-	};
 
 	owner->SetHighColor(rgbColor);
 	owner->SetLowColor(rgbColor);
@@ -138,19 +136,16 @@ void RightList::MessageReceived(BMessage* msg)
 	int32 counter = 0;
 
 	switch (msg->what) {
-
 		case B_SIMPLE_DATA:
 			if (VRCD) {
-				while (msg->FindRef("refs", counter++, &ref) == B_OK) {
+				while (msg->FindRef("refs", counter++, &ref) == B_OK)
 					MakeLink(&ref);
-				}
 				UpdateDir();
 			} else {
 				BAlert* MyAlert = new BAlert("BurnItNow", "You have to add a Virtual CD Directory to be able to drop files!", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 				MyAlert->Go();
 			}
 			break;
-
 		default:
 			BListView::MessageReceived(msg);
 			break;
@@ -167,10 +162,8 @@ void RightList::DeleteDirFromVRCD(entry_ref* ref)
 		if (BEntry(&temp_ref, true).IsDirectory()) {
 			DeleteDirFromVRCD(&temp_ref);
 			BEntry(&temp_ref).Remove();
-		} else {
+		} else
 			BEntry(&temp_ref).Remove();
-		}
-
 	}
 	delete temp_dir;
 }
@@ -183,9 +176,8 @@ void RightList::DeleteFromVRCD(entry_ref* ref)
 	if (temp_entry.IsDirectory()) {
 		DeleteDirFromVRCD(ref);
 		temp_entry.Remove();
-	} else {
+	} else
 		temp_entry.Remove();
-	}
 }
 
 
@@ -204,22 +196,17 @@ void RightList::KeyDown(const char* bytes, int32 numBytes)
 					if (result == 0) {
 						DeleteFromVRCD(&item->fRef);
 						UpdateDir();
-
 					} else {
 						UpdateDir();
 						WriteLog("Didnt delete file");
 					}
-					if (item != NULL) {
+					if (item != NULL)
 						delete item;
-					}
-
 				}
-
 				break;
 			}
-		default: {
-				BListView::KeyDown(bytes, numBytes);
-			}
+		default:
+			BListView::KeyDown(bytes, numBytes);
 	}
 }
 
@@ -229,48 +216,44 @@ void RightList::MouseDown(BPoint point)
 	BMessage* msg = Window()->CurrentMessage();
 	uint32 clicks = msg->FindInt32("clicks");
 	uint32 button = msg->FindInt32("buttons");
-	if ((button == fLastButton) && (clicks > 1)) {
+	if ((button == fLastButton) && (clicks > 1))
 		fClickCount++;
-	} else {
+	else
 		fClickCount = 1;
-	}
+
 	fLastButton = button;
 	if ((button == B_PRIMARY_MOUSE_BUTTON) && (fClickCount == 2)) {
 		int32 selection = CurrentSelection();
 		if (selection >= 0) {
 			FileListItem* item = (FileListItem*)ItemAt(selection);
 			if (item->fIconBitmap != NULL && item->fIconBitmap != fInfoBitmap)
-				if (fBDirectory->SetTo(&item->fRef) == B_OK) {
+				if (fBDirectory->SetTo(&item->fRef) == B_OK)
 					UpdateDir();
-				}
 		}
 		fClickCount = 0;
 
-	} else {
+	} else
 		BListView::MouseDown(point);
-	}
 }
 
 
 void RightList::UpdateInfo(char* str1 = NULL, char* str2 = NULL, char* str3 = NULL, char* str4 = NULL, char* str5 = NULL)
 {
 	MakeEmpty();
-	if (str1 != NULL) {
+	if (str1 != NULL)
 		AddItem(new FileListItem(NULL, str1, fInfoBitmap));
-	}
-	if (str2 != NULL) {
-		AddItem(new FileListItem(NULL, str2, NULL));
-	}
-	if (str3 != NULL) {
-		AddItem(new FileListItem(NULL, str3, NULL));
-	}
-	if (str4 != NULL) {
-		AddItem(new FileListItem(NULL, str4, NULL));
-	}
-	if (str5 != NULL) {
-		AddItem(new FileListItem(NULL, str5, NULL));
-	}
 
+	if (str2 != NULL)
+		AddItem(new FileListItem(NULL, str2, NULL));
+
+	if (str3 != NULL)
+		AddItem(new FileListItem(NULL, str3, NULL));
+
+	if (str4 != NULL)
+		AddItem(new FileListItem(NULL, str4, NULL));
+
+	if (str5 != NULL)
+		AddItem(new FileListItem(NULL, str5, NULL));
 }
 
 
@@ -282,12 +265,10 @@ void RightList::UpdateDir()
 	fBDirectory->GetEntry(&temp_entry);
 	fBDirectory->SetTo(&temp_entry);
 	while (fBDirectory->GetNextRef(&temp_ref) != B_ENTRY_NOT_FOUND) {
-		if (BEntry(&temp_ref, true).IsDirectory()) {
+		if (BEntry(&temp_ref, true).IsDirectory())
 			AddItem(new FileListItem(&temp_ref, temp_ref.name, fDirectoryBitmap));
-		} else {
+		else
 			AddItem(new FileListItem(&temp_ref, temp_ref.name, fFileBitmap));
-		}
-
 	}
 }
 
@@ -302,7 +283,6 @@ void RightList::ParentDir()
 			if (!strncmp(temp_path.Path(), BURN_DIR, strlen(BURN_DIR))) {
 				temp_entry.GetParent(fBDirectory);
 				UpdateDir();
-			} else {
 			}
 		}
 	}
@@ -355,8 +335,6 @@ void RightList::MakeDir(entry_ref* ref)
 					MakeDir(&temp_ref);
 					fTDirectory->SetTo(temp_path.Path());
 				}
-
-
 		} else {
 			if (!BEntry(&temp_ref, true).IsDirectory()) {
 				if (fTDirectory->GetEntry(&temp_entry) == B_OK)
@@ -367,7 +345,6 @@ void RightList::MakeDir(entry_ref* ref)
 							}
 						}
 					}
-
 			} else {
 				// Don't follow linked directorys
 				WriteLog("RightList::MakeDir -> #1");
@@ -399,10 +376,8 @@ void RightList::MakeLink(entry_ref* ref)
 			if (fBDirectory->GetEntry(&temp_entry) == B_OK) {
 				if (temp_entry.GetPath(&temp_path) == B_OK) {
 					sprintf(temp_char, "%s/%s", temp_path.Path(), ref->name);
-					if (BEntry(ref, false).GetPath(&temp_path) == B_OK) {
-						if (fBDirectory->CreateSymLink(temp_char, temp_path.Path(), NULL) == B_OK) {
-						}
-					}
+					if (BEntry(ref, false).GetPath(&temp_path) == B_OK)
+						fBDirectory->CreateSymLink(temp_char, temp_path.Path(), NULL);
 				}
 			}
 		} else {
@@ -417,7 +392,6 @@ void RightList::MakeLink(entry_ref* ref)
 void RightList::WriteLog(const char* string)
 {
 	jpWindow* win = dynamic_cast<jpWindow*>(Window());
-	if (win != NULL) {
+	if (win != NULL)
 		win->MessageLog(string);
-	}
 }

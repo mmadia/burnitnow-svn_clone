@@ -49,16 +49,16 @@ PrefsView::PrefsView(BRect size)
 	r.right = 175; // was 125
 	r.bottom = 40;
 	fDAOCheckBox = new BCheckBox(r, "DAO", "DAO (Disc At Once)", new BMessage(MISC_DAO));
-	if (!strncmp(DAO, "-dao", 4)) {
+	if (!strncmp(DAO, "-dao", 4))
 		fDAOCheckBox->SetValue(B_CONTROL_ON);
-	}
+
 	miscOptBox->AddChild(fDAOCheckBox);
 
 	r.top += 20;
 	r.bottom += 20;
 	fBurnProofCheckBox = new BCheckBox(r, "burnproof", "BurnProof (read help)", new BMessage(MISC_BURNPROOF));
-	if (!strncmp(BURNPROOF, "driveropts = burnproof", 22)) {
+	if (!strncmp(BURNPROOF, "driveropts = burnproof", 22))
 		fBurnProofCheckBox->SetValue(B_CONTROL_ON);
-	}
+
 	miscOptBox->AddChild(fBurnProofCheckBox);
 }

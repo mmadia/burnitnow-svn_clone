@@ -119,8 +119,7 @@ int32 OutPutMkImage(void* p)
 			SWin->UpdateStatus(temp, buf3);
 			SWin->Unlock();
 		}
-
-	};
+	}
 
 	if (!JUST_IMAGE) {
 		SWin->Lock();
@@ -140,7 +139,6 @@ int32 OutPutMkImage(void* p)
 		BEntry(temp, true).Remove();
 		sprintf(temp, "%s/boot.catalog", BURN_DIR);
 		BEntry(temp, true).Remove();
-
 	}
 	return 0;
 }
@@ -162,12 +160,12 @@ int32 OutPutBurn(void* p)
 		} else {
 			fread(buffer, 1, 33, CLInput);
 			buffer[33] = 0;
-			if (buffer[0] != 0x0d) progress_mode = false;
-
+			if (buffer[0] != 0x0d)
+				progress_mode = false;
 		}
-		if (!strncmp(buffer, "Starting new", 12)) {
+		if (!strncmp(buffer, "Starting new", 12))
 			progress_mode = true;
-		}
+
 		if (!strncmp(buffer, "Sense Code:", 11)) {
 			SWin->Lock();
 			BMessage hejsan(WRITE_TO_LOG);
@@ -198,7 +196,6 @@ int32 OutPutBurn(void* p)
 			}
 		}
 		if (!strncmp(buffer, "Fixating", 8)) {
-
 			SWin->Lock();
 			SWin->StatusSetColor(black);
 			SWin->StatusUpdateReset();
@@ -248,7 +245,6 @@ int32 OutPutBlank(void* p)
 		if (temp) {
 			SWin->StatusSetColor(green);
 			temp = false;
-
 		} else {
 			SWin->StatusSetColor(blue);
 			temp = true;
@@ -256,9 +252,8 @@ int32 OutPutBlank(void* p)
 		SWin->StatusUpdateReset();
 		SWin->StatusSetText("Blanking...");
 
-
 		SWin->Unlock();
-	};
+	}
 	SWin->Lock();
 	SWin->Ready();
 	SWin->StatusSetText("Blanking Done.");
@@ -488,9 +483,9 @@ uint64 jpWindow::GetVRCDSize()
 		}
 		pclose(f1);
 		tempas = atol(buf) * 2048;
-	} else if (IMAGE_TYPE == 1) {
+	} else if (IMAGE_TYPE == 1)
 		tempas = GetBFSSize();
-	}
+
 	return tempas;
 }
 
@@ -544,7 +539,7 @@ void jpWindow::CalculateSize()
 					angle_temp[i] = temp / 1024 / 1024;
 					nrtracks++;
 				}
-			} else if (fLeftList->CountItems() > 1)
+			} else if (fLeftList->CountItems() > 1) {
 				if (item2->fIconBitmap == fLeftList->fAudioBitmap) {
 					tracks = fLeftList->CountItems();
 					for (i = 1; i < tracks; i++) {
@@ -556,6 +551,7 @@ void jpWindow::CalculateSize()
 						nrtracks++;
 					}
 				}
+			}
 		}
 	} else if (BURN_TYPE == 2) {
 		sprintf(what, "MixCD");
@@ -636,29 +632,29 @@ void jpWindow::InitBurnIt()
 	BURNIT_PATH = new char[strlen(path.Path())+1];
 	strcpy(BURNIT_PATH, path.Path());
 	sprintf(temp_char, "%s/tmp", BURNIT_PATH);
-	if (!BEntry(temp_char).Exists()) {
+	if (!BEntry(temp_char).Exists())
 		BDirectory(BURNIT_PATH).CreateDirectory(temp_char, NULL);
-	}
+
 	IMAGE_NAME = new char[1024];
 	sprintf(IMAGE_NAME, "%s/BurnItNow.raw", temp_char);
 	sprintf(temp_char, "%s/VRCD", temp_char);
-	if (!BEntry(temp_char).Exists()) {
+	if (!BEntry(temp_char).Exists())
 		BDirectory(temp_char).CreateDirectory(temp_char, NULL);
-	}
+
 	BURN_DIR = new char[strlen(temp_char)+1];
 	strcpy(BURN_DIR, temp_char);
 
 	// Load from pref file
-	if (fBurnItPrefs->FindString("ISOFILE_DIR", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("ISOFILE_DIR", &tr) == B_OK)
 		strcpy(ISOFILE_DIR, tr);
-	} else {
+	else
 		strcpy(ISOFILE_DIR, "NONE");
-	}
-	if (fBurnItPrefs->FindString("VOL_NAME", &tr) == B_OK) {
+
+	if (fBurnItPrefs->FindString("VOL_NAME", &tr) == B_OK)
 		strcpy(VOL_NAME, tr);
-	} else {
+	else
 		strcpy(VOL_NAME, "BurnItNow");
-	}
+
 	if (fBurnItPrefs->FindBool("VRCD", &VRCD) != B_OK)
 		VRCD = false;
 
@@ -680,74 +676,65 @@ void jpWindow::InitBurnIt()
 	if (fBurnItPrefs->FindBool("ONTHEFLY", &ONTHEFLY) != B_OK)
 		ONTHEFLY = false;
 
-	if (fBurnItPrefs->FindString("MULTISESSION", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("MULTISESSION", &tr) == B_OK)
 		strcpy(MULTISESSION, tr);
-	} else {
+	else
 		strcpy(MULTISESSION, " ");
-	}
-	if (fBurnItPrefs->FindString("DUMMYMODE", &tr) == B_OK) {
+
+	if (fBurnItPrefs->FindString("DUMMYMODE", &tr) == B_OK)
 		strcpy(DUMMYMODE, tr);
-	} else {
+	else
 		strcpy(DUMMYMODE, " ");
-	}
-	if (fBurnItPrefs->FindString("EJECT", &tr) == B_OK) {
+
+	if (fBurnItPrefs->FindString("EJECT", &tr) == B_OK)
 		strcpy(EJECT, tr);
-	} else {
+	else
 		strcpy(EJECT, " ");
-	}
-	if (fBurnItPrefs->FindString("DATA_STRING", &tr) == B_OK) {
+
+	if (fBurnItPrefs->FindString("DATA_STRING", &tr) == B_OK)
 		strcpy(DATA_STRING, tr);
-	} else {
+	else
 		strcpy(DATA_STRING, " ");
-	}
+
 	if (fBurnItPrefs->FindInt16("IMAGE_TYPE", &IMAGE_TYPE) != B_OK)
 		IMAGE_TYPE = 0;
 
 	if (fBurnItPrefs->FindInt16("SCSI_DEV", &SCSI_DEV) != B_OK)
 		SCSI_DEV = -1;
 
-	if (fBurnItPrefs->FindString("PAD", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("PAD", &tr) == B_OK)
 		strcpy(PAD, tr);
-	} else {
+	else
 		strcpy(PAD, "-pad");
-	}
 
-	if (fBurnItPrefs->FindString("DAO", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("DAO", &tr) == B_OK)
 		strcpy(DAO, tr);
-	}
-
-	else {
+	else
 		strcpy(DAO, " ");
-	}
 
-	if (fBurnItPrefs->FindString("BURNPROOF", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("BURNPROOF", &tr) == B_OK)
 		strcpy(BURNPROOF, tr);
-	}
-
-	else {
+	else
 		strcpy(BURNPROOF, " ");
-	}
 
-
-	if (fBurnItPrefs->FindString("NOFIX", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("NOFIX", &tr) == B_OK)
 		strcpy(NOFIX, tr);
-	} else {
+	else
 		strcpy(NOFIX, " ");
-	}
 
-	if (fBurnItPrefs->FindString("PREEMP", &tr) == B_OK) {
+	if (fBurnItPrefs->FindString("PREEMP", &tr) == B_OK)
 		strcpy(PREEMP, tr);
-	} else {
+	else
 		strcpy(PREEMP, " ");
-	}
-	if (fBurnItPrefs->FindString("SWAB", &tr) == B_OK) {
+
+	if (fBurnItPrefs->FindString("SWAB", &tr) == B_OK)
 		strcpy(SWAB, tr);
-	} else {
+	else
 		strcpy(SWAB, " ");
-	}
+
 	if (fBurnItPrefs->FindRef("BOOTIMAGEREF", &BOOTIMAGEREF) == B_OK)
 		if (BEntry(&BOOTIMAGEREF, true).Exists())
-			if (fBurnItPrefs->FindBool("BOOTABLE", &BOOTABLE) == B_OK) {}
+			fBurnItPrefs->FindBool("BOOTABLE", &BOOTABLE);
 
 	// End loading from pref file
 
@@ -824,9 +811,9 @@ void jpWindow::CheckForDevices()
 			if (SCSI_DEV != -1) {
 				fBurnDevice = &fScsiDevices[SCSI_DEV - 1];
 				fPrefsView->fRecordersMenu->ItemAt(SCSI_DEV - 1)->SetMarked(true);
-			} else {
+			} else
 				fBurnDevice = NULL;
-			}
+
 			Unlock();
 		}
 	} else {
@@ -853,13 +840,12 @@ int jpWindow::CheckMulti(char* str)
 		fgets(buf, 1024, f);
 		if (buf[0] == '/') {
 			temp = strlen(buf) - strlen("Cannot read first writable address\n");
-			if (!strncmp(&buf[temp], "Cannot read first writable address", strlen("Cannot read first writable address"))) {
+			if (!strncmp(&buf[temp], "Cannot read first writable address", strlen("Cannot read first writable address")))
 				return -1;
-			}
+
 			temp = strlen(buf) - strlen("Cannot read session offset\n");
-			if (!strncmp(&buf[temp], "Cannot read session offset", strlen("Cannot read session offset"))) {
+			if (!strncmp(&buf[temp], "Cannot read session offset", strlen("Cannot read session offset")))
 				return 0;
-			}
 
 		}
 		if (buf[0] >= '0' && buf[0] <= '9') {
@@ -890,12 +876,12 @@ void jpWindow::BurnNOW()
 						ONTHEFLY = true;
 						BurnWithCDRecord();
 					} else {
-						if (fBurnView->fMultiCheckBox->Value() == 1) {
+						if (fBurnView->fMultiCheckBox->Value() == 1)
 							temp = CheckMulti(buf);
-						}
-						if (temp != -1) {
+
+						if (temp != -1)
 							MakeImageNOW(temp, buf);
-						} else {
+						else {
 							BAlert* MyAlert = new BAlert("BurnItNow", "Put a blank CD or a CD that you have burned multisession on before.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 							MyAlert->Go();
 						}
@@ -952,12 +938,12 @@ void jpWindow::BurnNOW()
 						ONTHEFLY = true;
 						BurnWithCDRecord();
 					} else {
-						if (fBurnView->fMultiCheckBox->Value() == 1) {
+						if (fBurnView->fMultiCheckBox->Value() == 1)
 							temp = CheckMulti(buf);
-						}
-						if (temp != -1) {
+
+						if (temp != -1)
 							MakeImageNOW(temp, buf);
-						} else {
+						else {
 							BAlert* MyAlert = new BAlert("BurnItNow", "Put a blank CD or a CD that you have burned multisession on before.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 							MyAlert->Go();
 						}
@@ -1074,9 +1060,8 @@ void jpWindow::MessageReceived(BMessage* message)
 				CalculateSize();
 			}
 			break;
-		case BURN_WITH_CDRECORD: {
+		case BURN_WITH_CDRECORD:
 				BurnWithCDRecord();
-			}
 			break;
 		case WRITE_TO_LOG: {
 				char* temp_str;
@@ -1096,9 +1081,8 @@ void jpWindow::MessageReceived(BMessage* message)
 			VRCD = true;
 			ISOFILE = false;
 			fDataView->fBootableCDCheckBox->SetEnabled(true);
-			if (fDataView->fBootableCDCheckBox->Value() == 1) {
+			if (fDataView->fBootableCDCheckBox->Value() == 1)
 				fDataView->fChooseBootImageButton->SetEnabled(true);
-			}
 			break;
 		case DATA_ISOFILE:
 			VRCD = false;
@@ -1190,14 +1174,13 @@ void jpWindow::MessageReceived(BMessage* message)
 		case BURN_DATA_CD:
 			BURN_TYPE = 0;
 			if (fDataView->fBeOSRadio->Value() != 1) {
-				if (fBurnView->fOnTheFlyCheckBox->Value() != 1) {
+				if (fBurnView->fOnTheFlyCheckBox->Value() != 1)
 					fBurnView->fMultiCheckBox->SetEnabled(true);
-				}
+
 				fBurnView->fOnTheFlyCheckBox->SetEnabled(true);
 				fDataView->fBootableCDCheckBox->SetEnabled(true);
-				if (fDataView->fBootableCDCheckBox->Value() == 1) {
+				if (fDataView->fBootableCDCheckBox->Value() == 1)
 					fDataView->fChooseBootImageButton->SetEnabled(true);
-				}
 			}
 			break;
 		case BURN_AUDIO_CD:
@@ -1213,53 +1196,46 @@ void jpWindow::MessageReceived(BMessage* message)
 				fBurnView->fOnTheFlyCheckBox->SetEnabled(true);
 				fBurnView->fMultiCheckBox->SetEnabled(false);
 				fDataView->fBootableCDCheckBox->SetEnabled(true);
-				if (fDataView->fBootableCDCheckBox->Value() == 1) {
+				if (fDataView->fBootableCDCheckBox->Value() == 1)
 					fDataView->fChooseBootImageButton->SetEnabled(true);
-				}
 			}
 			break;
 		case AUDIO_PAD:
-			if (fAudioView->fPadCheckBox->Value() == 1) {
+			if (fAudioView->fPadCheckBox->Value() == 1)
 				strcpy(PAD, "-pad");
-			} else {
+			else
 				strcpy(PAD, " ");
-			}
 			break;
 		case AUDIO_SWAB:
-			if (fAudioView->fSwabCheckBox->Value() == 1) {
+			if (fAudioView->fSwabCheckBox->Value() == 1)
 				strcpy(SWAB, "-swab");
-			} else {
+			else
 				strcpy(SWAB, " ");
-			}
 			break;
 		case AUDIO_NOFIX:
-			if (fAudioView->fNoFixCheckBox->Value() == 1) {
+			if (fAudioView->fNoFixCheckBox->Value() == 1)
 				strcpy(NOFIX, "-nofix");
-			} else {
+			else
 				strcpy(NOFIX, " ");
-			}
 			break;
 		case AUDIO_PREEMP:
-			if (fAudioView->fPreEmpCheckBox->Value() == 1) {
+			if (fAudioView->fPreEmpCheckBox->Value() == 1)
 				strcpy(PREEMP, "-preemp");
-			} else {
+			else
 				strcpy(PREEMP, " ");
-			}
 			break;
 
 		case BURN_MULTI:
-			if (fBurnView->fMultiCheckBox->Value() == 1) {
+			if (fBurnView->fMultiCheckBox->Value() == 1)
 				strcpy(MULTISESSION, "-multi");
-			} else {
+			else
 				strcpy(MULTISESSION, " ");
-			}
 			break;
 		case BURN_DUMMY_MODE:
-			if (fBurnView->fDummyModeCheckBox->Value() == 1) {
+			if (fBurnView->fDummyModeCheckBox->Value() == 1)
 				strcpy(DUMMYMODE, "-dummy");
-			} else {
+			else
 				strcpy(DUMMYMODE, " ");
-			}
 			break;
 		case BURN_ONTHEFLY:
 			if (fBurnView->fOnTheFlyCheckBox->Value() == 1) {
@@ -1272,26 +1248,22 @@ void jpWindow::MessageReceived(BMessage* message)
 			}
 			break;
 		case BURN_EJECT:
-			if (fBurnView->fEjectCheckBox->Value() == 1) {
+			if (fBurnView->fEjectCheckBox->Value() == 1)
 				strcpy(EJECT, "-eject");
-			} else {
+			else
 				strcpy(EJECT, " ");
-			}
 			break;
 		case MISC_DAO:
-			if (fPrefsView->fDAOCheckBox->Value() == 1) {
+			if (fPrefsView->fDAOCheckBox->Value() == 1)
 				strcpy(DAO, "-dao");
-			} else {
+			else
 				strcpy(DAO, " ");
-			}
-
 			break;
 		case MISC_BURNPROOF:
-			if (fPrefsView->fBurnProofCheckBox->Value() == 1) {
+			if (fPrefsView->fBurnProofCheckBox->Value() == 1)
 				strcpy(BURNPROOF, "driveropts = burnproof");
-			} else {
+			else
 				strcpy(BURNPROOF, " ");
-			}
 			break;
 
 		case MENU_FILE_ABOUT:
@@ -1304,9 +1276,9 @@ void jpWindow::MessageReceived(BMessage* message)
 			BurnNOW();
 			break;
 		case MAKE_AND_SAVE_IMAGE:
-			if (VRCD && !ISOFILE) {
+			if (VRCD && !ISOFILE)
 				fISOSavePanel->Show();
-			} else {
+			else {
 				BAlert* MyAlert = new BAlert("BurnItNow", "You have to Add an \"Virtual CD Directory\" able to make an ISOfile.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 				MyAlert->Go();
 			}
@@ -1369,9 +1341,9 @@ void jpWindow::MessageReceived(BMessage* message)
 		case MAKE_DIRECTORY:
 			const char* temp_char;
 			message->FindString("DirName", &temp_char);
-			if (strcmp(temp_char, "boot.catalog")) {
+			if (strcmp(temp_char, "boot.catalog"))
 				fRightList->MakeDir(temp_char);
-			} else {
+			else {
 				BAlert* MyAlert = new BAlert("BurnItNow", "You cannot create a directory named boot.catalog,\nit is reserved for making bootable CDs.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 				MyAlert->Go();
 			}
@@ -1424,7 +1396,6 @@ void jpWindow::MessageReceived(BMessage* message)
 					fDataView->fChooseBootImageButton->SetEnabled(false);
 					BOOTABLE = false;
 					fDataView->fFilePanel->Show();
-
 				} else {
 					BOOTABLE = false;
 					sprintf(BOOTSTRING, " ");
@@ -1437,7 +1408,6 @@ void jpWindow::MessageReceived(BMessage* message)
 							fLeftList->InvalidateItem(0);
 						}
 					}
-
 				}
 			}
 			break;
@@ -1546,7 +1516,6 @@ void jpWindow::SetISOFile(char* string)
 		fAddISOButton->SetEnabled(false);
 		ISOFILE = true;
 		VRCD = false;
-
 	} else {
 		BAlert* MyAlert = new BAlert("BurnItNow", "You can only have one ISOfile/VirtualCD on a CD.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 		MyAlert->Go();
@@ -1585,17 +1554,16 @@ void jpWindow::MakeImageNOW(int Multi, const char* str)
 		fStatusWindow->fStatusBar->SetBarColor(blue);
 		fStatusWindow->Unlock();
 		char command[2000];
-		if (BOOTABLE) {
+		if (BOOTABLE)
 			MakeBootImage();
-		}
 
 		if (IMAGE_TYPE == 0) {
-			if (Multi == 0) {
+			if (Multi == 0)
 				sprintf(command, "mkisofs -o \"%s\" %s %s -gui -f -V \"%s\" \"%s\" 2>&1", IMAGE_NAME, DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR);
-			}
-			if (Multi == 1) {
+
+			if (Multi == 1)
 				sprintf(command, "mkisofs -o \"%s\" %s %s -gui -f -V \"%s\" -C %s -M %s \"%s\" 2>&1", IMAGE_NAME, DATA_STRING, BOOTSTRING, VOL_NAME, str, fBurnDevice->scsiid, BURN_DIR);
-			}
+
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "MakeingIMAGE", 5, command));
 			snooze(500000);
@@ -1679,15 +1647,14 @@ void jpWindow::BurnWithCDRecord()
 			fStatusWindow->Unlock();
 
 			if (ONTHEFLY && !ISOFILE && VRCD) {
-				if (BOOTABLE) {
+				if (BOOTABLE)
 					MakeBootImage();
-				}
 
 				GetTsize(tsize);
 				sprintf(command, "/boot/apps/cdrtools/bin/mkisofs %s -quiet %s -f -V \"%s\" \"%s\" | /boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s tsize=%s %s -data %s %s -v -", DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR, fBurnDevice->scsiid, BURN_SPD, BURNPROOF, tsize, DAO, DUMMYMODE, EJECT);
-			} else {
+			} else
 				sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s -data %s %s %s -v \"%s\"", fBurnDevice->scsiid, BURN_SPD, BURNPROOF, DAO, DUMMYMODE, EJECT, MULTISESSION, IMAGE_NAME);
-			}
+
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
 			snooze(500000);
@@ -1713,14 +1680,14 @@ void jpWindow::BurnWithCDRecord()
 
 			if (ONTHEFLY && !ISOFILE && VRCD) {
 				GetTsize(tsize);
-				if (fDataView->fBootableCDCheckBox->Value() == 1) {
+				if (fDataView->fBootableCDCheckBox->Value() == 1)
 					MakeBootImage();
-				}
+
 				sprintf(command, "/boot/apps/cdrtools/bin/mkisofs %s %s -quiet -f -V \"%s\" \"%s\" | /boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s tsize=%s %s %s %s -v %s %s %s %s -data - -audio %s", DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR, fBurnDevice->scsiid, BURN_SPD, BURNPROOF, tsize, DAO, DUMMYMODE, EJECT, PAD, PREEMP, SWAB, NOFIX, AUDIO_FILES);
 				MessageLog(command);
-			} else {
+			} else
 				sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s %s %s %s %s %s %s -v -data \"%s\" -audio %s", fBurnDevice->scsiid, BURN_SPD, BURNPROOF, DAO, PAD, PREEMP, SWAB, NOFIX, DUMMYMODE, EJECT, IMAGE_NAME, AUDIO_FILES);
-			}
+
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
 			snooze(500000);

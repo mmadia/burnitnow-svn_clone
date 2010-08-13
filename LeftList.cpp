@@ -48,9 +48,8 @@ LeftListItem::LeftListItem(entry_ref* ref, const char* name, BBitmap* icon, stru
 		fAudioInfo.total_time = Info->total_time;
 		strcpy(fAudioInfo.pretty_name, Info->pretty_name);
 		strcpy(fAudioInfo.short_name, Info->short_name);
-	} else {
+	} else
 		fIsAudio = false;
-	}
 }
 
 
@@ -63,12 +62,11 @@ void LeftListItem::DrawItem(BView* owner, BRect frame, bool complete)
 	rgb_color black = {0, 0, 0, 255};
 
 
-	if (IsSelected()) {
+	if (IsSelected())
 		rgbColor = rgbSelectedColor;
-	} else {
+	else
 		if (!fIsAudio)
 			rgbColor = rgbPatternColor;
-	};
 
 	owner->SetHighColor(rgbColor);
 	owner->SetLowColor(rgbColor);
@@ -82,9 +80,8 @@ void LeftListItem::DrawItem(BView* owner, BRect frame, bool complete)
 	if (fIsAudio) {
 		sprintf(temp_char, "%s - %d:%d", fName, (int)(fAudioInfo.total_time / 1000000) / 60, (int)(fAudioInfo.total_time / 1000000) % 60);
 		owner->DrawString(temp_char);
-	} else {
+	} else
 		owner->DrawString(fName);
-	}
 }
 
 
@@ -152,14 +149,14 @@ void LeftList::MessageReceived(BMessage* msg)
 							fIsAudio = true;
 						}
 					}
-				} else {
+				} else
 					WriteLog("MediaFile NULL (file doesnt exists!?)");
-				}
+
 				delete testfile;
 				if (fIsAudio) {
-					if (!strcmp(fAudioInfo.pretty_name, "Raw Audio") && (fAudioInfo.channels == 2) && (fAudioInfo.frame_rate == 44100) && (fAudioInfo.bps == 2)) {
+					if (!strcmp(fAudioInfo.pretty_name, "Raw Audio") && (fAudioInfo.channels == 2) && (fAudioInfo.frame_rate == 44100) && (fAudioInfo.bps == 2))
 						AddItem(new LeftListItem(&ref, ref.name, fAudioBitmap, &fAudioInfo));
-					} else {
+					else {
 						BAlert* MyAlert = new BAlert("BurnItNow", "You can only burn 16 bits stereo 44.1 kHz Raw Audio files.\n (More audio files will be supported in the future)", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 						MyAlert->Go();
 					}
@@ -167,9 +164,8 @@ void LeftList::MessageReceived(BMessage* msg)
 					BPath temp_path;
 					BEntry(&ref).GetPath(&temp_path);
 					jpWindow* win = dynamic_cast<jpWindow*>(Window());
-					if (win != NULL) {
+					if (win != NULL)
 						win->SetISOFile((char*)temp_path.Path());
-					}
 				}
 			}
 			break;
@@ -207,9 +203,8 @@ void LeftList::KeyDown(const char* bytes, int32 numBytes)
 							}
 
 						}
-						if (item != NULL) {
+						if (item != NULL)
 							delete item;
-						}
 					}
 				}
 				break;
@@ -232,11 +227,11 @@ void LeftList::MouseDown(BPoint point)
 	uint32 button = msg->FindInt32("buttons");
 
 
-	if ((button == fLastButton) && (clicks > 1)) {
+	if ((button == fLastButton) && (clicks > 1))
 		fClickCount++;
-	} else {
+	else
 		fClickCount = 1;
-	}
+
 	fLastButton = button;
 
 	if ((button == B_SECONDARY_MOUSE_BUTTON)) {
@@ -282,9 +277,8 @@ void LeftList::MouseDown(BPoint point)
 								win->fAddISOButton->SetEnabled(true);
 							}
 						}
-						if (item != NULL) {
+						if (item != NULL)
 							delete item;
-						}
 					}
 				}
 			}
@@ -302,24 +296,21 @@ void LeftList::MouseDown(BPoint point)
 				sprintf(temp4, "%d bits", (int)item->fAudioInfo.bps * 8);
 				sprintf(temp5, "Info on AudioFile");
 				jpWindow* win = dynamic_cast<jpWindow*>(Window());
-				if (win != NULL) {
+				if (win != NULL)
 					win->fRightList->UpdateInfo(temp5, temp1, temp2, temp3, temp4);
-				}
 			}
 			if (item->fIconBitmap == fVRCDBitmap) {
 				jpWindow* win = dynamic_cast<jpWindow*>(Window());
-				if (win != NULL) {
+				if (win != NULL)
 					win->fRightList->UpdateDir();
-				}
 			}
 			if (item->fIconBitmap == fISOBitmap) {
 				sprintf(temp1, "Info on ISOFile");
 				sprintf(temp2, "%s", item->fName);
 				sprintf(temp3, "X Mb");
 				jpWindow* win = dynamic_cast<jpWindow*>(Window());
-				if (win != NULL) {
+				if (win != NULL)
 					win->fRightList->UpdateInfo(temp1, temp2, temp3, NULL, NULL);
-				}
 			}
 		}
 		fClickCount = 0;
@@ -333,7 +324,6 @@ void LeftList::MouseDown(BPoint point)
 void LeftList::WriteLog(const char* string)
 {
 	jpWindow* win = dynamic_cast<jpWindow*>(Window());
-	if (win != NULL) {
+	if (win != NULL)
 		win->PutLog(string);
-	}
 }

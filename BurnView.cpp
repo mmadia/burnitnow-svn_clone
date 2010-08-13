@@ -100,9 +100,9 @@ BurnView::BurnView(BRect size)
 	r.left = 13;
 	r.right = 125;
 	fMultiCheckBox = new BCheckBox(r, "fMultiCheckBox", "MultiSession", new BMessage(BURN_MULTI));
-	if (!strncmp(MULTISESSION, "-multi", 6)) {
+	if (!strncmp(MULTISESSION, "-multi", 6))
 		fMultiCheckBox->SetValue(B_CONTROL_ON);
-	}
+
 	burnBox->AddChild(fMultiCheckBox);
 
 	r.top += 15;
@@ -117,17 +117,16 @@ BurnView::BurnView(BRect size)
 	r.top += 15;
 	r.bottom += 15;
 	fDummyModeCheckBox = new BCheckBox(r, "fDummyModeCheckBox", "Dummy mode", new BMessage(BURN_DUMMY_MODE));
-	if (!strncmp(DUMMYMODE, "-dummy", 6)) {
+	if (!strncmp(DUMMYMODE, "-dummy", 6))
 		fDummyModeCheckBox->SetValue(B_CONTROL_ON);
-	}
+
 	burnBox->AddChild(fDummyModeCheckBox);
 
 	r.top += 15;
 	r.bottom += 15;
 	fEjectCheckBox = new BCheckBox(r, "fEjectCheckBox", "Eject", new BMessage(BURN_EJECT));
-	if (!strncmp(EJECT, "-eject", 6)) {
+	if (!strncmp(EJECT, "-eject", 6))
 		fEjectCheckBox->SetValue(B_CONTROL_ON);
-	}
 
 	burnBox->AddChild(fEjectCheckBox);
 

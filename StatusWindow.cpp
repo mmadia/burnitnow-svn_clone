@@ -63,7 +63,7 @@ void StatusView::Draw(BRect updateRect)
 
 	oldangle = 0;
 	SetLowColor(190, 190, 190);
-	if (fNumberOfTracks > 1)
+	if (fNumberOfTracks > 1) {
 		for (i = 0; i < fNumberOfTracks; i++) {
 			p1 = center;
 			p1.y += 60 * sin((3.14 / 180) * (fAngles[i] - 90));
@@ -94,10 +94,8 @@ void StatusView::Draw(BRect updateRect)
 			SetHighColor(105, 105, 105);
 			oldangle = fAngles[i];
 		}
-
-	else {
+	} else {
 		if (fNumberOfTracks > 0) {
-
 			SetHighColor(0, 0, 0);
 			SetFont(fViewFont);
 			MovePenTo(center);
@@ -217,20 +215,18 @@ void StatusWindow::StatusUpdateReset()
 void StatusWindow::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
-		case 'ClWi': {
+		case 'ClWi':
 				Quit();
-			}
 			break;
-		case 'More': {
-				if (!fFullView) {
-					fFullView = !fFullView;
-					ResizeBy(0.0, 150.0);
-					fMoreButton->SetLabel("Less..");
-				} else {
-					fFullView = !fFullView;
-					ResizeBy(0.0, -150.0);
-					fMoreButton->SetLabel("More..");
-				}
+		case 'More':
+			if (!fFullView) {
+				fFullView = !fFullView;
+				ResizeBy(0.0, 150.0);
+				fMoreButton->SetLabel("Less..");
+			} else {
+				fFullView = !fFullView;
+				ResizeBy(0.0, -150.0);
+				fMoreButton->SetLabel("More..");
 			}
 			break;
 	}

@@ -37,9 +37,9 @@ AskName::AskName(BRect frame, const char* title, uint32 mess, const char* what)
 	fNameTextView = new BTextView(r, "Name_", r, B_FOLLOW_NONE, B_WILL_DRAW);
 	fNameTextView->SetWordWrap(false);
 	fNameTextView->DisallowChar('\n');
-	if (fMessageWhat == VOLUME_NAME) {
-		//Name->DisallowChar(' ');
-	}
+//	if (fMessageWhat == VOLUME_NAME) {
+//		Name->DisallowChar(' ');
+//	}
 	aroundView->AddChild(new BScrollView("NameScroll", fNameTextView, B_FOLLOW_NONE, 0, false, false, B_FANCY_BORDER));
 	r2 = aroundView->Bounds();
 	r2.InsetBy(5.0, 5.0);

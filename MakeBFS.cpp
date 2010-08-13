@@ -32,19 +32,25 @@ status_t copy_data(const entry_ref& source, const entry_ref& dest)
 	ssize_t nRead;
 
 	BFile srcFile(&source, O_RDONLY);
-	if ((err = srcFile.InitCheck()) != B_NO_ERROR) return err;
+	if ((err = srcFile.InitCheck()) != B_NO_ERROR)
+		return err;
 
 	BFile destFile(&dest, O_WRONLY | O_CREAT | O_TRUNC);
-	if ((err = destFile.InitCheck()) != B_NO_ERROR) return err;
+	if ((err = destFile.InitCheck()) != B_NO_ERROR)
+		return err;
 
 	struct stat info;
-	if ((err = srcFile.GetStat(&info)) != B_NO_ERROR) return err;
-	if ((err = destFile.SetSize(info.st_size)) != B_NO_ERROR) return err;
-	if ((err = destFile.Seek(0, SEEK_SET)) != B_NO_ERROR) return err;
+	if ((err = srcFile.GetStat(&info)) != B_NO_ERROR)
+		return err;
+	if ((err = destFile.SetSize(info.st_size)) != B_NO_ERROR)
+		return err;
+	if ((err = destFile.Seek(0, SEEK_SET)) != B_NO_ERROR)
+		return err;
 
 	while ((nRead = srcFile.Read(buffer, BUFFERLEN)) > 0) {
 		err = destFile.Write(buffer, nRead);
-		if (err < 0) return err;
+		if (err < 0)
+			return err;
 	}
 	delete buffer;
 
@@ -59,10 +65,12 @@ status_t copy_attributes(const entry_ref& source, const entry_ref& dest)
 	buffer = new unsigned char[BUFFERLEN];
 
 	BNode srcNode(&source);
-	if ((err = srcNode.InitCheck()) != B_NO_ERROR) return err;
+	if ((err = srcNode.InitCheck()) != B_NO_ERROR)
+		return err;
 
 	BNode destNode(&dest);
-	if ((err = destNode.InitCheck()) != B_NO_ERROR) return err;
+	if ((err = destNode.InitCheck()) != B_NO_ERROR)
+		return err;
 
 
 	char attrName[B_ATTR_NAME_LENGTH];
@@ -70,20 +78,19 @@ status_t copy_attributes(const entry_ref& source, const entry_ref& dest)
 	while ((err = srcNode.GetNextAttrName(attrName)) == B_NO_ERROR) {
 		attr_info info;
 
-		if ((err = srcNode.GetAttrInfo(attrName, &info)) != B_NO_ERROR) return err;
+		if ((err = srcNode.GetAttrInfo(attrName, &info)) != B_NO_ERROR)
+			return err;
 
 		ssize_t nRead;
 		off_t offset = 0;
 		while ((offset < info.size) && ((nRead = srcNode.ReadAttr(attrName, info.type, offset, buffer, BUFFERLEN)) > 0)) {
 			err = destNode.WriteAttr(attrName, info.type, offset, buffer, nRead);
-			if (err < 0) {
+			if (err < 0)
 				return err;
-			}
 
 			offset += nRead;
 		}
 	}
-
 
 	delete buffer;
 
@@ -112,14 +119,13 @@ void GetSizeLoop(entry_ref* ref)
 		if (BEntry(&temp_ref, true).IsDirectory()) {
 			GetSizeLoop(&temp_ref);
 			total_size += 1024;
-
 		} else {
-			if (temp_dir->GetEntry(&temp_entry) == B_OK)
+			if (temp_dir->GetEntry(&temp_entry) == B_OK) {
 				if (temp_entry.GetPath(&temp_path) == B_OK) {
 					BEntry(&temp_ref, true).GetStat(&temp);
 					total_size += temp.st_size + 1024;
-
 				}
+			}
 		}
 	}
 	delete temp_dir;
@@ -143,15 +149,15 @@ status_t MakeBFS()
 	char temp[1024], buffer[1024];
 	sprintf(temp, "dd if=/dev/zero of=\"%s\" bs=1024k count=%lld", IMAGE_NAME, (GetBFSSize() / 1024 / 1024));
 	f1 = popen(temp, "r");
-	while (!feof(f1) && !ferror(f1)) {
+	while (!feof(f1) && !ferror(f1))
 		fgets(buffer, 1024, f1);
-	}
+
 	pclose(f1);
 	sprintf(temp, "sync; mkbfs 2048 \"%s\" \"%s\"", IMAGE_NAME, VOL_NAME);
 	f1 = popen(temp, "r");
-	while (!feof(f1) && !ferror(f1)) {
+	while (!feof(f1) && !ferror(f1))
 		fgets(buffer, 1024, f1);
-	}
+
 	pclose(f1);
 
 	return B_OK;
@@ -182,9 +188,9 @@ status_t MountBFS()
 
 	sprintf(command, "sync ; mount \"%s\" /BurnItNowTempMount", IMAGE_NAME);
 	f1 = popen(command, "r");
-	while (!feof(f1) && !ferror(f1)) {
+	while (!feof(f1) && !ferror(f1))
 		fgets(buffer, 1024, f1);
-	}
+
 	pclose(f1);
 	delete temp_dir;
 
@@ -214,16 +220,15 @@ void Copy_Loop(entry_ref* ref)
 				}
 			}
 		} else {
-			if (BFSDir->GetEntry(&temp_entry) == B_OK)
+			if (BFSDir->GetEntry(&temp_entry) == B_OK) {
 				if (temp_entry.GetPath(&temp_path) == B_OK) {
 					sprintf(temp_char, "%s/%s", temp_path.Path(), temp_ref.name);
 					BEntry(&temp_ref, true).GetRef(&t_ref2);
-					if (BEntry(temp_char, true).GetRef(&t_ref) == B_OK) {
+					if (BEntry(temp_char, true).GetRef(&t_ref) == B_OK)
 						CopyFile(t_ref2, t_ref);
-					}
 				}
+			}
 		}
-
 	}
 	delete temp_dir;
 }
