@@ -121,36 +121,36 @@ StatusWindow::StatusWindow(char* title)
 		SetTitle("BurnItNow");
 
 	r = Bounds();
-	fAroundView = new BView(r, "fAroundView", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);
-	fAroundView->SetViewColor(216, 216, 216, 0);
-	AddChild(fAroundView);
+	BView* aroundView = new BView(r, "AroundView", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);
+	aroundView->SetViewColor(216, 216, 216, 0);
+	AddChild(aroundView);
 
-	r = fAroundView->Bounds();
+	r = aroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.bottom = r.top + 30;
 	fStatusBar = new BStatusBar(r, "MyStatus");
-	fAroundView->AddChild(fStatusBar);
+	aroundView->AddChild(fStatusBar);
 	fStatusBar->SetText("");
 
 	fFullView = false;
 
-	r = fAroundView->Bounds();
+	r = aroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = r.bottom - 20;
 	r.left = r.right - 35;
 	fCloseButton = new BButton(r, "close", "Close", new BMessage('ClWi'));
-	fAroundView->AddChild(fCloseButton);
+	aroundView->AddChild(fCloseButton);
 	fCloseButton->SetEnabled(false);
 	r.right = r.left - 5;
 	r.left = r.right - 35;
 	fMoreButton = new BButton(r, "more", "More..", new BMessage('More'));
-	fAroundView->AddChild(fMoreButton);
-	r = fAroundView->Bounds();
+	aroundView->AddChild(fMoreButton);
+	r = aroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 70;
 	r.bottom = 210;
 	fStatusView = new StatusView(r, "StatusView");
-	fAroundView->AddChild(fStatusView);
+	aroundView->AddChild(fStatusView);
 }
 
 

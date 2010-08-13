@@ -6,14 +6,9 @@
 #define _CDRWVIEW_H_
 
 
-#include <Box.h>
 #include <Button.h>
-#include <MenuField.h>
+#include <Menu.h>
 #include <Slider.h>
-
-
-// Forward declaration of IconLabel
-class IconLabel;
 
 
 class CDRWView : public BView {
@@ -22,10 +17,7 @@ public:
 	~CDRWView();
 
 	BSlider* fBlankSpeedSlider;
-	BBox* fCDRWBox;
-	IconLabel* fCDRWLabel;
 	BMenu* fBlankMenu;
-	BMenuField* fBlankMenuField;
 	BButton* fBlankButton;
 };
 

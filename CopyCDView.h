@@ -17,7 +17,6 @@ public:
 
 private:
 	BWindow* fTempWindow;
-	BButton* fOpenDirButton;
 };
 
 

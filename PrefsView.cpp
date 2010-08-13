@@ -11,6 +11,9 @@
 
 #include <string.h>
 
+#include <Box.h>
+#include <MenuField.h>
+
 
 extern char DAO[10];
 extern char BURNPROOF[30];
@@ -27,20 +30,20 @@ PrefsView::PrefsView(BRect size)
 	r.bottom = r.top + 20;
 	fRecordersMenu = new BMenu("Select");
 	fRecordersMenu->SetLabelFromMarked(true);
-	fRecordMenuField = new BMenuField(r, "recorder", "Devices:", fRecordersMenu);
-	fRecordMenuField->SetDivider(be_plain_font->StringWidth("Devices:  "));
-	AddChild(fRecordMenuField);
+	BMenuField* recorderMenuField = new BMenuField(r, "recorder", "Devices:", fRecordersMenu);
+	recorderMenuField->SetDivider(be_plain_font->StringWidth("Devices:  "));
+	AddChild(recorderMenuField);
 
-	fMiscLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Misc Options (see help before change options)"), 19), " Misc Options (see help before change options)", "BMP:MISCOPT");
-	fMiscLabel->SetViewColor(grey);
+	IconLabel* miscLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Misc Options (see help before change options)"), 19), " Misc Options (see help before change options)", "BMP:MISCOPT");
+	miscLabel->SetViewColor(grey);
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = r.top + 25;
-	fMiscOptBox = new BBox(r, "fMiscOptBoxions", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
-	fMiscOptBox->SetLabel(fMiscLabel);
-	AddChild(fMiscOptBox);
+	BBox* miscOptBox = new BBox(r, "fMiscOptBoxions", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
+	miscOptBox->SetLabel(miscLabel);
+	AddChild(miscOptBox);
 
-	r = fMiscOptBox->Bounds();
+	r = miscOptBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 10;
 	r.right = 175; // was 125
@@ -49,7 +52,7 @@ PrefsView::PrefsView(BRect size)
 	if (!strncmp(DAO, "-dao", 4)) {
 		fDAOCheckBox->SetValue(B_CONTROL_ON);
 	}
-	fMiscOptBox->AddChild(fDAOCheckBox);
+	miscOptBox->AddChild(fDAOCheckBox);
 
 	r.top += 20;
 	r.bottom += 20;
@@ -57,7 +60,7 @@ PrefsView::PrefsView(BRect size)
 	if (!strncmp(BURNPROOF, "driveropts = burnproof", 22)) {
 		fBurnProofCheckBox->SetValue(B_CONTROL_ON);
 	}
-	fMiscOptBox->AddChild(fBurnProofCheckBox);
+	miscOptBox->AddChild(fBurnProofCheckBox);
 
 }
 

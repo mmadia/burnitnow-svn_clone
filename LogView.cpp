@@ -9,6 +9,7 @@
 #include "const.h"
 #include "IconLabel.h"
 
+#include <Box.h>
 #include <ScrollView.h>
 
 
@@ -19,16 +20,16 @@ LogView::LogView(BRect size)
 	BRect r, r2;
 	SetViewColor(216, 216, 216, 0);
 	// fLogBox
-	fLogLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(""), 19), "", "BMP:LOG");
-	fLogLabel->SetViewColor(grey);
+	IconLabel* logLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(""), 19), "", "BMP:LOG");
+	logLabel->SetViewColor(grey);
 	r = Bounds();
 	//r.InsetBy(5.0,5.0);
-	fLogBox = new BBox(r, "Boxlog", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
-	fLogBox->SetLabel(fLogLabel);
-	AddChild(fLogBox);
+	BBox* logBox = new BBox(r, "logBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
+	logBox->SetLabel(logLabel);
+	AddChild(logBox);
 
 	// This will be inside the fLogBox
-	r = fLogBox->Bounds();
+	r = logBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.right -= B_V_SCROLL_BAR_WIDTH;
 	r.top += 15;
@@ -37,8 +38,8 @@ LogView::LogView(BRect size)
 	fLogTextView = new BTextView(r, "fLogTextView", r2, B_FOLLOW_NONE, B_WILL_DRAW);
 	fLogTextView->MakeEditable(false);
 	fLogTextView->SetStylable(true);
-	fLogScrollView = new BScrollView("logscroll", fLogTextView, B_FOLLOW_NONE, 0, false, true, B_FANCY_BORDER);
-	fLogBox->AddChild(fLogScrollView);
+	BScrollView* logScrollView = new BScrollView("logScrollView", fLogTextView, B_FOLLOW_NONE, 0, false, true, B_FANCY_BORDER);
+	logBox->AddChild(logScrollView);
 }
 
 

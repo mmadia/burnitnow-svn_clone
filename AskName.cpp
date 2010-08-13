@@ -26,11 +26,11 @@ AskName::AskName(BRect frame, char* title, uint32 mess, char* what)
 	fMessageWhat = mess;
 
 	r = Bounds();
-	fAroundView = new BView(r, "Around", B_FOLLOW_NONE, B_WILL_DRAW);
-	fAroundView->SetViewColor(216, 216, 216, 0);
-	AddChild(fAroundView);
+	BView* aroundView = new BView(r, "aroundView", B_FOLLOW_NONE, B_WILL_DRAW);
+	aroundView->SetViewColor(216, 216, 216, 0);
+	AddChild(aroundView);
 
-	r = fAroundView->Bounds();
+	r = aroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.right -= 70;
 	r.bottom = 23;
@@ -40,14 +40,13 @@ AskName::AskName(BRect frame, char* title, uint32 mess, char* what)
 	if (fMessageWhat == VOLUME_NAME) {
 		//Name->DisallowChar(' ');
 	}
-	fAroundView->AddChild(new BScrollView("NameScroll", fNameTextView, B_FOLLOW_NONE, 0, false, false, B_FANCY_BORDER));
-	r2 = fAroundView->Bounds();
+	aroundView->AddChild(new BScrollView("NameScroll", fNameTextView, B_FOLLOW_NONE, 0, false, false, B_FANCY_BORDER));
+	r2 = aroundView->Bounds();
 	r2.InsetBy(5.0, 5.0);
 	r2.left = r.right + 5;
 	r2.top -= 3;
 	r2.bottom = 25;
-	fOkButton = new BButton(r2, "Ok", "Ok", new BMessage('STxt'));
-	fAroundView->AddChild(fOkButton);
+	aroundView->AddChild(new BButton(r2, "Ok", "Ok", new BMessage('STxt')));
 
 	fNameTextView->MakeFocus();
 	if (what != NULL) {

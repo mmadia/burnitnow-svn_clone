@@ -35,7 +35,6 @@ public:
 	virtual void SendMessage(BMessage* msg);
 	virtual void Ready();
 
-	BView* fAroundView;
 	StatusView* fStatusView;
 	BButton* fCloseButton, *fMoreButton;
 	BStatusBar* fStatusBar;

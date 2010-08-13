@@ -11,7 +11,9 @@
 
 #include <stdio.h>
 
+#include <Box.h>
 #include <Button.h>
+#include <MenuField.h>
 #include <MenuItem.h>
 
 
@@ -26,24 +28,24 @@ CDRWView::CDRWView(BRect size)
 	char temp_char[100];
 	SetViewColor(216, 216, 216, 0);
 	// CDRW BOX
-	fCDRWLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(""), 19), "", "BMP:CDRW");
-	fCDRWLabel->SetViewColor(grey);
+	IconLabel* CDRWLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(""), 19), "", "BMP:CDRW");
+	CDRWLabel->SetViewColor(grey);
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.bottom = r.top + 70;
-	fCDRWBox = new BBox(r, "fCDRWBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
-	fCDRWBox->SetLabel(fCDRWLabel);
-	AddChild(fCDRWBox);
+	BBox* CDRWBox = new BBox(r, "CDRWBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
+	CDRWBox->SetLabel(CDRWLabel);
+	AddChild(CDRWBox);
 
 	// BlankMenu (CDRWBOX)
-	r = fCDRWBox->Bounds();
+	r = CDRWBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 25;
 	fBlankMenu = new BMenu("Select");
 	fBlankMenu->SetLabelFromMarked(true);
-	fBlankMenuField = new BMenuField(r, "blank", "Blank:", fBlankMenu);
-	fBlankMenuField->SetDivider(be_plain_font->StringWidth("Blank:  "));
-	fCDRWBox->AddChild(fBlankMenuField);
+	BMenuField* blankMenuField = new BMenuField(r, "blank", "Blank:", fBlankMenu);
+	blankMenuField->SetDivider(be_plain_font->StringWidth("Blank:  "));
+	CDRWBox->AddChild(blankMenuField);
 	fBlankMenu->AddItem(new BMenuItem("Full", new BMessage(BLANK_FULL)));
 	fBlankMenu->AddItem(new BMenuItem("Fast", new BMessage(BLANK_FAST)));
 	fBlankMenu->AddItem(new BMenuItem("Session", new BMessage(BLANK_SESSION)));
@@ -54,7 +56,7 @@ CDRWView::CDRWView(BRect size)
 
 
 	// BlankSpeed
-	r = fCDRWBox->Bounds();
+	r = CDRWBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 15;
 	r.left = 155; // was 125
@@ -64,16 +66,16 @@ CDRWView::CDRWView(BRect size)
 	fBlankSpeedSlider->SetHashMarks(B_HASH_MARKS_BOTTOM);
 	fBlankSpeedSlider->SetHashMarkCount(6);
 	fBlankSpeedSlider->SetValue((int32)(BLANK_SPD / 2) - 1);
-	fCDRWBox->AddChild(fBlankSpeedSlider);
+	CDRWBox->AddChild(fBlankSpeedSlider);
 
 	// BlankButton
-	r = fCDRWBox->Bounds();
+	r = CDRWBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 10;
 	r.left = 300;
 	r.right = 365;
 	fBlankButton = new BButton(r, "BlankButton", "Blank!", new BMessage(BLANK_IT_NOW));
-	fCDRWBox->AddChild(fBlankButton);
+	CDRWBox->AddChild(fBlankButton);
 
 }
 

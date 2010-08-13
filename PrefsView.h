@@ -6,13 +6,8 @@
 #define _PREFSVIEW_H_
 
 
-#include <Box.h>
 #include <CheckBox.h>
-#include <MenuField.h>
-
-
-// Forward declaration of IconLabel class
-class IconLabel;
+#include <Menu.h>
 
 
 class PrefsView : public BView {
@@ -21,10 +16,7 @@ public:
 	~PrefsView();
 
 	BMenu* fRecordersMenu;
-	BMenuField* fRecordMenuField;
 	BCheckBox* fDAOCheckBox, *fBurnProofCheckBox;
-	BBox* fMiscOptBox;
-	IconLabel* fMiscLabel;
 };
 
 

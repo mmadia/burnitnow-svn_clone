@@ -24,10 +24,6 @@ class AboutWindow : public BWindow {
 public:
 	AboutWindow();
 	virtual void MessageReceived(BMessage* msg);
-
-	BView* fAroundView;
-	AboutView* fAboutView;
-	BButton* fCloseButton;
 };
 
 

@@ -19,9 +19,8 @@ CopyCDView::CopyCDView(BRect size, BWindow* twin)
 	BRect r;
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
-	fOpenDirButton = new BButton(r, "About!", "About", new BMessage(MENU_FILE_ABOUT));
 
-	AddChild(fOpenDirButton);
+	AddChild(new BButton(r, "About!", "About", new BMessage(MENU_FILE_ABOUT)));
 	fTempWindow = twin;
 }
 

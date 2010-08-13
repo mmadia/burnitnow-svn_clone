@@ -11,7 +11,9 @@
 
 #include <string.h>
 
+#include <Box.h>
 #include <ScrollView.h>
+#include <TextView.h>
 
 
 extern char PAD[10]; //-pad (audio)
@@ -27,17 +29,17 @@ AudioView::AudioView(BRect size)
 	BRect r, r2;
 	SetViewColor(216, 216, 216, 0);
 
-	fAdvLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Audio Options (see help before change options)"), 19), " Audio Options (see help before change options)", "BMP:AUDIOOPT");
-	fAdvLabel->SetViewColor(grey);
+	IconLabel* advLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Audio Options (see help before change options)"), 19), " Audio Options (see help before change options)", "BMP:AUDIOOPT");
+	advLabel->SetViewColor(grey);
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.bottom = 80;
-	fAdvOptionsBox = new BBox(r, "fAdvOptionsBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
-	fAdvOptionsBox->SetLabel(fAdvLabel);
-	AddChild(fAdvOptionsBox);
+	BBox* advOptionsBox = new BBox(r, "fAdvOptionsBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
+	advOptionsBox->SetLabel(advLabel);
+	AddChild(advOptionsBox);
 
 
-	r = fAdvOptionsBox->Bounds();
+	r = advOptionsBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 10;
 	r.right = 120;
@@ -46,7 +48,7 @@ AudioView::AudioView(BRect size)
 	if (!strncmp(PAD, "-pad", 4)) {
 		fPadCheckBox->SetValue(B_CONTROL_ON);
 	}
-	fAdvOptionsBox->AddChild(fPadCheckBox);
+	advOptionsBox->AddChild(fPadCheckBox);
 
 	r.bottom += 15;
 	r.top += 15;
@@ -55,7 +57,7 @@ AudioView::AudioView(BRect size)
 	if (!strncmp(NOFIX, "-nofix", 6)) {
 		fNoFixCheckBox->SetValue(B_CONTROL_ON);
 	}
-	fAdvOptionsBox->AddChild(fNoFixCheckBox);
+	advOptionsBox->AddChild(fNoFixCheckBox);
 
 	r.bottom += 15;
 	r.top += 15;
@@ -63,9 +65,9 @@ AudioView::AudioView(BRect size)
 	if (!strncmp(PREEMP, "-preemp", 7)) {
 		fPreEmpCheckBox->SetValue(B_CONTROL_ON);
 	}
-	fAdvOptionsBox->AddChild(fPreEmpCheckBox);
+	advOptionsBox->AddChild(fPreEmpCheckBox);
 
-	r = fAdvOptionsBox->Bounds();
+	r = advOptionsBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 10;
 	r.left = 125;
@@ -75,7 +77,7 @@ AudioView::AudioView(BRect size)
 	if (!strncmp(SWAB, "-swab", 5)) {
 		fSwabCheckBox->SetValue(B_CONTROL_ON);
 	}
-	fAdvOptionsBox->AddChild(fSwabCheckBox);
+	advOptionsBox->AddChild(fSwabCheckBox);
 
 
 
@@ -83,23 +85,23 @@ AudioView::AudioView(BRect size)
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = 85;
-	fInfoBox = new BBox(r, "Info", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
-	fInfoBox->SetLabel("Audio Info");
-	AddChild(fInfoBox);
+	BBox* infoBox = new BBox(r, "Info", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
+	infoBox->SetLabel("Audio Info");
+	AddChild(infoBox);
 
-	r = fInfoBox->Bounds();
+	r = infoBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 10;
 	r.right -= B_V_SCROLL_BAR_WIDTH;
 	r2 = r;
 	r2.InsetBy(2.0, 2.0);
-	fInfoTextView = new BTextView(r, "fInfoTextView", r2, B_FOLLOW_NONE, B_WILL_DRAW);
-	fInfoTextView->MakeEditable(false);
-	fInfoTextView->SetStylable(true);
-	fInfoScrollView = new BScrollView("Infoscroll", fInfoTextView, B_FOLLOW_NONE, 0, false, true, B_FANCY_BORDER);
-	fInfoBox->AddChild(fInfoScrollView);
-	fInfoTextView->SetFontAndColor(be_fixed_font, B_FONT_ALL, &darkblue);
-	fInfoTextView->Insert("Here will be some AudioInfo in the future like what codecs there are on the system.");
+	BTextView* infoTextView = new BTextView(r, "infoTextView", r2, B_FOLLOW_NONE, B_WILL_DRAW);
+	infoTextView->MakeEditable(false);
+	infoTextView->SetStylable(true);
+	BScrollView* infoScrollView = new BScrollView("infoScrollView", infoTextView, B_FOLLOW_NONE, 0, false, true, B_FANCY_BORDER);
+	infoBox->AddChild(infoScrollView);
+	infoTextView->SetFontAndColor(be_fixed_font, B_FONT_ALL, &darkblue);
+	infoTextView->Insert("Here will be some AudioInfo in the future like what codecs there are on the system.");
 
 }
 

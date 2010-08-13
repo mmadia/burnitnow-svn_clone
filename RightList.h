@@ -10,20 +10,16 @@
 #include <ListView.h>
 
 
-// Forward declaration of AskName class
-class AskName;
-
-
 class FileListItem : public BListItem {
 public:
 	FileListItem(entry_ref* ref, char* name, BBitmap* icon);
 	~FileListItem();
 	virtual void DrawItem(BView* owner, BRect frame, bool complete);
 
-	BBitmap* ficon;
-	char* fname;
-	entry_ref fref;
-	bool Pattern;
+	BBitmap* fIconBitmap;
+	char* fName;
+	entry_ref fRef;
+	bool fPattern;
 };
 
 
@@ -48,7 +44,6 @@ public:
 
 	BDirectory* fBDirectory, *fTDirectory;
 	uint32 fLastButton, fClickCount;
-	AskName* fMakeDirWindow;
 	BBitmap* fFileBitmap;
 	BBitmap* fDirectoryBitmap;
 	BBitmap* fInfoBitmap;

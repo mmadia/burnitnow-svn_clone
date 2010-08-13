@@ -65,18 +65,18 @@ FileListItem::FileListItem(entry_ref* ref, char* name, BBitmap* icon)
 	BListItem()
 {
 	if (ref != NULL)
-		fref = *ref;
-	fname = new char[strlen(name)+1];
-	strcpy(fname, name);
-	ficon = icon;
-	Pattern = GlobalPattern;
+		fRef = *ref;
+	fName = new char[strlen(name)+1];
+	strcpy(fName, name);
+	fIconBitmap = icon;
+	fPattern = GlobalPattern;
 	GlobalPattern = !GlobalPattern;
 }
 
 
 FileListItem::~FileListItem()
 {
-	delete fname;
+	delete fName;
 }
 
 
@@ -84,7 +84,7 @@ void FileListItem::DrawItem(BView* owner, BRect frame, bool complete)
 {
 	rgb_color rgbColor = {255, 255, 255};
 	rgb_color rgbSelectedColor = {235, 235, 200};
-	rgb_color rgbPatternColor = {244, 244, 255};
+	rgb_color rgbfPatternColor = {244, 244, 255};
 	rgb_color black = {0, 0, 0};
 
 
@@ -92,8 +92,8 @@ void FileListItem::DrawItem(BView* owner, BRect frame, bool complete)
 	if (IsSelected()) {
 		rgbColor = rgbSelectedColor;
 	} else {
-		if (Pattern)
-			rgbColor = rgbPatternColor;
+		if (fPattern)
+			rgbColor = rgbfPatternColor;
 	};
 
 	owner->SetHighColor(rgbColor);
@@ -102,10 +102,10 @@ void FileListItem::DrawItem(BView* owner, BRect frame, bool complete)
 
 	owner->SetHighColor(black);
 
-	if (ficon != NULL)
-		owner->DrawBitmap(ficon, BPoint(1, frame.top + 1));
+	if (fIconBitmap != NULL)
+		owner->DrawBitmap(fIconBitmap, BPoint(1, frame.top + 1));
 	owner->MovePenTo(BPoint(21, frame.bottom - 1));
-	owner->DrawString(fname);
+	owner->DrawString(fName);
 }
 
 
@@ -205,7 +205,7 @@ void RightList::KeyDown(const char* bytes, int32 numBytes)
 					MyAlert->SetFeel(B_MODAL_ALL_WINDOW_FEEL);
 					result = MyAlert->Go();
 					if (result == 0) {
-						DeleteFromVRCD(&item->fref);
+						DeleteFromVRCD(&item->fRef);
 						UpdateDir();
 
 					} else {
@@ -242,8 +242,8 @@ void RightList::MouseDown(BPoint point)
 		int32 selection = CurrentSelection();
 		if (selection >= 0) {
 			FileListItem* item = (FileListItem*)ItemAt(selection);
-			if (item->ficon != NULL && item->ficon != fInfoBitmap)
-				if (fBDirectory->SetTo(&item->fref) == B_OK) {
+			if (item->fIconBitmap != NULL && item->fIconBitmap != fInfoBitmap)
+				if (fBDirectory->SetTo(&item->fRef) == B_OK) {
 					UpdateDir();
 				}
 		}
@@ -319,8 +319,8 @@ void RightList::ParentDir()
 
 void RightList::CreateDir()
 {
-	fMakeDirWindow = new AskName(BRect(200, 200, 440, 240), "Make directory", MAKE_DIRECTORY, "");
-	fMakeDirWindow->Show();
+	AskName* makeDirWindow = new AskName(BRect(200, 200, 440, 240), "Make directory", MAKE_DIRECTORY, "");
+	makeDirWindow->Show();
 }
 
 

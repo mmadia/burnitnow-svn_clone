@@ -6,15 +6,9 @@
 #define _BURNVIEW_H_
 
 
-#include <Box.h>
 #include <Button.h>
 #include <CheckBox.h>
-#include <RadioButton.h>
 #include <Slider.h>
-
-
-// Forward declaration of IconLabel
-class IconLabel;
 
 
 class BurnView : public BView {
@@ -23,19 +17,10 @@ public:
 	~BurnView();
 	void SetButton(bool);
 	void SetLabel(char*);
-	// CDRW public
 
-	// Burn public
-	BSlider* fBurnSpeedSlider;
 	BButton* fBurnButton, *fMakeImageButton;
 	BCheckBox* fMultiCheckBox, *fOnTheFlyCheckBox, *fEjectCheckBox, *fDummyModeCheckBox;
 	BSlider* fSpeedSlider;
-
-private:
-	// BurnBox
-	BBox* fBurnBox;
-	IconLabel* fBurnLabel, *fDataCDLabel, *fAudioCDLabel, *fMixCDLabel, *fBGLabel;
-	BRadioButton* fAudioCDRadio, *fDataCDRadio, *fMixCDRadio;
 };
 
 

@@ -87,21 +87,19 @@ AboutWindow::AboutWindow()
 	SetTitle("About");
 
 	r = Bounds();
-	fAroundView = new BView(r, "fAroundView", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);
-	fAroundView->SetViewColor(216, 216, 216, 0);
-	AddChild(fAroundView);
+	BView* aroundView = new BView(r, "AroundView", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);
+	aroundView->SetViewColor(216, 216, 216, 0);
+	AddChild(aroundView);
 
-	r = fAroundView->Bounds();
+	r = aroundView->Bounds();
 	r.InsetBy(10.0, 10.0);
 	r.top = r.bottom - 20;
 	r.left = r.right - 45;
-	fCloseButton = new BButton(r, "close", "Close", new BMessage('ClWi'));
-	fAroundView->AddChild(fCloseButton);
-	r = fAroundView->Bounds();
+	aroundView->AddChild(new BButton(r, "close", "Close", new BMessage('ClWi')));
+	r = aroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.bottom = r.bottom - 25;
-	fAboutView = new AboutView(r, "AboutView");
-	fAroundView->AddChild(fAboutView);
+	aroundView->AddChild(new AboutView(r, "AboutView"));
 }
 
 

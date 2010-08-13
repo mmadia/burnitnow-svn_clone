@@ -12,6 +12,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <Box.h>
+#include <RadioButton.h>
+
 
 extern int16 BURN_SPD;
 extern int16 BURN_TYPE;
@@ -28,24 +31,24 @@ BurnView::BurnView(BRect size)
 	BRect r, r2;
 	SetViewColor(216, 216, 216, 0);
 	char temp_char[100];
-	// fBurnBox
-	fBurnLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Burn"), 19), " Burn", "BMP:BURN");
-	fBurnLabel->SetViewColor(grey);
+	// burnBox
+	IconLabel* burnLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Burn"), 19), " Burn", "BMP:BURN");
+	burnLabel->SetViewColor(grey);
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
-	fBurnBox = new BBox(r, "fBurnBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
-	fBurnBox->SetLabel(fBurnLabel);
-	AddChild(fBurnBox);
-	r = fBurnBox->Bounds();
+	BBox* burnBox = new BBox(r, "burnBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
+	burnBox->SetLabel(burnLabel);
+	AddChild(burnBox);
+	r = burnBox->Bounds();
 	r.left = 140;
 	r.right = 204;
 	r.top = 50;
 	r.bottom = 114;
-	fBGLabel = new IconLabel(r, "", "BMP:BACKGROUND");
-	fBGLabel->SetViewColor(grey);
-	fBurnBox->AddChild(fBGLabel);
+	IconLabel* BGLabel = new IconLabel(r, "", "BMP:BACKGROUND");
+	BGLabel->SetViewColor(grey);
+	burnBox->AddChild(BGLabel);
 	// RadioButtons
-	r = fBurnBox->Bounds();
+	r = burnBox->Bounds();
 	r2 = r;
 	r.InsetBy(5.0, 5.0);
 	r.left += 25;
@@ -57,40 +60,40 @@ BurnView::BurnView(BRect size)
 	r2.right = 27;
 	r2.top += 10;
 	r2.bottom = 30;
-	fDataCDLabel = new IconLabel(r2, "", "BMP:DATACD");
-	fDataCDLabel->SetViewColor(grey);
-	fBurnBox->AddChild(fDataCDLabel);
+	IconLabel* dataCDLabel = new IconLabel(r2, "", "BMP:DATACD");
+	dataCDLabel->SetViewColor(grey);
+	burnBox->AddChild(dataCDLabel);
 
 	r2.top += 22;
 	r2.bottom += 22;
-	fAudioCDLabel = new IconLabel(r2, "", "BMP:AUDIOCD");
-	fAudioCDLabel->SetViewColor(grey);
-	fBurnBox->AddChild(fAudioCDLabel);
+	IconLabel* audioCDLabel = new IconLabel(r2, "", "BMP:AUDIOCD");
+	audioCDLabel->SetViewColor(grey);
+	burnBox->AddChild(audioCDLabel);
 
 	r2.top += 22;
 	r2.bottom += 22;
-	fMixCDLabel = new IconLabel(r2, "", "BMP:MIXCD");
-	fMixCDLabel->SetViewColor(grey);
-	fBurnBox->AddChild(fMixCDLabel);
+	IconLabel* mixCDLabel = new IconLabel(r2, "", "BMP:MIXCD");
+	mixCDLabel->SetViewColor(grey);
+	burnBox->AddChild(mixCDLabel);
 
-	fDataCDRadio = new BRadioButton(r, "DataCD", "DataCD", new BMessage(BURN_DATA_CD));
+	BRadioButton* dataCDRadio = new BRadioButton(r, "DataCD", "DataCD", new BMessage(BURN_DATA_CD));
 	if (BURN_TYPE == 0)
-		fDataCDRadio->SetValue(B_CONTROL_ON);
-	fBurnBox->AddChild(fDataCDRadio);
+		dataCDRadio->SetValue(B_CONTROL_ON);
+	burnBox->AddChild(dataCDRadio);
 
 	r.top += 20;
 	r.bottom += 20;
-	fAudioCDRadio = new BRadioButton(r, "AudioCD", "AudioCD", new BMessage(BURN_AUDIO_CD));
+	BRadioButton* audioCDRadio = new BRadioButton(r, "AudioCD", "AudioCD", new BMessage(BURN_AUDIO_CD));
 	if (BURN_TYPE == 1)
-		fAudioCDRadio->SetValue(B_CONTROL_ON);
-	fBurnBox->AddChild(fAudioCDRadio);
+		audioCDRadio->SetValue(B_CONTROL_ON);
+	burnBox->AddChild(audioCDRadio);
 
 	r.top += 20;
 	r.bottom += 20;
-	fMixCDRadio = new BRadioButton(r, "MixCD", "MixCD", new BMessage(BURN_MIX_CD));
+	BRadioButton* mixCDRadio = new BRadioButton(r, "MixCD", "MixCD", new BMessage(BURN_MIX_CD));
 	if (BURN_TYPE == 2)
-		fMixCDRadio->SetValue(B_CONTROL_ON);
-	fBurnBox->AddChild(fMixCDRadio);
+		mixCDRadio->SetValue(B_CONTROL_ON);
+	burnBox->AddChild(mixCDRadio);
 	// CheckBoxes
 	r.top += 35;
 	r.bottom += 35;
@@ -100,7 +103,7 @@ BurnView::BurnView(BRect size)
 	if (!strncmp(MULTISESSION, "-multi", 6)) {
 		fMultiCheckBox->SetValue(B_CONTROL_ON);
 	}
-	fBurnBox->AddChild(fMultiCheckBox);
+	burnBox->AddChild(fMultiCheckBox);
 
 	r.top += 15;
 	r.bottom += 15;
@@ -109,7 +112,7 @@ BurnView::BurnView(BRect size)
 		fOnTheFlyCheckBox->SetValue(B_CONTROL_ON);
 		fMultiCheckBox->SetEnabled(false);
 	}
-	fBurnBox->AddChild(fOnTheFlyCheckBox);
+	burnBox->AddChild(fOnTheFlyCheckBox);
 
 	r.top += 15;
 	r.bottom += 15;
@@ -117,7 +120,7 @@ BurnView::BurnView(BRect size)
 	if (!strncmp(DUMMYMODE, "-dummy", 6)) {
 		fDummyModeCheckBox->SetValue(B_CONTROL_ON);
 	}
-	fBurnBox->AddChild(fDummyModeCheckBox);
+	burnBox->AddChild(fDummyModeCheckBox);
 
 	r.top += 15;
 	r.bottom += 15;
@@ -126,29 +129,29 @@ BurnView::BurnView(BRect size)
 		fEjectCheckBox->SetValue(B_CONTROL_ON);
 	}
 
-	fBurnBox->AddChild(fEjectCheckBox);
+	burnBox->AddChild(fEjectCheckBox);
 
 
 	// fBurnButton
-	r = fBurnBox->Bounds();
+	r = burnBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = 120;
 	r.bottom -= 5;
 	r.left = 370; // was 260
 	r.right = 460; // was 350
 	fBurnButton = new BButton(r, "fBurnButton", "Burn!", new BMessage(MAKE_IMAGE));
-	fBurnBox->AddChild(fBurnButton);
+	burnBox->AddChild(fBurnButton);
 
-	r = fBurnBox->Bounds();
+	r = burnBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = 120;
 	r.bottom -= 5;
 	r.left = 270; //was 160
 	r.right = 360; //was 250
 	fMakeImageButton = new BButton(r, "fMakeImageButton", "Make Image", new BMessage(MAKE_AND_SAVE_IMAGE));
-	fBurnBox->AddChild(fMakeImageButton);
+	burnBox->AddChild(fMakeImageButton);
 	// BurningSpeed
-	r = fBurnBox->Bounds();
+	r = burnBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.left = 225;
 	r.right = 350;
@@ -157,7 +160,7 @@ BurnView::BurnView(BRect size)
 	fSpeedSlider = new BSlider(r, "Speed", temp_char, new BMessage(SPEED_CHANGE), 0, 5, B_BLOCK_THUMB, B_FOLLOW_NONE);
 	fSpeedSlider->SetHashMarks(B_HASH_MARKS_BOTTOM);
 	fSpeedSlider->SetHashMarkCount(6);
-	fBurnBox->AddChild(fSpeedSlider);
+	burnBox->AddChild(fSpeedSlider);
 	fSpeedSlider->SetValue((int32)(BURN_SPD / 2) - 1);
 
 
@@ -166,7 +169,6 @@ BurnView::BurnView(BRect size)
 
 BurnView::~BurnView()
 {
-	delete fBGLabel;
 }
 
 

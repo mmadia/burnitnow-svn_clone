@@ -13,7 +13,6 @@ set(BURNITNOW_SRCS
 	AboutWindow.cpp
 	AskName.cpp
 	AudioView.cpp
-	BootView.cpp
 	BurnView.cpp
 	CDRWView.cpp
 	CopyCDView.cpp

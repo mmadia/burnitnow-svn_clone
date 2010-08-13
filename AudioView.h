@@ -6,13 +6,7 @@
 #define _AUDIOVIEW_H_
 
 
-#include <Box.h>
 #include <CheckBox.h>
-#include <TextView.h>
-
-
-// Forward declaration of IconLabel class
-class IconLabel;
 
 
 class AudioView : public BView {
@@ -21,10 +15,6 @@ public:
 	~AudioView();
 
 	BCheckBox* fSwabCheckBox, *fNoFixCheckBox, *fPreEmpCheckBox, *fPadCheckBox;
-	BBox* fAdvOptionsBox, *fInfoBox;
-	IconLabel* fAdvLabel;
-	BTextView* fInfoTextView;
-	BScrollView* fInfoScrollView;
 };
 
 

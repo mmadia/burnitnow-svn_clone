@@ -6,22 +6,14 @@
 #define _LOGVIEW_H_
 
 
-#include <Box.h>
 #include <TextView.h>
-
-
-// Forward declaration of IconLabel class
-class IconLabel;
 
 
 class LogView : public BView {
 public:
 	LogView(BRect size);
 	~LogView();
-	IconLabel* fLogLabel;
-	BBox* fLogBox;
 	BTextView* fLogTextView;
-	BScrollView* fLogScrollView;
 };
 
 

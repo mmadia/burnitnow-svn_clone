@@ -17,8 +17,6 @@ public:
 	virtual void MessageReceived(BMessage* msg);
 
 private:
-	BView* fAroundView;
-	BButton* fOkButton;
 	BTextView* fNameTextView;
 	uint32 fMessageWhat;
 };
