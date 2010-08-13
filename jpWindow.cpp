@@ -1061,7 +1061,7 @@ void jpWindow::MessageReceived(BMessage* message)
 			}
 			break;
 		case BURN_WITH_CDRECORD:
-				BurnWithCDRecord();
+			BurnWithCDRecord();
 			break;
 		case WRITE_TO_LOG: {
 				char* temp_str;

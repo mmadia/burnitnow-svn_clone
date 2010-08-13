@@ -95,8 +95,8 @@ DataView::DataView(BRect size)
 	r.bottom += 15;
 	r.top += 15;
 	BRadioButton* ownRadio = new BRadioButton(r, "own", "Own (choose mkisofs options)", new BMessage(DATA_HFS));
-	//if(!strcmp(DATA_STRING,"-hfs"))
-	//	fMacRadio->SetValue(B_CONTROL_ON);
+//	if(!strcmp(DATA_STRING,"-hfs"))
+//		fMacRadio->SetValue(B_CONTROL_ON);
 	ownRadio->SetEnabled(false);
 	fileSystemBox->AddChild(ownRadio);
 

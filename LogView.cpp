@@ -23,7 +23,7 @@ LogView::LogView(BRect size)
 	IconLabel* logLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(""), 19), "", "BMP:LOG");
 	logLabel->SetViewColor(grey);
 	r = Bounds();
-	//r.InsetBy(5.0,5.0);
+//	r.InsetBy(5.0,5.0);
 	BBox* logBox = new BBox(r, "logBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
 	logBox->SetLabel(logLabel);
 	AddChild(logBox);

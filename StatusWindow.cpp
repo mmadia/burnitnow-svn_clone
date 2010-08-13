@@ -216,7 +216,7 @@ void StatusWindow::MessageReceived(BMessage* msg)
 {
 	switch (msg->what) {
 		case 'ClWi':
-				Quit();
+			Quit();
 			break;
 		case 'More':
 			if (!fFullView) {

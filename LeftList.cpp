@@ -64,9 +64,8 @@ void LeftListItem::DrawItem(BView* owner, BRect frame, bool complete)
 
 	if (IsSelected())
 		rgbColor = rgbSelectedColor;
-	else
-		if (!fIsAudio)
-			rgbColor = rgbPatternColor;
+	else if (!fIsAudio)
+		rgbColor = rgbPatternColor;
 
 	owner->SetHighColor(rgbColor);
 	owner->SetLowColor(rgbColor);

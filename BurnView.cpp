@@ -145,8 +145,8 @@ BurnView::BurnView(BRect size)
 	r.InsetBy(5.0, 5.0);
 	r.top = 120;
 	r.bottom -= 5;
-	r.left = 270; //was 160
-	r.right = 360; //was 250
+	r.left = 270; // was 160
+	r.right = 360; // was 250
 	fMakeImageButton = new BButton(r, "fMakeImageButton", "Make Image", new BMessage(MAKE_AND_SAVE_IMAGE));
 	burnBox->AddChild(fMakeImageButton);
 	// BurningSpeed

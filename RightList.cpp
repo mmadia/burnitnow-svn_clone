@@ -88,9 +88,8 @@ void FileListItem::DrawItem(BView* owner, BRect frame, bool complete)
 
 	if (IsSelected())
 		rgbColor = rgbSelectedColor;
-	else
-		if (fPattern)
-			rgbColor = rgbfPatternColor;
+	else if (fPattern)
+		rgbColor = rgbfPatternColor;
 
 	owner->SetHighColor(rgbColor);
 	owner->SetLowColor(rgbColor);
@@ -340,10 +339,8 @@ void RightList::MakeDir(entry_ref* ref)
 				if (fTDirectory->GetEntry(&temp_entry) == B_OK)
 					if (temp_entry.GetPath(&temp_path) == B_OK) {
 						sprintf(temp_char, "%s/%s", temp_path.Path(), temp_ref.name);
-						if (BEntry(&temp_ref, false).GetPath(&temp_path) == B_OK) {
-							if (fTDirectory->CreateSymLink(temp_char, temp_path.Path(), NULL) == B_OK) {
-							}
-						}
+						if (BEntry(&temp_ref, false).GetPath(&temp_path) == B_OK)
+							fTDirectory->CreateSymLink(temp_char, temp_path.Path(), NULL);
 					}
 			} else {
 				// Don't follow linked directorys
