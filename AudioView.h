@@ -12,7 +12,6 @@
 class AudioView : public BView {
 public:
 	AudioView(BRect size);
-	~AudioView();
 
 	BCheckBox* fSwabCheckBox, *fNoFixCheckBox, *fPreEmpCheckBox, *fPadCheckBox;
 };

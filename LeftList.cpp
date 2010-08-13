@@ -51,24 +51,16 @@ LeftListItem::LeftListItem(entry_ref* ref, const char* name, BBitmap* icon, stru
 	} else {
 		fIsAudio = false;
 	}
-
-
-}
-
-
-LeftListItem::~LeftListItem()
-{
 }
 
 
 void LeftListItem::DrawItem(BView* owner, BRect frame, bool complete)
 {
 	char temp_char[1024];
-	rgb_color rgbColor = {255, 255, 255};
-	rgb_color rgbSelectedColor = {235, 235, 200};
-	rgb_color rgbPatternColor = {244, 244, 255};
-	rgb_color black = {0, 0, 0};
-
+	rgb_color rgbColor = {255, 255, 255, 255};
+	rgb_color rgbSelectedColor = {235, 235, 200, 255};
+	rgb_color rgbPatternColor = {244, 244, 255, 255};
+	rgb_color black = {0, 0, 0, 255};
 
 
 	if (IsSelected()) {
@@ -112,7 +104,6 @@ LeftList::LeftList(BRect size)
 	fTrackPopUpMenu->AddItem(new BMenuItem("Remove", new BMessage('remt')));
 	fTrackPopUpMenu->AddItem(new BMenuItem("Move Down", new BMessage('mvdn')));
 	fTrackPopUpMenu->AddItem(new BMenuItem("Play", new BMessage('play')));
-
 }
 
 
@@ -219,17 +210,13 @@ void LeftList::KeyDown(const char* bytes, int32 numBytes)
 						if (item != NULL) {
 							delete item;
 						}
-					} else {}
-
+					}
 				}
-
 				break;
 			}
-		default: {
-				BListView::KeyDown(bytes, numBytes);
-			}
+		default:
+			BListView::KeyDown(bytes, numBytes);
 	}
-
 }
 
 
@@ -268,7 +255,6 @@ void LeftList::MouseDown(BPoint point)
 					if ((selection - 1 > 0) && (item->fIsAudio) && (item2->fIsAudio))
 						SwapItems(selection, selection - 1);
 
-
 				} else if (!strcmp(selected->Label(), "Move Down")) {
 					LeftListItem* item = (LeftListItem*)ItemAt(selection);
 					if ((selection + 1 <= CountItems()) && (item->fIconBitmap == fAudioBitmap))
@@ -294,16 +280,13 @@ void LeftList::MouseDown(BPoint point)
 								win->fParentDirButton->SetEnabled(false);
 								win->fNewVRCDButton->SetEnabled(true);
 								win->fAddISOButton->SetEnabled(true);
-
 							}
-
 						}
 						if (item != NULL) {
 							delete item;
 						}
-					} else {}
+					}
 				}
-
 			}
 			return;
 		}

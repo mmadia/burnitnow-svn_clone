@@ -25,11 +25,6 @@ CopyCDView::CopyCDView(BRect size, BWindow* twin)
 }
 
 
-CopyCDView::~CopyCDView()
-{
-}
-
-
 void CopyCDView::MessageReceived(BMessage* message)
 {
 	fTempWindow->MessageReceived(message);

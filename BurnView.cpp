@@ -162,13 +162,6 @@ BurnView::BurnView(BRect size)
 	fSpeedSlider->SetHashMarkCount(6);
 	burnBox->AddChild(fSpeedSlider);
 	fSpeedSlider->SetValue((int32)(BURN_SPD / 2) - 1);
-
-
-}
-
-
-BurnView::~BurnView()
-{
 }
 
 

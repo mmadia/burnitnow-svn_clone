@@ -93,7 +93,6 @@ void jpApp::MessageReceived(BMessage* msg)
 
 void jpApp::RefsReceived(BMessage* msg)
 {
-
 	entry_ref ref;
 	msg->FindRef("refs", &ref);
 	BEntry entry(&ref, true);
@@ -107,8 +106,6 @@ void jpApp::RefsReceived(BMessage* msg)
 	baseWindow->Lock();
 	baseWindow->SetISOFile(BurnDir);
 	baseWindow->Unlock();
-
-
 }
 
 

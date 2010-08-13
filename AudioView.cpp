@@ -80,7 +80,6 @@ AudioView::AudioView(BRect size)
 	advOptionsBox->AddChild(fSwabCheckBox);
 
 
-
 	// Info box
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
@@ -102,10 +101,4 @@ AudioView::AudioView(BRect size)
 	infoBox->AddChild(infoScrollView);
 	infoTextView->SetFontAndColor(be_fixed_font, B_FONT_ALL, &darkblue);
 	infoTextView->Insert("Here will be some AudioInfo in the future like what codecs there are on the system.");
-
-}
-
-
-AudioView::~AudioView()
-{
 }

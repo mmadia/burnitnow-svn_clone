@@ -61,10 +61,4 @@ PrefsView::PrefsView(BRect size)
 		fBurnProofCheckBox->SetValue(B_CONTROL_ON);
 	}
 	miscOptBox->AddChild(fBurnProofCheckBox);
-
-}
-
-
-PrefsView::~PrefsView()
-{
 }

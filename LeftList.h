@@ -24,7 +24,6 @@ struct AudioInfo {
 class LeftListItem : public BListItem {
 public:
 	LeftListItem(entry_ref* ref, const char* name, BBitmap* icon, struct AudioInfo* Info);
-	~LeftListItem();
 	virtual void DrawItem(BView* owner, BRect frame, bool complete);
 
 	BBitmap* fIconBitmap;

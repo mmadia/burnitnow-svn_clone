@@ -14,7 +14,6 @@
 class CDRWView : public BView {
 public:
 	CDRWView(BRect size);
-	~CDRWView();
 
 	BSlider* fBlankSpeedSlider;
 	BMenu* fBlankMenu;

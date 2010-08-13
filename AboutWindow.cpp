@@ -75,7 +75,6 @@ void AboutView::Draw(BRect updateRect)
 	p1.x = r.left + 15;
 	p1.y = r.top + 70;
 	DrawBitmap(fCDRecordBitmap, p1);
-
 }
 
 

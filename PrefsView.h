@@ -13,7 +13,6 @@
 class PrefsView : public BView {
 public:
 	PrefsView(BRect size);
-	~PrefsView();
 
 	BMenu* fRecordersMenu;
 	BCheckBox* fDAOCheckBox, *fBurnProofCheckBox;

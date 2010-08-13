@@ -76,10 +76,4 @@ CDRWView::CDRWView(BRect size)
 	r.right = 365;
 	fBlankButton = new BButton(r, "BlankButton", "Blank!", new BMessage(BLANK_IT_NOW));
 	CDRWBox->AddChild(fBlankButton);
-
-}
-
-
-CDRWView::~CDRWView()
-{
 }

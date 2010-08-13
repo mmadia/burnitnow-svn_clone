@@ -350,9 +350,6 @@ jpWindow::jpWindow(BRect frame)
 
 	fAroundBox->AddChild(fTabView);
 
-
-
-
 	// FileList(RightList)
 	r = fAroundBox->Bounds();
 	r.InsetBy(5.0, 5.0);
@@ -1062,9 +1059,9 @@ void jpWindow::MessageReceived(BMessage* message)
 				entry.GetPath(&path);
 				path.GetParent(&path);
 				path.Append("Docs/BurnItNowHelp.html");
-				char *helpfile = new char[strlen(path.Path())+1];
+				char* helpfile = new char[strlen(path.Path())+1];
 				sprintf(helpfile, path.Path());
-				be_roster->Launch("text/html",1, & helpfile);
+				be_roster->Launch("text/html", 1, & helpfile);
 				delete helpfile;
 			}
 			break;
@@ -1557,11 +1554,6 @@ void jpWindow::SetISOFile(char* string)
 }
 
 
-void jpWindow::SetProgDir(char* string)
-{
-}
-
-
 void jpWindow::MakeImageNOW(int Multi, const char* str)
 {
 	/*float temp1
@@ -1742,29 +1734,9 @@ void jpWindow::BurnWithCDRecord()
 }
 
 
-void jpWindow::StatusSetMax(float t1)
-{
-}
-
-
 void jpWindow::UpdateStatus(float delta, char* str)
 {
 	fStatusBar->Update(delta - fStatusBar->CurrentValue(), str);
-}
-
-
-void jpWindow::StatusSetText(const char* str)
-{
-}
-
-
-void jpWindow::StatusSetColor(rgb_color color)
-{
-}
-
-
-void jpWindow::StatusUpdateReset()
-{
 }
 
 

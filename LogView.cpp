@@ -41,8 +41,3 @@ LogView::LogView(BRect size)
 	BScrollView* logScrollView = new BScrollView("logScrollView", fLogTextView, B_FOLLOW_NONE, 0, false, true, B_FANCY_BORDER);
 	logBox->AddChild(logScrollView);
 }
-
-
-LogView::~LogView()
-{
-}

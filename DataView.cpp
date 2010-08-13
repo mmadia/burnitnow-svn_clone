@@ -141,10 +141,4 @@ DataView::DataView(BRect size)
 
 	fFilePanel = new BFilePanel(B_OPEN_PANEL);
 	fFilePanel->SetMessage(new BMessage(BOOT_CHANGE_IMAGE_NAME));
-
-}
-
-
-DataView::~DataView()
-{
 }

@@ -12,7 +12,6 @@
 class LogView : public BView {
 public:
 	LogView(BRect size);
-	~LogView();
 	BTextView* fLogTextView;
 };
 

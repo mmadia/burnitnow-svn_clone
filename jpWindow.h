@@ -41,7 +41,6 @@ public:
 	virtual void MessageReceived(BMessage* message);
 	virtual void CheckForDevices();
 	virtual void SetISOFile(char* string);
-	virtual void SetProgDir(char* string);
 	virtual void PutLog(const char*);
 	virtual void MessageLog(const char*);
 	virtual void MakeImageNOW(int, const char*);
@@ -49,10 +48,6 @@ public:
 	virtual void BlankNOW();
 	virtual void BurnWithCDRecord();
 	virtual void UpdateStatus(float delta, char* str);
-	virtual void StatusSetMax(float t1);
-	virtual void StatusSetText(const char* str);
-	virtual void StatusSetColor(rgb_color color);
-	virtual void StatusUpdateReset();
 	virtual void SetButtons(bool);
 	virtual void AWindow();
 	virtual int  CheckMulti(char* str);

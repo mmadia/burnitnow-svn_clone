@@ -31,7 +31,6 @@ public:
 	virtual void UpdateDir();
 	virtual void KeyDown(const char* bytes, int32 numBytes);
 	virtual void MouseDown(BPoint point);
-	virtual void RemoveVRCD();
 	virtual void ParentDir();
 	virtual void CreateDir();
 	virtual void MakeLink(entry_ref* ref);

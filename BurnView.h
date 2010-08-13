@@ -14,7 +14,6 @@
 class BurnView : public BView {
 public:
 	BurnView(BRect size);
-	~BurnView();
 	void SetButton(bool);
 	void SetLabel(char*);
 

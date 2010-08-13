@@ -82,12 +82,10 @@ FileListItem::~FileListItem()
 
 void FileListItem::DrawItem(BView* owner, BRect frame, bool complete)
 {
-	rgb_color rgbColor = {255, 255, 255};
-	rgb_color rgbSelectedColor = {235, 235, 200};
-	rgb_color rgbfPatternColor = {244, 244, 255};
-	rgb_color black = {0, 0, 0};
-
-
+	rgb_color rgbColor = {255, 255, 255, 255};
+	rgb_color rgbSelectedColor = {235, 235, 200, 255};
+	rgb_color rgbfPatternColor = {244, 244, 255, 255};
+	rgb_color black = {0, 0, 0, 255};
 
 	if (IsSelected()) {
 		rgbColor = rgbSelectedColor;
@@ -121,7 +119,6 @@ RightList::RightList(BRect size)
 	fDirectoryBitmap = GetBitmapResource('BBMP', "BMP:DIRICON");
 	fInfoBitmap = GetBitmapResource('BBMP', "BMP:INFOICON");
 	UpdateDir();
-
 }
 
 
@@ -292,12 +289,6 @@ void RightList::UpdateDir()
 		}
 
 	}
-
-}
-
-
-void RightList::RemoveVRCD()
-{
 }
 
 

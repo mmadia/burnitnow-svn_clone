@@ -15,7 +15,6 @@
 class DataView : public BView {
 public:
 	DataView(BRect size);
-	~DataView();
 
 	BButton* fChooseBootImageButton;
 	char fChooseLabel[1024];
