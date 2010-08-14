@@ -11,11 +11,7 @@
 
 class CopyCDView : public BView {
 public:
-	CopyCDView(BRect size, BWindow* twin);
-	virtual void MessageReceived(BMessage* message);
-
-private:
-	BWindow* fTempWindow;
+	CopyCDView(BRect size, BWindow* targetWindow);
 };
 
 

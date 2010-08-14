@@ -26,10 +26,10 @@ CDRWView::CDRWView(BRect size)
 {
 	BRect r;
 	char temp_char[100];
-	SetViewColor(216, 216, 216, 0);
+	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	// CDRW BOX
 	IconLabel* CDRWLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(""), 19), "", "BMP:CDRW");
-	CDRWLabel->SetViewColor(grey);
+	CDRWLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.bottom = r.top + 70;

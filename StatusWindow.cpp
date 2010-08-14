@@ -46,11 +46,11 @@ void StatusView::Draw(BRect updateRect)
 	float oldangle;
 	int i;
 	BPoint center, p1;
-	SetLowColor(216, 216, 216);
+	SetLowColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	fViewFont->SetSize(13);
 	center.x = 70;
 	center.y = Bounds().bottom / 2;
-	SetHighColor(216, 216, 216);
+	SetHighColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	FillRect(Bounds());
 	SetHighColor(190, 190, 190);
 	SetPenSize(2.0);
@@ -120,7 +120,7 @@ StatusWindow::StatusWindow(const char* title)
 
 	r = Bounds();
 	BView* aroundView = new BView(r, "AroundView", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);
-	aroundView->SetViewColor(216, 216, 216, 0);
+	aroundView->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	AddChild(aroundView);
 
 	r = aroundView->Bounds();

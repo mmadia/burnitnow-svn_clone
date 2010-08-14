@@ -27,10 +27,10 @@ AudioView::AudioView(BRect size)
 	BView(size, "AudioView", B_FOLLOW_NONE, B_WILL_DRAW)
 {
 	BRect r, r2;
-	SetViewColor(216, 216, 216, 0);
+	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 
 	IconLabel* advLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Audio Options (see help before change options)"), 19), " Audio Options (see help before change options)", "BMP:AUDIOOPT");
-	advLabel->SetViewColor(grey);
+	advLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.bottom = 80;

@@ -43,8 +43,8 @@ AboutView::~AboutView()
 
 void AboutView::Draw(BRect updateRect)
 {
-	SetLowColor(grey);
-	SetHighColor(grey);
+	SetLowColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+	SetHighColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	BRect r;
 	BPoint p1;
 	r = Bounds();
@@ -87,7 +87,7 @@ AboutWindow::AboutWindow()
 
 	r = Bounds();
 	BView* aroundView = new BView(r, "AroundView", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);
-	aroundView->SetViewColor(216, 216, 216, 0);
+	aroundView->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	AddChild(aroundView);
 
 	r = aroundView->Bounds();

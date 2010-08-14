@@ -11,21 +11,18 @@
 #include <Button.h>
 
 
-CopyCDView::CopyCDView(BRect size, BWindow* twin)
+CopyCDView::CopyCDView(BRect size, BWindow* targetWindow)
 	:
 	BView(size, "CopyCDView", B_FOLLOW_NONE, B_WILL_DRAW)
 {
-	SetViewColor(216, 216, 216, 0);
+	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	BRect r;
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 
-	AddChild(new BButton(r, "About!", "About", new BMessage(MENU_FILE_ABOUT)));
-	fTempWindow = twin;
-}
+	BButton* aboutButton = new BButton(r, "About!", "About", new BMessage(MENU_FILE_ABOUT));
 
+	aboutButton->SetTarget(targetWindow);
 
-void CopyCDView::MessageReceived(BMessage* message)
-{
-	fTempWindow->MessageReceived(message);
+	AddChild(aboutButton);
 }

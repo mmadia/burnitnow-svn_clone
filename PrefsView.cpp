@@ -24,7 +24,7 @@ PrefsView::PrefsView(BRect size)
 	BView(size, "PrefsView", B_FOLLOW_NONE, B_WILL_DRAW)
 {
 	BRect r;
-	SetViewColor(216, 216, 216, 0);
+	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.bottom = r.top + 20;
@@ -35,7 +35,7 @@ PrefsView::PrefsView(BRect size)
 	AddChild(recorderMenuField);
 
 	IconLabel* miscLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Misc Options (see help before change options)"), 19), " Misc Options (see help before change options)", "BMP:MISCOPT");
-	miscLabel->SetViewColor(grey);
+	miscLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = r.top + 25;

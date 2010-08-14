@@ -29,11 +29,11 @@ BurnView::BurnView(BRect size)
 	BView(size, "BurnView", B_FOLLOW_NONE, B_WILL_DRAW)
 {
 	BRect r, r2;
-	SetViewColor(216, 216, 216, 0);
+	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	char temp_char[100];
 	// burnBox
 	IconLabel* burnLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Burn"), 19), " Burn", "BMP:BURN");
-	burnLabel->SetViewColor(grey);
+	burnLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	BBox* burnBox = new BBox(r, "burnBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
@@ -45,7 +45,7 @@ BurnView::BurnView(BRect size)
 	r.top = 50;
 	r.bottom = 114;
 	IconLabel* BGLabel = new IconLabel(r, "", "BMP:BACKGROUND");
-	BGLabel->SetViewColor(grey);
+	BGLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	burnBox->AddChild(BGLabel);
 	// RadioButtons
 	r = burnBox->Bounds();
@@ -61,19 +61,19 @@ BurnView::BurnView(BRect size)
 	r2.top += 10;
 	r2.bottom = 30;
 	IconLabel* dataCDLabel = new IconLabel(r2, "", "BMP:DATACD");
-	dataCDLabel->SetViewColor(grey);
+	dataCDLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	burnBox->AddChild(dataCDLabel);
 
 	r2.top += 22;
 	r2.bottom += 22;
 	IconLabel* audioCDLabel = new IconLabel(r2, "", "BMP:AUDIOCD");
-	audioCDLabel->SetViewColor(grey);
+	audioCDLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	burnBox->AddChild(audioCDLabel);
 
 	r2.top += 22;
 	r2.bottom += 22;
 	IconLabel* mixCDLabel = new IconLabel(r2, "", "BMP:MIXCD");
-	mixCDLabel->SetViewColor(grey);
+	mixCDLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	burnBox->AddChild(mixCDLabel);
 
 	BRadioButton* dataCDRadio = new BRadioButton(r, "DataCD", "DataCD", new BMessage(BURN_DATA_CD));

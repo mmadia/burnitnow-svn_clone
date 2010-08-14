@@ -18,10 +18,10 @@ LogView::LogView(BRect size)
 	BView(size, "LogView", B_FOLLOW_NONE, B_WILL_DRAW)
 {
 	BRect r, r2;
-	SetViewColor(216, 216, 216, 0);
+	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	// fLogBox
 	IconLabel* logLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(""), 19), "", "BMP:LOG");
-	logLabel->SetViewColor(grey);
+	logLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	r = Bounds();
 //	r.InsetBy(5.0,5.0);
 	BBox* logBox = new BBox(r, "logBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);

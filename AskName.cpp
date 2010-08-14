@@ -27,7 +27,7 @@ AskName::AskName(BRect frame, const char* title, uint32 mess, const char* what)
 
 	r = Bounds();
 	BView* aroundView = new BView(r, "aroundView", B_FOLLOW_NONE, B_WILL_DRAW);
-	aroundView->SetViewColor(216, 216, 216, 0);
+	aroundView->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	AddChild(aroundView);
 
 	r = aroundView->Bounds();

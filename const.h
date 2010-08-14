@@ -80,7 +80,6 @@ const rgb_color green = {0, 200, 50, 255};
 const rgb_color blue = {0, 0, 200, 255};
 const rgb_color white = {255, 255, 255, 255};
 const rgb_color darkblue = {70, 70, 200, 255};
-const rgb_color grey = {216, 216, 216, 255};
 const rgb_color greenblue = {0, 255, 255, 255};
 
 

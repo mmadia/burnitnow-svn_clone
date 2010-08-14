@@ -24,13 +24,13 @@ DataView::DataView(BRect size)
 	:
 	BView(size, "DataView", B_FOLLOW_NONE, B_WILL_DRAW)
 {
-	SetViewColor(216, 216, 216, 0);
+	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	BRect r;
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.bottom = 90; // was 85
 	IconLabel* fileSystemLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Filesystem"), 19), " Filesystem", "BMP:FS");
-	fileSystemLabel->SetViewColor(grey);
+	fileSystemLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	BBox* fileSystemBox = new BBox(r, "fFileSystemBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
 	fileSystemBox->SetLabel(fileSystemLabel);
 	AddChild(fileSystemBox);
@@ -106,7 +106,7 @@ DataView::DataView(BRect size)
 	r.right = r.right - 160; // was 130
 
 	IconLabel* bootLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" El Torito Bootable CD"), 19), " El Torito Bootable CD", "BMP:BOOTABLE");
-	bootLabel->SetViewColor(grey);
+	bootLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	BBox* bootBox = new BBox(r, "BootBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
 	bootBox->SetLabel(bootLabel);
 	AddChild(bootBox);

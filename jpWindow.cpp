@@ -302,7 +302,7 @@ jpWindow::jpWindow(BRect frame)
 	r.bottom = 210;
 
 	fTabView = new BTabView(r, "mytabview", B_WIDTH_FROM_LABEL);
-	fTabView->SetViewColor(216, 216, 216, 0);
+	fTabView->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 
 	r = fTabView->Bounds();
 	r.InsetBy(5.0, 5.0);

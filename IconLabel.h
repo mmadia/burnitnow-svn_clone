@@ -7,19 +7,20 @@
 
 
 #include <Bitmap.h>
+#include <String.h>
 #include <View.h>
 
 
 class IconLabel : public BView {
 public:
 	IconLabel(BRect size, const char* labelstring, const char* gfx);
-	~IconLabel();
+	virtual ~IconLabel();
 	virtual void Draw(BRect frame);
 	BBitmap* GetBitmapResource(type_code type, const char* name);
 
 private:
-	const BBitmap* fBitmap;
-	char fLabel[100];
+	BBitmap* fBitmap;
+	BString fLabel;
 };
 
 
