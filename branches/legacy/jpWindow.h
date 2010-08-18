@@ -8,6 +8,7 @@
 
 #include <Box.h>
 #include <FilePanel.h>
+#include <Path.h>
 #include <Slider.h>
 #include <StatusBar.h>
 #include <TabView.h>
@@ -40,6 +41,7 @@ public:
 	virtual bool QuitRequested();
 	virtual void MessageReceived(BMessage* message);
 	virtual void CheckForDevices();
+	virtual void FindCDRTools();
 	virtual void SetISOFile(char* string);
 	virtual void PutLog(const char*);
 	virtual void MessageLog(const char*);
@@ -87,6 +89,10 @@ public:
 	struct cdrecorder fScsiDevices[100];
 	int fRecorderCount;
 	struct cdrecorder* fBurnDevice;
+	
+private:
+	BPath		fPath;
+	status_t	fStatus;	
 };
 
 

@@ -30,6 +30,7 @@
 #include <Application.h>
 #include <Button.h>
 #include <File.h>
+#include <FindDirectory.h>
 #include <Entry.h>
 #include <MenuBar.h>
 #include <MenuItem.h>
@@ -63,7 +64,7 @@ entry_ref BOOTIMAGEREF;
 char* IMAGE_NAME;
 char* BURNIT_PATH;
 char* BURN_DIR;
-
+BPath CDRTOOLS_DIR;
 
 char BURNPROOF[30]; // driveropts = burnproof
 char PAD[10]; // -pad (audio)
@@ -644,6 +645,8 @@ void jpWindow::InitBurnIt()
 	BURN_DIR = new char[strlen(temp_char)+1];
 	strcpy(BURN_DIR, temp_char);
 
+	FindCDRTools(); // Locate cdrecord and set CDRTOOLS_DIR
+
 	// Load from pref file
 	if (fBurnItPrefs->FindString("ISOFILE_DIR", &tr) == B_OK)
 		strcpy(ISOFILE_DIR, tr);
@@ -744,18 +747,57 @@ void jpWindow::InitBurnIt()
 }
 
 
+void jpWindow::FindCDRTools()
+{
+	BPath path;
+	BEntry entry;
+
+	fStatus = find_directory(B_COMMON_BIN_DIRECTORY, &CDRTOOLS_DIR);
+	if (fStatus != B_OK)
+		return;
+
+   	printf("Pathname: %s\n", CDRTOOLS_DIR.Path());
+
+    /* now check to see if CDRTOOLS/cdrtools exists... */
+	path.SetTo(CDRTOOLS_DIR.Path());
+    entry.GetPath(&path);
+    path.Append("cdrecord");
+    if (entry.Exists() == B_OK)
+        printf("Found cdrecord, pathname: %s\n", path.Path());
+    return;
+    // TODO: Shouldn't assume cdrecord is in B_COMMON_BIN_DIRECTORY. perhaps look in several locations or do a fuller search for it.
+    
+}
+
+
 void jpWindow::CheckForDevices()
 {
 	bool got_it;
-	char command[2000];
+	char command[2048];
 	char buffer[1024], buf[512];
 	FILE* f;
 	int i, j;
 	int msg;
-
+	
+	BString commandstr; // this will replace command
+	BEntry cdrecord, mkisofs;
+	BPath path1, path2;
+	
+	path1.SetTo(CDRTOOLS_DIR.Path());
+	path1.Append("cdrecord");
+	cdrecord.SetTo(path1.Path());
+	
+	path2.SetTo(CDRTOOLS_DIR.Path());
+	path2.Append("mkisofs");
+	mkisofs.SetTo(path2.Path());
+		
 	got_it = false;
-	sprintf(command, "/boot/apps/cdrtools/bin/cdrecord -scanbus");
-	if (BEntry("/boot/apps/cdrtools/bin/cdrecord").Exists() && BEntry("/boot/apps/cdrtools/bin/mkisofs").Exists()) {
+	
+	commandstr.SetTo(CDRTOOLS_DIR.Path());
+	commandstr.Append("/cdrecord -scanbus");
+	strcpy(command, commandstr.String());
+	
+	if (cdrecord.Exists() && mkisofs.Exists()) {
 		if (fRecorderCount < 100) {
 			Lock();
 			f = popen(command, "r");
@@ -819,9 +861,10 @@ void jpWindow::CheckForDevices()
 	} else {
 		Lock();
 		fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &blue);
-		fLogView->fLogTextView->Insert("Cound not find cdrecord/mkisofs check that itis installed in /boot/apps/cdrtools/bin.\nInstall cdrecord and restart BurnItNow");
+		fLogView->fLogTextView->Insert("Cound not find cdrecord/mkisofs check that it is installed and restart BurnItNow");
 		Unlock();
 		BAlert* MyAlert = new BAlert("BurnItNow", "Could not find cdrecord/mkisofs. You need to install the cdrtools OptionalPackage", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_STOP_ALERT);
+
 		MyAlert->Go();
 		fBurnView->SetButton(false);
 		fCDRWView->fBlankButton->SetEnabled(false);
@@ -834,7 +877,13 @@ int jpWindow::CheckMulti(char* str)
 	FILE* f;
 	int temp;
 	char buf[1024];
-	f = popen("/boot/apps/cdrtools/bin/cdrecord -msinfo dev=9,1,0 2>&1", "r");
+	
+	BString commandstr; // this will replace command
+
+	commandstr.SetTo(CDRTOOLS_DIR.Path());
+	commandstr.Append("/cdrecord -msinfo dev=9,1,0 2>&1");
+	
+	f = popen(commandstr.String(), "r");
 	while (!feof(f) && !ferror(f)) {
 		buf[0] = 0;
 		fgets(buf, 1024, f);
@@ -974,6 +1023,11 @@ void jpWindow::BurnNOW()
 void jpWindow::BlankNOW()
 {
 	int Result;
+	
+	BString commandstr;
+
+	commandstr.SetTo(CDRTOOLS_DIR.Path());
+	
 	if (fBurnDevice == NULL) {
 		fTabView->Select(5);
 		BAlert* MyAlert = new BAlert("BurnItNow", "You have to select device to be able to blank.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
@@ -989,8 +1043,9 @@ void jpWindow::BlankNOW()
 
 			SetButtons(false);
 			char command[2000];
-			sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d blank=%s 2>&1", fBurnDevice->scsiid, BLANK_SPD, BlType[BLANK_TYPE]);
+			commandstr << "cdrecord dev=" << fBurnDevice->scsiid << " speed=" << BLANK_SPD << " blank=" << BlType[BLANK_TYPE];
 			Lock();
+			strcpy (command, commandstr.String());
 			resume_thread(Cntrl = spawn_thread(controller, "Blanking", 15, command));
 			snooze(500000);
 			resume_thread(OPBlank = spawn_thread(OutPutBlank, "OutPutBlank", 15, fStatusWindow));
@@ -1602,17 +1657,23 @@ void jpWindow::MakeImageNOW(int Multi, const char* str)
 void jpWindow::GetTsize(char* tsize)
 {
 	char buffer[1024];
-	char temp_char[1024];
+	char command[1024];
 	FILE* f;
-	sprintf(temp_char, "/boot/apps/cdrtools/bin/mkisofs -print-size %s -f -V \"%s\" \"%s\" 2>&1", DATA_STRING, VOL_NAME, BURN_DIR);
-	f = popen(temp_char, "r");
-	memset(temp_char, 0, 1024);
+
+	BString commandstr;
+	
+	commandstr.SetTo(CDRTOOLS_DIR.Path());
+	commandstr << "mkisofs -print-size " << DATA_STRING << " -f -V " << '"' << VOL_NAME << '"' << " " << '"' << BURN_DIR << '"' << " 2>&1";
+
+	strcpy(command, commandstr.String());
+	f = popen(command, "r");
+	memset(command, 0, 1024);
 	while (!feof(f) && !ferror(f)) {
 		buffer[0] = 0;
 		fgets(buffer, 1024, f);
 		if (!strncmp(buffer, "Total extents scheduled to be written = ", 40)) {
-			strncpy(temp_char, &buffer[40], strlen(buffer) - 41);
-			sprintf(tsize, "%ss", temp_char);
+			strncpy(command, &buffer[40], strlen(buffer) - 41);
+			sprintf(tsize, "%ss", command);
 		}
 	}
 	pclose(f);
@@ -1623,8 +1684,11 @@ void jpWindow::GetTsize(char* tsize)
 void jpWindow::BurnWithCDRecord()
 {
 	char tsize[512];
+	char command[2048];
 	int Result;
-
+		
+	BString commandstr;
+	
 	CalculateSize();
 
 	BAlert* MyAlert = new BAlert("Put in a CD", "Put in a CDR/CDRW", "Cancel", "Ok", NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
@@ -1640,7 +1704,6 @@ void jpWindow::BurnWithCDRecord()
 		fStatusWindow->Unlock();
 
 		SetButtons(false);
-		char command[2000];
 		if (BURN_TYPE == 0) {
 			fStatusWindow->Lock();
 			fStatusWindow->SetAngles(angles, 1);
@@ -1651,11 +1714,17 @@ void jpWindow::BurnWithCDRecord()
 					MakeBootImage();
 
 				GetTsize(tsize);
-				sprintf(command, "/boot/apps/cdrtools/bin/mkisofs %s -quiet %s -f -V \"%s\" \"%s\" | /boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s tsize=%s %s -data %s %s -v -", DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR, fBurnDevice->scsiid, BURN_SPD, BURNPROOF, tsize, DAO, DUMMYMODE, EJECT);
-			} else
-				sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s -data %s %s %s -v \"%s\"", fBurnDevice->scsiid, BURN_SPD, BURNPROOF, DAO, DUMMYMODE, EJECT, MULTISESSION, IMAGE_NAME);
-
+			commandstr.SetTo(CDRTOOLS_DIR.Path());
+			commandstr << "mkisofs" << DATA_STRING << " -quiet " << BOOTSTRING << " -f -V " << '"' << VOL_NAME << '"' << " " << '"' << BURN_DIR << '"' << " | ";
+			commandstr << CDRTOOLS_DIR.Path() << "cdrecord dev=" << fBurnDevice->scsiid << " speed=" << BURN_SPD << " " << BURNPROOF;
+			commandstr << "tsize" << tsize << " " << DAO << " -data " << DUMMYMODE << " " << EJECT << "-v -";
+			} else {
+			commandstr.SetTo(CDRTOOLS_DIR.Path());
+			commandstr << "cdrecord dev=" << fBurnDevice->scsiid << " speed=" << BURN_SPD << " " << BURNPROOF << " " << DAO;
+			commandstr << " -data " << DUMMYMODE << " " << EJECT << " " << MULTISESSION	<< "\"" << IMAGE_NAME << "\"";
+			}	
 			Lock();
+			strcpy(command, commandstr.String());
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
 			snooze(500000);
 			resume_thread(OPBurn = spawn_thread(OutPutBurn, "OutPutBurning", 15, fStatusWindow));
@@ -1666,7 +1735,10 @@ void jpWindow::BurnWithCDRecord()
 			fStatusWindow->SetAngles(angles, nrtracks);
 			fStatusWindow->Unlock();
 
-			sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s %s %s %s %s -audio %s %s -v %s", fBurnDevice->scsiid, BURN_SPD, BURNPROOF, DAO, PAD, PREEMP, SWAB, NOFIX, DUMMYMODE, EJECT, AUDIO_FILES);
+			commandstr.SetTo(CDRTOOLS_DIR.Path());
+			commandstr << "/cdrecord dev=" << fBurnDevice->scsiid;
+			commandstr << "speed=" << BURN_SPD << " " << BURNPROOF << " " << DAO << " " << PAD << " " << PREEMP << " " << SWAB << " " << NOFIX;
+			commandstr << " -audio " << DUMMYMODE << " " << EJECT << " " << AUDIO_FILES;
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
 			snooze(500000);
@@ -1683,11 +1755,18 @@ void jpWindow::BurnWithCDRecord()
 				if (fDataView->fBootableCDCheckBox->Value() == 1)
 					MakeBootImage();
 
-				sprintf(command, "/boot/apps/cdrtools/bin/mkisofs %s %s -quiet -f -V \"%s\" \"%s\" | /boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s tsize=%s %s %s %s -v %s %s %s %s -data - -audio %s", DATA_STRING, BOOTSTRING, VOL_NAME, BURN_DIR, fBurnDevice->scsiid, BURN_SPD, BURNPROOF, tsize, DAO, DUMMYMODE, EJECT, PAD, PREEMP, SWAB, NOFIX, AUDIO_FILES);
-				MessageLog(command);
-			} else
-				sprintf(command, "/boot/apps/cdrtools/bin/cdrecord dev=%s speed=%d %s %s %s %s %s %s %s %s -v -data \"%s\" -audio %s", fBurnDevice->scsiid, BURN_SPD, BURNPROOF, DAO, PAD, PREEMP, SWAB, NOFIX, DUMMYMODE, EJECT, IMAGE_NAME, AUDIO_FILES);
-
+				commandstr.SetTo(CDRTOOLS_DIR.Path());
+				commandstr << "/mkisofs " << DATA_STRING << BOOTSTRING << " -quiet -f -V " << '"' << VOL_NAME << '"' << BURN_DIR << '"' << " |";
+				commandstr << CDRTOOLS_DIR.Path() << "/cdrecord dev=" <<  fBurnDevice->scsiid << "speed=" << BURN_SPD << " " << BURNPROOF;
+				commandstr << " tsize=" << tsize << " " << DAO << " " << DUMMYMODE << " " << EJECT << " " << PAD << " " << PREEMP << " " << SWAB << " " << NOFIX;
+				commandstr << " -data - -audio " << AUDIO_FILES;
+				MessageLog(commandstr.String());
+			} else {
+				commandstr.SetTo(CDRTOOLS_DIR.Path());
+				commandstr << "/cdrecord dev=" << fBurnDevice->scsiid;
+				commandstr << " speed=" << BURN_SPD << " " << BURNPROOF << " " << DAO << " " << PAD << " " << PREEMP << " " << SWAB << " " << NOFIX << " " << DUMMYMODE << " " << EJECT; 
+				commandstr << " -data " << '"' << IMAGE_NAME << '"' << " -audio " << AUDIO_FILES;
+			}
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
 			snooze(500000);
