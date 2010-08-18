@@ -1,3 +1,7 @@
+/*
+ * Copyright 2010, BurnItNow Team. All rights reserved.
+ * Distributed under the terms of the MIT License.
+ */
 #ifndef _BURNAPPLICATION_H_
 #define _BURNAPPLICATION_H_
 

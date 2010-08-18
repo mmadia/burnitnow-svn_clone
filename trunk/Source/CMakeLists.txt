@@ -1,6 +1,12 @@
 set(EXECUTABLE_OUTPUT_PATH ${BURNITNOW_BINARY_DIR})
 
-set(BURNITNOW_SRCS BurnApplication.cpp BurnWindow.cpp BurnItNow.rdef)
+set(BURNITNOW_SRCS
+	BurnApplication.cpp
+	BurnWindow.cpp
+	CompilationAudioView.cpp
+	CompilationDataView.cpp
+	CompilationImageView.cpp
+	BurnItNow.rdef)
 
 add_executable(BurnItNow ${BURNITNOW_SRCS})
 
