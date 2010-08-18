@@ -756,14 +756,12 @@ void jpWindow::FindCDRTools()
 	if (fStatus != B_OK)
 		return;
 
-   	printf("Pathname: %s\n", CDRTOOLS_DIR.Path());
-
     /* now check to see if CDRTOOLS/cdrtools exists... */
 	path.SetTo(CDRTOOLS_DIR.Path());
     entry.GetPath(&path);
     path.Append("cdrecord");
-    if (entry.Exists() == B_OK)
-        printf("Found cdrecord, pathname: %s\n", path.Path());
+    if (entry.Exists() != B_OK)
+        printf("Error: cdrecord not found, pathname: %s\n", path.Path());
     return;
     // TODO: Shouldn't assume cdrecord is in B_COMMON_BIN_DIRECTORY. perhaps look in several locations or do a fuller search for it.
     
@@ -1092,18 +1090,20 @@ void jpWindow::MessageReceived(BMessage* message)
 	uint8 count;
 	switch (message->what) {
 		case MENU_HELP: {
-				// Borrowed this code from BeAE
 				BPath path;
-				app_info ai;
-				be_app->GetAppInfo(&ai);
-				BEntry entry(&ai.ref);
-				entry.GetPath(&path);
-				path.GetParent(&path);
+				BEntry helpfile;
+				
+				path.SetTo(BURNIT_PATH);
 				path.Append("Docs/BurnItNowHelp.html");
-				char* helpfile = new char[strlen(path.Path())+1];
-				sprintf(helpfile, path.Path());
-				be_roster->Launch("text/html", 1, & helpfile);
-				delete helpfile;
+				helpfile.SetTo(path.Path());
+				char *command = new char[strlen(path.Path())+1];
+				sprintf(command, path.Path());
+				if (helpfile.Exists()) {
+					be_roster->Launch("text/html", 1, & command);
+				} else {
+					printf("\nError: Can't find helpfile: Docs/BurnItNowHelp.html");
+				}
+				delete command;
 			}
 			break;
 		case CALCULATE_SIZE: {
