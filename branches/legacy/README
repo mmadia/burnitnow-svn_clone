@@ -1,11 +1,10 @@
 BurnItNow README
 Copyright ©2000-2010
 
+BurnItNow is a Haiku GUI FrontEnd for cdrecord and mkisofs. 
+	So all the burners that work with cdrecord work with BurnItNow.
 
-BurnItNow is a Haiku GUI FrontEnd for cdrecord and mkisofs. So all the burners that work with cdrecord work with BurnItNow.
-
-BurnItNow is at open source software under the MIT license.
-
+BurnItNow is open source software under the MIT license.
 
 Requierment:
 	* cdrecord 1.9+ and mkisofs 1.12+
@@ -23,7 +22,8 @@ Special functions:
 	    an ISOfile and burnit as an ISOfile.
 
 Author: Johan Nilsson
-Email: jojje@quake.swe.net
-URL: http://quake.swe.net/~jojje
+Email: "Johan Nilsson" <joppefan@gmail.com>
+
+BurnItNow url: http://dev.osdrawer.net/projects/burnitnow
 
 Maintained at OSDrawer.net by the BurnItNow maintainers
