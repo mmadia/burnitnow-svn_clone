@@ -14,7 +14,7 @@
 
 #define  ABOUT_STRING "BurnItNow beta 3"
 #define ABOUT_STRING2 "©2000-2002 Johan Nilsson"
-/* #define ABOUT_STRING3 "©2010 BurnItNow Maintainers" */
+#define ABOUT_STRING3 "©2010 BurnItNow Maintainers"
 
 
 BBitmap* GetBitmapResource(type_code type, const char* name);
@@ -50,7 +50,7 @@ void AboutView::Draw(BRect updateRect)
 	r = Bounds();
 	FillRect(r);
 	p1.x = (r.right / 2) - 32;
-	p1.y = r.top + 10;
+	p1.y = r.top + 12;
 	DrawBitmap(fBurnBitmap, p1);
 	fViewFont->SetSize(15);
 	fViewFont->SetFace(B_BOLD_FACE);
@@ -64,25 +64,29 @@ void AboutView::Draw(BRect updateRect)
 	fViewFont->SetFace(B_REGULAR_FACE);
 	SetFont(fViewFont);
 	p1.x = (r.right / 2) - (fViewFont->StringWidth(ABOUT_STRING2) / 2);
-	p1.y += 15;
+	p1.y += 60;
 	MovePenTo(p1);
 	SetHighColor(0, 0, 0);
 	DrawString(ABOUT_STRING2);
+	// p1.x = r.left + 100;
+	p1.y += 14;
+	MovePenTo(p1);
+	SetHighColor(0, 0, 0);
+	DrawString(ABOUT_STRING3);
 	p1.x = r.left + 100;
-	p1.y = r.top + 85;
+	p1.y = r.top + 100;
 	DrawBitmap(fBurnProofBitmap, p1);
-
 	p1.x = r.left + 15;
-	p1.y = r.top + 70;
+	p1.y = r.top + 100; // was 70
 	DrawBitmap(fCDRecordBitmap, p1);
 }
 
 
 AboutWindow::AboutWindow()
 	:
-	BWindow(BRect(250, 200, 460, 350), "AboutWindow", B_MODAL_WINDOW_LOOK, B_MODAL_APP_WINDOW_FEEL, B_NOT_ZOOMABLE | B_NOT_RESIZABLE | B_NOT_CLOSABLE)
+	BWindow(BRect(250, 200, 460, 380), "AboutWindow", B_MODAL_WINDOW_LOOK, B_MODAL_APP_WINDOW_FEEL, B_NOT_ZOOMABLE | B_NOT_RESIZABLE | B_NOT_CLOSABLE)
 {
-	BRect r;
+	BRect r;   // was 250, 200, 460, 350
 	SetTitle("About");
 
 	r = Bounds();
@@ -93,7 +97,7 @@ AboutWindow::AboutWindow()
 	r = aroundView->Bounds();
 	r.InsetBy(10.0, 10.0);
 	r.top = r.bottom - 20;
-	r.left = r.right - 45;
+	r.left = r.right - 55;
 	aroundView->AddChild(new BButton(r, "close", "Close", new BMessage('ClWi')));
 	r = aroundView->Bounds();
 	r.InsetBy(5.0, 5.0);

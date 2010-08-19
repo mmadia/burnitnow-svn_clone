@@ -283,7 +283,7 @@ jpWindow::jpWindow(BRect frame)
 	// Size Status and button
 	r = fAroundBox->Bounds();
 	r.InsetBy(5.0, 5.0);
-	r.top = r.bottom - 36; // was 30
+	r.top = r.bottom - 39; // was 30
 	r.right -= 85; // was 55
 	fStatusBar = new BStatusBar(r, "fStatusBar");
 	fStatusBar->SetMaxValue(100.0);
@@ -292,8 +292,8 @@ jpWindow::jpWindow(BRect frame)
 
 	r = fAroundBox->Bounds();
 	r.InsetBy(10.0, 10.0);
-	r.top = r.bottom - 17;
-	r.left = r.right - 80; // was 50
+	r.top = r.bottom - 23; // was 17 
+	r.left = r.right - 70; // was 50
 	fCalcSizeButton = new BButton(r, "calcsize", "Calc. Size", new BMessage(CALCULATE_SIZE));
 	fAroundBox->AddChild(fCalcSizeButton);
 
