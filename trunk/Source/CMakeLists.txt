@@ -14,4 +14,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-multichar -Woverloaded-virtua
 
 include_directories(${BURNITNOW_SOURCE_DIR}/Source/HaikuInclude)
 
-target_link_libraries(BurnItNow "be")
+target_link_libraries(BurnItNow "be" "tracker")

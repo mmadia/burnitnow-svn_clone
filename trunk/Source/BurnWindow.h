@@ -23,8 +23,11 @@ private:
 	BView* _CreateTabView();
 	BView* _CreateDiskUsageView();
 
+	void _BurnDisc();
+	void _BuildImage();
 	void _OpenWebSite();
 	void _OpenHelp();
+	void _UpdateSpeedSlider(BMessage* message);
 };
 
 

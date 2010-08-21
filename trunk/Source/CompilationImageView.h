@@ -6,12 +6,24 @@
 #define _COMPILATIONIMAGEVIEW_H_
 
 
+#include <FilePanel.h>
 #include <View.h>
 
 
 class CompilationImageView : public BView {
 public:
 	CompilationImageView();
+	virtual ~CompilationImageView();
+
+	virtual void MessageReceived(BMessage* message);
+	virtual void AttachedToWindow();
+
+private:
+	void _ChooseImage();
+	void _OpenImage(BMessage* message);
+
+	BFilePanel* fOpenPanel;
+	BPath* fImagePath;
 };
 
 
