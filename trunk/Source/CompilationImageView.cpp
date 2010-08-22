@@ -4,10 +4,13 @@
  */
 #include "CompilationImageView.h"
 
+#include "CommandThread.h"
+
 #include <Box.h>
 #include <Button.h>
 #include <LayoutBuilder.h>
 #include <Path.h>
+#include <ScrollView.h>
 #include <String.h>
 #include <StringView.h>
 
@@ -16,18 +19,27 @@ const float kControlPadding = 5;
 
 // Message Constants
 const int32 kChooseImageMessage = 'Chus';
+const int32 kScannerMessage = 'Scan';
 
 
 CompilationImageView::CompilationImageView()
 	:
 	BView("Image File(ISO/CUE)", B_WILL_DRAW, new BGroupLayout(B_VERTICAL, kControlPadding)),
 	fOpenPanel(NULL),
-	fImagePath(new BPath())
+	fImagePath(new BPath()),
+	fImageScannerThread(NULL)
 {
 	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 
 	BBox* imageInfoBox = new BBox("ImageInfoBBox");
 	imageInfoBox->SetLabel("Image Information");
+
+	fImageInfoTextView = new BTextView("ImageInfoTextView");
+	fImageInfoTextView->SetWordWrap(false);
+	fImageInfoTextView->MakeEditable(false);
+	BScrollView* infoScrollView = new BScrollView("ImageInfoScrollView", fImageInfoTextView, 0, true, true);
+
+	imageInfoBox->AddChild(infoScrollView);
 
 	BButton* chooseImageButton = new BButton("ChooseImageButton", "Choose File", new BMessage(kChooseImageMessage));
 	chooseImageButton->SetTarget(this);
@@ -47,6 +59,7 @@ CompilationImageView::CompilationImageView()
 CompilationImageView::~CompilationImageView()
 {
 	delete fImagePath;
+	delete fImageScannerThread;
 }
 
 
@@ -68,6 +81,9 @@ void CompilationImageView::MessageReceived(BMessage* message)
 	switch (message->what) {
 		case kChooseImageMessage:
 			_ChooseImage();
+			break;
+		case kScannerMessage:
+			_ImageScannerParse(message);
 			break;
 		case B_REFS_RECEIVED:
 			_OpenImage(message);
@@ -108,7 +124,34 @@ void CompilationImageView::_OpenImage(BMessage* message)
 	imageFileString << fImagePath->Path();
 	imageFileStringView->SetText(imageFileString.String());
 
+	fImageInfoTextView->SetText(NULL);
+
 	// TODO Verify that the file is a supported image type
 
-	// TODO Spawn a job to collect image info
+	if (fImageScannerThread != NULL)
+		delete fImageScannerThread;
+
+	fImageScannerThread = new CommandThread(NULL, new BInvoker(new BMessage(kScannerMessage), this));
+
+	// TODO Search for 'isoinfo' in case it isn't in the $PATH
+
+	fImageScannerThread->AddArgument("isoinfo")
+		->AddArgument("-d")
+		->AddArgument("-i")
+		->AddArgument(fImagePath->Path())
+		->Run();
+}
+
+
+void CompilationImageView::_ImageScannerParse(BMessage* message)
+{
+	BString data;
+
+	if (message->FindString("line", &data) != B_OK)
+		return;
+
+	data << "\n";
+
+	fImageInfoTextView->Insert(data.String());
+//	message->PrintToStream();
 }

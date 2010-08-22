@@ -7,7 +7,11 @@
 
 
 #include <FilePanel.h>
+#include <TextView.h>
 #include <View.h>
+
+
+class CommandThread;
 
 
 class CompilationImageView : public BView {
@@ -21,9 +25,12 @@ public:
 private:
 	void _ChooseImage();
 	void _OpenImage(BMessage* message);
+	void _ImageScannerParse(BMessage* message);
 
 	BFilePanel* fOpenPanel;
 	BPath* fImagePath;
+	CommandThread* fImageScannerThread;
+	BTextView* fImageInfoTextView;
 };
 
 

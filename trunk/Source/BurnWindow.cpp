@@ -41,7 +41,7 @@ const float kControlPadding = 5;
 
 BurnWindow::BurnWindow(BRect frame, const char* title)
 	:
-	BWindow(frame, title, B_TITLED_WINDOW, B_ASYNCHRONOUS_CONTROLS | B_QUIT_ON_WINDOW_CLOSE)
+	BWindow(frame, title, B_TITLED_WINDOW, B_ASYNCHRONOUS_CONTROLS | B_QUIT_ON_WINDOW_CLOSE | B_AUTO_UPDATE_SIZE_LIMITS)
 {
 
 	BLayoutBuilder::Group<>(this, B_VERTICAL, 1)
