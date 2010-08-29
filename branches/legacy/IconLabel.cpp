@@ -10,14 +10,15 @@
 
 #include <Application.h>
 #include <Resources.h>
-
+#include <TranslationUtils.h>
+#include <TranslatorFormats.h>
 
 IconLabel::IconLabel(BRect size, const char* labelstring, const char* gfx)
 	:
 	BView(size, "IconLabel", B_FOLLOW_NONE, B_WILL_DRAW),
 	fLabel(labelstring)
 {
-	fBitmap = GetBitmapResource('BBMP', gfx);
+	fBitmap = BTranslationUtils::GetBitmap(B_PNG_FORMAT, gfx);
 	SetFont(be_bold_font);
 }
 

@@ -10,9 +10,10 @@
 
 #include <Button.h>
 #include <Bitmap.h>
+#include <TranslationUtils.h>
+#include <TranslatorFormats.h>
 
-
-#define  ABOUT_STRING "BurnItNow beta 3"
+#define  ABOUT_STRING "Beta 3"
 #define ABOUT_STRING2 "©2000-2002 Johan Nilsson"
 #define ABOUT_STRING3 "©2010 BurnItNow Maintainers"
 
@@ -26,9 +27,9 @@ AboutView::AboutView(BRect r, const char* title)
 {
 	fViewFont = new BFont(be_plain_font);
 	SetFont(fViewFont);
-	fBurnBitmap = GetBitmapResource('BBMP', "BMP:BACKGROUND");
-	fBurnProofBitmap = GetBitmapResource('BBMP', "BMP:BURNPROOF");
-	fCDRecordBitmap = GetBitmapResource('BBMP', "BMP:CDRECORD");
+	fBurnBitmap = BTranslationUtils::GetBitmap('PNG ', "about.png");
+	fBurnProofBitmap = BTranslationUtils::GetBitmap('PNG ', "burn-proof.png");
+	fCDRecordBitmap = BTranslationUtils::GetBitmap('PNG ', "cdrecord.png");
 }
 
 
@@ -49,44 +50,47 @@ void AboutView::Draw(BRect updateRect)
 	BPoint p1;
 	r = Bounds();
 	FillRect(r);
-	p1.x = (r.right / 2) - 32;
-	p1.y = r.top + 12;
+	p1.x = r.left;
+	p1.y = r.top;
 	DrawBitmap(fBurnBitmap, p1);
-	fViewFont->SetSize(15);
+	fViewFont->SetSize(18);
 	fViewFont->SetFace(B_BOLD_FACE);
 	SetFont(fViewFont);
-	p1.x = (r.right / 2) - (fViewFont->StringWidth(ABOUT_STRING) / 2);
-	p1.y = r.top + 20;
+	p1.x = r.left + 252;
+	p1.y = r.top + 67;
 	MovePenTo(p1);
-	SetHighColor(0, 0, 0);
+	SetHighColor(255,120,255);
 	DrawString(ABOUT_STRING);
-	fViewFont->SetSize(10);
+	MovePenTo(p1);
+	SetHighColor(0,0,0);
+	DrawString(ABOUT_STRING);
+	fViewFont->SetSize(20);
 	fViewFont->SetFace(B_REGULAR_FACE);
 	SetFont(fViewFont);
-	p1.x = (r.right / 2) - (fViewFont->StringWidth(ABOUT_STRING2) / 2);
-	p1.y += 60;
+	p1.x = r.left + 20;
+	p1.y = r.top + 100;
 	MovePenTo(p1);
 	SetHighColor(0, 0, 0);
 	DrawString(ABOUT_STRING2);
-	// p1.x = r.left + 100;
-	p1.y += 14;
+	p1.x = r.left + 20;
+	p1.y = r.top +120;
 	MovePenTo(p1);
 	SetHighColor(0, 0, 0);
 	DrawString(ABOUT_STRING3);
-	p1.x = r.left + 100;
-	p1.y = r.top + 100;
+	p1.x = r.left + 205;
+	p1.y = r.bottom - 37;
 	DrawBitmap(fBurnProofBitmap, p1);
-	p1.x = r.left + 15;
-	p1.y = r.top + 100; // was 70
+	p1.x = r.left + 5;
+	p1.y = r.bottom - 65;
 	DrawBitmap(fCDRecordBitmap, p1);
 }
 
 
 AboutWindow::AboutWindow()
 	:
-	BWindow(BRect(250, 200, 460, 380), "AboutWindow", B_MODAL_WINDOW_LOOK, B_MODAL_APP_WINDOW_FEEL, B_NOT_ZOOMABLE | B_NOT_RESIZABLE | B_NOT_CLOSABLE)
+	BWindow(BRect(250, 200, 650, 500), "AboutWindow", B_MODAL_WINDOW_LOOK, B_MODAL_APP_WINDOW_FEEL, B_NOT_ZOOMABLE | B_NOT_RESIZABLE | B_NOT_CLOSABLE)
 {
-	BRect r;   // was 250, 200, 460, 350
+	BRect r;   // was 250, 200, 460, 350 ...  250,200,460,380
 	SetTitle("About");
 
 	r = Bounds();

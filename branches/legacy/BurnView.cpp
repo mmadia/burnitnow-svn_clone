@@ -40,12 +40,13 @@ BurnView::BurnView(BRect size)
 	burnBox->SetLabel(burnLabel);
 	AddChild(burnBox);
 	r = burnBox->Bounds();
-	r.left = 140;
-	r.right = 204;
+	r.left = 120;
+	r.right = 248;
 	r.top = 50;
-	r.bottom = 114;
-	IconLabel* BGLabel = new IconLabel(r, "", "BMP:BACKGROUND");
+	r.bottom = 178;
+	IconLabel* BGLabel = new IconLabel(r, "", "cd128.png");
 	BGLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+	BGLabel->SetDrawingMode(B_OP_BLEND);
 	burnBox->AddChild(BGLabel);
 	// RadioButtons
 	r = burnBox->Bounds();
