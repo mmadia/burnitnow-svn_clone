@@ -19,7 +19,8 @@
 #include <MenuItem.h>
 #include <Path.h>
 #include <Roster.h>
-
+#include <TranslationUtils.h>
+#include <TranslatorFormats.h>
 
 extern bool VRCD;
 extern bool ISOFILE;
@@ -73,8 +74,9 @@ void LeftListItem::DrawItem(BView* owner, BRect frame, bool complete)
 
 	owner->SetHighColor(black);
 
-
+	owner->SetDrawingMode(B_OP_ALPHA);
 	owner->DrawBitmap(fIconBitmap, BPoint(1, frame.top + 1));
+	
 	owner->MovePenTo(BPoint(21, frame.bottom - 1));
 	if (fIsAudio) {
 		sprintf(temp_char, "%s - %d:%d", fName, (int)(fAudioInfo.total_time / 1000000) / 60, (int)(fAudioInfo.total_time / 1000000) % 60);
@@ -90,9 +92,9 @@ LeftList::LeftList(BRect size)
 {
 	SetViewColor(255, 255, 255, 0);
 
-	fVRCDBitmap = GetBitmapResource('BBMP', "BMP:VRCDICON");
-	fISOBitmap = GetBitmapResource('BBMP', "BMP:ISOICON");
-	fAudioBitmap = GetBitmapResource('BBMP', "BMP:AUDIOICON");
+	fVRCDBitmap = BTranslationUtils::GetBitmap('PNG ', "vrcd.png");
+	fISOBitmap = BTranslationUtils::GetBitmap('PNG ', "iso_16.png");
+	fAudioBitmap = BTranslationUtils::GetBitmap('PNG ', "audio.png");
 
 	fTrackPopUpMenu = new BPopUpMenu("Tracks Popup");
 	fTrackPopUpMenu->SetRadioMode(false);

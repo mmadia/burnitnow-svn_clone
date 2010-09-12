@@ -15,6 +15,8 @@
 #include <Directory.h>
 #include <Path.h>
 #include <Resources.h>
+#include <TranslationUtils.h>
+#include <TranslatorFormats.h>
 
 #include <stdio.h>
 
@@ -98,6 +100,7 @@ void FileListItem::DrawItem(BView* owner, BRect frame, bool complete)
 	owner->SetHighColor(black);
 
 	if (fIconBitmap != NULL)
+		owner->SetDrawingMode(B_OP_ALPHA);
 		owner->DrawBitmap(fIconBitmap, BPoint(1, frame.top + 1));
 	owner->MovePenTo(BPoint(21, frame.bottom - 1));
 	owner->DrawString(fName);
@@ -112,9 +115,9 @@ RightList::RightList(BRect size)
 	fBDirectory = new BDirectory(BURN_DIR);
 	fTDirectory = new BDirectory(BURN_DIR);
 
-	fFileBitmap = GetBitmapResource('BBMP', "BMP:FILEICON");
-	fDirectoryBitmap = GetBitmapResource('BBMP', "BMP:DIRICON");
-	fInfoBitmap = GetBitmapResource('BBMP', "BMP:INFOICON");
+	fFileBitmap = BTranslationUtils::GetBitmap('PNG ', "file.png");
+	fDirectoryBitmap = BTranslationUtils::GetBitmap('PNG ', "folder.png");
+	fInfoBitmap = BTranslationUtils::GetBitmap('PNG ', "info.png");
 	UpdateDir();
 }
 
