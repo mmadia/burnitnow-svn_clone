@@ -39,7 +39,7 @@
 #include <ScrollView.h>
 
 
-#define VERSION "beta 3"
+#define VERSION "beta 4"
 
 
 const char* BlType[] = {"all", "fast", "session", "track", "trtail", "unreserve", "unclose"};
@@ -324,9 +324,9 @@ jpWindow::jpWindow(BRect frame)
 	fMiscTab->SetLabel("Audio");
 
 
-	fMiscTab = new BTab();
-	fTabView->AddTab(new CopyCDView(r, this), fMiscTab);
-	fMiscTab->SetLabel("CopyCD");
+//	fMiscTab = new BTab();
+//	fTabView->AddTab(new CopyCDView(r, this), fMiscTab);
+//	fMiscTab->SetLabel("CopyCD");
 
 
 	fMiscTab = new BTab();

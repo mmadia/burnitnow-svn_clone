@@ -36,7 +36,7 @@ BurnView::BurnView(BRect size)
 	burnLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	burnLabel->SetDrawingMode(B_OP_ALPHA);
 	r = Bounds();
-	r.InsetBy(7.0, 7.0);
+	r.InsetBy(5.0, 5.0);
 	BBox* burnBox = new BBox(r, "burnBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
 	burnBox->SetLabel(burnLabel);
 	AddChild(burnBox);
@@ -44,7 +44,7 @@ BurnView::BurnView(BRect size)
 	r.left = 150;
 	r.right = 278;
 	r.top = 50;
-	r.bottom = 178;
+	r.bottom = 120; //was 178;
 	IconLabel* BGLabel = new IconLabel(r, "", "lighter.png");
 	BGLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	BGLabel->SetDrawingMode(B_OP_ALPHA);
@@ -97,8 +97,8 @@ BurnView::BurnView(BRect size)
 		mixCDRadio->SetValue(B_CONTROL_ON);
 	burnBox->AddChild(mixCDRadio);
 	// CheckBoxes
-	r.top += 35;
-	r.bottom += 35;
+	r.top += 25;
+	r.bottom += 25;
 	r.left = 13;
 	r.right = 125;
 	fMultiCheckBox = new BCheckBox(r, "fMultiCheckBox", "MultiSession", new BMessage(BURN_MULTI));

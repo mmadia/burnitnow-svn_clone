@@ -29,8 +29,9 @@ DataView::DataView(BRect size)
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.bottom = 90; // was 85
-	IconLabel* fileSystemLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Filesystem"), 19), " Filesystem", "BMP:FS");
-	fileSystemLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+	IconLabel* fileSystemLabel = new IconLabel(BRect(0, 0, 28 + be_bold_font->StringWidth(" Filesystem"), 19), " Filesystem", "datacd_16.png");
+	fileSystemLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR)); // was 19
+	fileSystemLabel->SetDrawingMode(B_OP_ALPHA);
 	BBox* fileSystemBox = new BBox(r, "fFileSystemBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
 	fileSystemBox->SetLabel(fileSystemLabel);
 	AddChild(fileSystemBox);

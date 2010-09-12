@@ -1,6 +1,10 @@
 Changes BurnItNow
 
-2010-08-xx beta 3
+2010-09 beta 4
+	* Updated the graphics
+	* Removed unimplemented CopyCD option
+	
+2010-08 beta 3
 	* Revived Burn It Now! renamed at BurnItNow
 	* Added Haiku HVIF vector icon from Michele Frau
 	* Converted from a BeIDE project to use cmake for building

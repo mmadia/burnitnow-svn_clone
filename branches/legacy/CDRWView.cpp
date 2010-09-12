@@ -28,7 +28,7 @@ CDRWView::CDRWView(BRect size)
 	char temp_char[100];
 	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	// CDRW BOX
-	IconLabel* CDRWLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(""), 19), "", "cdrw_16.png");
+	IconLabel* CDRWLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(""), 19), "", "cd_16.png");
 	CDRWLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	CDRWLabel->SetDrawingMode(B_OP_ALPHA);
 	r = Bounds();

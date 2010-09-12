@@ -13,7 +13,7 @@
 #include <TranslationUtils.h>
 #include <TranslatorFormats.h>
 
-#define  ABOUT_STRING "Beta 3"
+#define  ABOUT_STRING "Beta 4"
 #define ABOUT_STRING2 "©2000-2002 Johan Nilsson"
 #define ABOUT_STRING3 "©2010 BurnItNow Maintainers"
 
@@ -46,7 +46,7 @@ void AboutView::Draw(BRect updateRect)
 {
 	SetLowColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	SetHighColor(ui_color(B_PANEL_BACKGROUND_COLOR));
-	BRect r;
+	BRect r, r2;
 	BPoint p1;
 	r = Bounds();
 	FillRect(r);
@@ -69,14 +69,14 @@ void AboutView::Draw(BRect updateRect)
 	fViewFont->SetSize(20);
 	fViewFont->SetFace(B_REGULAR_FACE);
 	SetFont(fViewFont);
-	p1.x = r.left + 20;
-	p1.y = r.top + 100;
+	p1.x = r.left + 30;
+	p1.y = r.top + 110;
 	MovePenTo(p1);
 	SetHighColor(0, 0, 0);
 	SetDrawingMode(B_OP_ALPHA);
 	DrawString(ABOUT_STRING2);
-	p1.x = r.left + 20;
-	p1.y = r.top +120;
+	p1.x = r.left + 30;
+	p1.y = r.top +140;
 	MovePenTo(p1);
 	SetHighColor(0, 0, 0);
 	SetDrawingMode(B_OP_ALPHA);
@@ -84,9 +84,20 @@ void AboutView::Draw(BRect updateRect)
 	p1.x = r.left + 205;
 	p1.y = r.bottom - 37;
 	DrawBitmap(fBurnProofBitmap, p1);
+	r2.left = p1.x;
+	r2.top = p1.y;
+	r2.right = p1.x + 180;
+	r2.bottom = p1.y + 32;
+	StrokeRect(r2);
 	p1.x = r.left + 5;
 	p1.y = r.bottom - 65;
 	DrawBitmap(fCDRecordBitmap, p1);
+	r2.left = p1.x;
+	r2.top = p1.y;
+	r2.right = p1.x + 180;
+	r2.bottom = p1.y + 60;
+	StrokeRect(r2);
+	StrokeRect(r);
 }
 
 
@@ -103,13 +114,8 @@ AboutWindow::AboutWindow()
 	AddChild(aroundView);
 
 	r = aroundView->Bounds();
-	r.InsetBy(10.0, 10.0);
-	r.top = r.bottom - 20;
-	r.left = r.right - 55;
-	aroundView->AddChild(new BButton(r, "close", "Close", new BMessage('ClWi')));
-	r = aroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
-	r.bottom = r.bottom - 25;
+	aroundView->AddChild(new BButton(r, "close", "Close", new BMessage('ClWi')));
 	aroundView->AddChild(new AboutView(r, "AboutView"));
 }
 
