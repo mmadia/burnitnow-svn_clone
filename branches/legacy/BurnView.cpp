@@ -44,7 +44,7 @@ BurnView::BurnView(BRect size)
 	r.left = 150;
 	r.right = 278;
 	r.top = 50;
-	r.bottom = 120; //was 178;
+	r.bottom = 120;
 	IconLabel* BGLabel = new IconLabel(r, "", "lighter.png");
 	BGLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	BGLabel->SetDrawingMode(B_OP_ALPHA);
@@ -60,21 +60,24 @@ BurnView::BurnView(BRect size)
 	r2.InsetBy(5.0, 5.0);
 	r2.left += 6;
 	r2.right = 27;
-	r2.top += 10;
-	r2.bottom = 30;
-	IconLabel* dataCDLabel = new IconLabel(r2, "", "BMP:DATACD");
+	r2.top += 14;
+	r2.bottom = 34;
+	IconLabel* dataCDLabel = new IconLabel(r2, "", "datacd_16.png");
+	dataCDLabel->SetDrawingMode(B_OP_ALPHA);
 	dataCDLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	burnBox->AddChild(dataCDLabel);
 
-	r2.top += 22;
-	r2.bottom += 22;
-	IconLabel* audioCDLabel = new IconLabel(r2, "", "BMP:AUDIOCD");
+	r2.top += 21;
+	r2.bottom += 21;
+	IconLabel* audioCDLabel = new IconLabel(r2, "", "audiocd_16.png");
+	audioCDLabel->SetDrawingMode(B_OP_ALPHA);
 	audioCDLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	burnBox->AddChild(audioCDLabel);
 
-	r2.top += 22;
-	r2.bottom += 22;
-	IconLabel* mixCDLabel = new IconLabel(r2, "", "BMP:MIXCD");
+	r2.top += 21;
+	r2.bottom += 21;
+	IconLabel* mixCDLabel = new IconLabel(r2, "", "mix-cd_16.png");
+	mixCDLabel->SetDrawingMode(B_OP_ALPHA);
 	mixCDLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	burnBox->AddChild(mixCDLabel);
 
@@ -138,8 +141,8 @@ BurnView::BurnView(BRect size)
 	r.InsetBy(5.0, 5.0);
 	r.top = 120;
 	r.bottom -= 5;
-	r.left = 370; // was 260
-	r.right = 460; // was 350
+	r.left = 370;
+	r.right = 460;
 	fBurnButton = new BButton(r, "fBurnButton", "Burn!", new BMessage(MAKE_IMAGE));
 	burnBox->AddChild(fBurnButton);
 
@@ -147,8 +150,8 @@ BurnView::BurnView(BRect size)
 	r.InsetBy(5.0, 5.0);
 	r.top = 120;
 	r.bottom -= 5;
-	r.left = 270; // was 160
-	r.right = 360; // was 250
+	r.left = 270;
+	r.right = 360;
 	fMakeImageButton = new BButton(r, "fMakeImageButton", "Make Image", new BMessage(MAKE_AND_SAVE_IMAGE));
 	burnBox->AddChild(fMakeImageButton);
 	// BurningSpeed

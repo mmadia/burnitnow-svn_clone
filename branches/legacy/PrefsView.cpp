@@ -49,7 +49,7 @@ PrefsView::PrefsView(BRect size)
 	r = miscOptBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 10;
-	r.right = 175; // was 125
+	r.right = 175;
 	r.bottom = 40;
 	fDAOCheckBox = new BCheckBox(r, "DAO", "DAO (Disc At Once)", new BMessage(MISC_DAO));
 	if (!strncmp(DAO, "-dao", 4))

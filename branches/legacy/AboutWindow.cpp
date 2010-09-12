@@ -105,7 +105,7 @@ AboutWindow::AboutWindow()
 	:
 	BWindow(BRect(250, 200, 650, 500), "AboutWindow", B_MODAL_WINDOW_LOOK, B_MODAL_APP_WINDOW_FEEL, B_NOT_ZOOMABLE | B_NOT_RESIZABLE | B_NOT_CLOSABLE)
 {
-	BRect r;   // was 250, 200, 460, 350 ...  250,200,460,380
+	BRect r;
 	SetTitle("About");
 
 	r = Bounds();

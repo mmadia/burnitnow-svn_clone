@@ -283,8 +283,8 @@ jpWindow::jpWindow(BRect frame)
 	// Size Status and button
 	r = fAroundBox->Bounds();
 	r.InsetBy(5.0, 5.0);
-	r.top = r.bottom - 39; // was 30
-	r.right -= 85; // was 55
+	r.top = r.bottom - 39;
+	r.right -= 85;
 	fStatusBar = new BStatusBar(r, "fStatusBar");
 	fStatusBar->SetMaxValue(100.0);
 	fAroundBox->AddChild(fStatusBar);
@@ -292,8 +292,8 @@ jpWindow::jpWindow(BRect frame)
 
 	r = fAroundBox->Bounds();
 	r.InsetBy(10.0, 10.0);
-	r.top = r.bottom - 23; // was 17 
-	r.left = r.right - 70; // was 50
+	r.top = r.bottom - 23; 
+	r.left = r.right - 70;
 	fCalcSizeButton = new BButton(r, "calcsize", "Calc. Size", new BMessage(CALCULATE_SIZE));
 	fAroundBox->AddChild(fCalcSizeButton);
 
@@ -414,7 +414,7 @@ jpWindow::jpWindow(BRect frame)
 	r.InsetBy(5.0, 5.0);
 	r.top = 220;
 	r.bottom = 240;
-	r.right = 120; // was 100
+	r.right = 120;
 	fNewVRCDButton = new BButton(r, "New Virtual CD", "New Virtual CD", new BMessage(NEW_VRCD));
 	fAroundBox->AddChild(fNewVRCDButton);
 
@@ -423,7 +423,7 @@ jpWindow::jpWindow(BRect frame)
 	r.InsetBy(5.0, 5.0);
 	r.top = 220;
 	r.bottom = 240;
-	r.left = 125; // was 105
+	r.left = 125;
 	r.right -= ((r.right / 2) + (B_V_SCROLL_BAR_WIDTH) + 2);
 	fAddISOButton = new BButton(r, "Add ISOFile", "Add ISOFile", new BMessage(OPEN_ISO_FILE));
 	fAroundBox->AddChild(fAddISOButton);

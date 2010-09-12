@@ -61,11 +61,11 @@ CDRWView::CDRWView(BRect size)
 	r.right = 278;
 	r.top = 60;
 	r.bottom = 128;
-	IconLabel* BGLabel1 = new IconLabel(r, "", "cdrw_64.png");
+	IconLabel* BGLabel1 = new IconLabel(r, "", "cdrw_64.png");  //cdrw_64.png
 	BGLabel1->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	BGLabel1->SetDrawingMode(B_OP_BLEND);
 	CDRWBox->AddChild(BGLabel1);
-	IconLabel* BGLabel2 = new IconLabel(r, "", "erase_64.png");
+	IconLabel* BGLabel2 = new IconLabel(r, "", "erase_64.png"); //erase_64.png
 	BGLabel2->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	BGLabel2->SetDrawingMode(B_OP_BLEND);
 	CDRWBox->AddChild(BGLabel2);
@@ -75,7 +75,7 @@ CDRWView::CDRWView(BRect size)
 	r = CDRWBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top += 15;
-	r.left = 155; // was 125
+	r.left = 155;
 	r.right = 250;
 	sprintf(temp_char, "Blank Speed [%dx]", BLANK_SPD);
 	fBlankSpeedSlider = new BSlider(r, "BlankSpeed", temp_char, new BMessage(BLANK_SPEED_CHANGE), 0, 5, B_BLOCK_THUMB, B_FOLLOW_NONE);
