@@ -32,21 +32,22 @@ BurnView::BurnView(BRect size)
 	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	char temp_char[100];
 	// burnBox
-	IconLabel* burnLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Burn"), 19), " Burn", "BMP:BURN");
+	IconLabel* burnLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Burn"), 19), " Burn", "cd_16.png");
 	burnLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+	burnLabel->SetDrawingMode(B_OP_ALPHA);
 	r = Bounds();
-	r.InsetBy(5.0, 5.0);
+	r.InsetBy(7.0, 7.0);
 	BBox* burnBox = new BBox(r, "burnBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
 	burnBox->SetLabel(burnLabel);
 	AddChild(burnBox);
 	r = burnBox->Bounds();
-	r.left = 120;
-	r.right = 248;
+	r.left = 150;
+	r.right = 278;
 	r.top = 50;
 	r.bottom = 178;
-	IconLabel* BGLabel = new IconLabel(r, "", "cd128.png");
+	IconLabel* BGLabel = new IconLabel(r, "", "lighter.png");
 	BGLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
-	BGLabel->SetDrawingMode(B_OP_BLEND);
+	BGLabel->SetDrawingMode(B_OP_ALPHA);
 	burnBox->AddChild(BGLabel);
 	// RadioButtons
 	r = burnBox->Bounds();

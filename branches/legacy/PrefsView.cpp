@@ -34,8 +34,11 @@ PrefsView::PrefsView(BRect size)
 	recorderMenuField->SetDivider(be_plain_font->StringWidth("Devices:  "));
 	AddChild(recorderMenuField);
 
-	IconLabel* miscLabel = new IconLabel(BRect(0, 0, 19 + be_bold_font->StringWidth(" Misc Options (see help before change options)"), 19), " Misc Options (see help before change options)", "BMP:MISCOPT");
+	IconLabel* miscLabel = new IconLabel(BRect(0, 0, 19 + 
+	                       be_bold_font->StringWidth(" Misc Options (see help before change options)"), 19), 
+	                       " Misc Options (see help before change options)", "cdprefs_16.png");
 	miscLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+	miscLabel->SetDrawingMode(B_OP_ALPHA);
 	r = Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = r.top + 25;
