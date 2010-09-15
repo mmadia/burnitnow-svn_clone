@@ -135,12 +135,12 @@ StatusWindow::StatusWindow(const char* title)
 	r = aroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.top = r.bottom - 20;
-	r.left = r.right - 35;
+	r.left = r.right - 55;
 	fCloseButton = new BButton(r, "close", "Close", new BMessage('ClWi'));
 	aroundView->AddChild(fCloseButton);
 	fCloseButton->SetEnabled(false);
 	r.right = r.left - 5;
-	r.left = r.right - 35;
+	r.left = r.right - 55;
 	fMoreButton = new BButton(r, "more", "More..", new BMessage('More'));
 	aroundView->AddChild(fMoreButton);
 	r = aroundView->Bounds();

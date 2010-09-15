@@ -48,17 +48,17 @@ PrefsView::PrefsView(BRect size)
 
 	r = miscOptBox->Bounds();
 	r.InsetBy(5.0, 5.0);
-	r.top += 10;
+	r.top += 15;
 	r.right = 175;
-	r.bottom = 40;
+	r.bottom = 30;
 	fDAOCheckBox = new BCheckBox(r, "DAO", "DAO (Disc At Once)", new BMessage(MISC_DAO));
 	if (!strncmp(DAO, "-dao", 4))
 		fDAOCheckBox->SetValue(B_CONTROL_ON);
 
 	miscOptBox->AddChild(fDAOCheckBox);
 
-	r.top += 20;
-	r.bottom += 20;
+	r.top += 15;
+	r.bottom += 15;
 	fBurnProofCheckBox = new BCheckBox(r, "burnproof", "BurnProof (read help)", new BMessage(MISC_BURNPROOF));
 	if (!strncmp(BURNPROOF, "driveropts = burnproof", 22))
 		fBurnProofCheckBox->SetValue(B_CONTROL_ON);
