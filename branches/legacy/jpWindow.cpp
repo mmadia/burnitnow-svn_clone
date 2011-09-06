@@ -7,6 +7,7 @@
 
 
 #include "jpWindow.h"
+#include "copyright.h"
 
 #include "AboutWindow.h"
 #include "AskName.h"
@@ -38,9 +39,6 @@
 #include <Path.h>
 #include <Roster.h>
 #include <ScrollView.h>
-
-
-#define VERSION "beta 5"
 
 
 const char* BlType[] = {"all", "fast", "session", "track", "trtail", "unreserve", "unclose"};
@@ -447,7 +445,11 @@ jpWindow::jpWindow(BRect frame)
 	fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &red);
 	fLogView->fLogTextView->Insert("Welcome to BurnItNow ");
 	fLogView->fLogTextView->Insert(VERSION);
-	fLogView->fLogTextView->Insert("\n ©2000-2002 Johan Nilsson\n ©2010 BurnItNow maintainers\n\n");
+	fLogView->fLogTextView->Insert("\n");	
+	fLogView->fLogTextView->Insert(COPYRIGHT1);
+	fLogView->fLogTextView->Insert("\n");	
+	fLogView->fLogTextView->Insert(COPYRIGHT2);	
+	fLogView->fLogTextView->Insert("\n\n");
 
 	CheckForDevices();
 	Show();

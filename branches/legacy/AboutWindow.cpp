@@ -1,10 +1,12 @@
 /*
  * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Copyright 2010-2011 BurnItNow maintainers 
  * Distributed under the terms of the MIT License.
  */
 
 
 #include "AboutWindow.h"
+#include "copyright.h"
 
 #include "const.h"
 
@@ -12,10 +14,6 @@
 #include <Bitmap.h>
 #include <TranslationUtils.h>
 #include <TranslatorFormats.h>
-
-#define  ABOUT_STRING "Beta 4"
-#define ABOUT_STRING2 "©2000-2002 Johan Nilsson"
-#define ABOUT_STRING3 "©2010 BurnItNow Maintainers"
 
 
 BBitmap* GetBitmapResource(type_code type, const char* name);
@@ -61,11 +59,11 @@ void AboutView::Draw(BRect updateRect)
 	MovePenTo(p1);
 	SetHighColor(255,120,255);
 	SetDrawingMode(B_OP_ALPHA);
-	DrawString(ABOUT_STRING);
+	DrawString(VERSION);
 	MovePenTo(p1);
 	SetHighColor(0,0,0);
 	SetDrawingMode(B_OP_ALPHA);
-	DrawString(ABOUT_STRING);
+	DrawString(VERSION);
 	fViewFont->SetSize(20);
 	fViewFont->SetFace(B_REGULAR_FACE);
 	SetFont(fViewFont);
@@ -74,13 +72,13 @@ void AboutView::Draw(BRect updateRect)
 	MovePenTo(p1);
 	SetHighColor(0, 0, 0);
 	SetDrawingMode(B_OP_ALPHA);
-	DrawString(ABOUT_STRING2);
+	DrawString(COPYRIGHT1);
 	p1.x = r.left + 30;
 	p1.y = r.top +140;
 	MovePenTo(p1);
 	SetHighColor(0, 0, 0);
 	SetDrawingMode(B_OP_ALPHA);
-	DrawString(ABOUT_STRING3);
+	DrawString(COPYRIGHT2);
 	p1.x = r.left + 205;
 	p1.y = r.bottom - 37;
 	DrawBitmap(fBurnProofBitmap, p1);
