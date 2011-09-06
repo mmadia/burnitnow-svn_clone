@@ -765,10 +765,10 @@ void jpWindow::CheckForDevices()
 	char command[2048];
 	char buffer[1024], buf[512];
 	FILE* f;
-	int i, j, k, l, m;
+	int i, k, l, m;
 	int msg;
- int pa=0,pb=0,pc=0,px=0;
- char awbuf[50];
+	int pa=0,pb=0,pc=0,px=0;
+	char awbuf[50];
 	char sidbuf[8];
 	char sivbuf[20];
 	char sinbuf[50];
@@ -808,14 +808,14 @@ void jpWindow::CheckForDevices()
 					}
 				}
 				
-				if (got_it) 
-				{	k= strspn(buffer,"\t 1234567890,)");
+				if (got_it) {
+					k= strspn(buffer,"\t 1234567890,)");
 					m= strspn(buffer,"\t ,)");
 
-					if (buffer[k] == '\'') 		
-					{	l= (int)strlen(buffer);
-						buffer[l-1]='\0'; 				printf("[buffer] '%s' \n",buffer);
-												
+					if (buffer[k] == '\'') {
+						l= (int)strlen(buffer);
+						buffer[l-1]='\0';
+						printf("[buffer] '%s' \n",buffer);
 						pa=0;
 						pb=0;
 						pc=0;
@@ -824,27 +824,23 @@ void jpWindow::CheckForDevices()
 						memset(sivbuf, 0, 20 );
 						memset(sinbuf, 0, 50 );
 						
-						for (pa = 0; pa < l ; pa++ ) 
-						{	
+						for (pa = 0; pa < l ; pa++ ) {	
 							if (pb == 0 && buffer[pa] == '\'')  
-							 pb=pa+1;
-							
-							if (pb >= 1 && buffer[pa] == '\'')	
-							{	
-							 pc=pa;	
-								if(pc > pb)  
-								{
+								pb=pa+1;
+							if (pb >= 1 && buffer[pa] == '\'') {	
+								pc=pa;	
+								if(pc > pb) {
 									memset(awbuf, 0,  50 );
 									memcpy(awbuf, &buffer[pb], (pc-pb) ); 
 									pb=0;
 									pc=0;
 									if( px == 0 )	{ 
-									 awbuf[7 -1]='\0';  
-									 strncpy(sidbuf,awbuf, 7);  
+										awbuf[7 -1]='\0';  
+										strncpy(sidbuf,awbuf, 7);  
 									}
 									if( px == 1 )	{ 
-									 awbuf[20-1]='\0';
-									 strncpy(sivbuf,awbuf ,20);
+										awbuf[20-1]='\0';
+										strncpy(sivbuf,awbuf ,20);
 									}								
 									if( px == 2 )	{
 										awbuf[50-1]='\0';
@@ -888,9 +884,9 @@ void jpWindow::CheckForDevices()
 
 			fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &blue);
 			
-			if(fRecorderCount == 1)	{
+			if(fRecorderCount == 1)
 				sprintf(buf, "Found %d device.\n\n", fRecorderCount); 
-			else	{
+			else 
 				sprintf(buf, "Found %d devices.\n\n", fRecorderCount);
  			fLogView->fLogTextView->Insert(buf);
  			if (SCSI_DEV != -1) {
