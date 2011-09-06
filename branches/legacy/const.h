@@ -1,5 +1,6 @@
 /*
  * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Copyright 2011 BurnItNow maintainers 
  * Distributed under the terms of the MIT License.
  */
 #ifndef _CONST_H_
@@ -84,7 +85,7 @@ const rgb_color greenblue = {0, 255, 255, 255};
 
 
 struct cdrecorder {
-	char scsiid[7];
+	char scsiid[8];
 	char scsi_vendor[20];
 	char scsi_name[50];
 };

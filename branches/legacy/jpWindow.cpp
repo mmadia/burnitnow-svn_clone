@@ -1,6 +1,6 @@
 /*
  * Copyright 2000-2002, Johan Nilsson.
- * Copyright 2010 BurnItNow maintainers
+ * Copyright 2010-2011 BurnItNow maintainers
  * All rights reserved.
  * Distributed under the terms of the MIT License.
  */
@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 #include <Alert.h>
 #include <Application.h>
 #include <Button.h>
@@ -39,7 +40,7 @@
 #include <ScrollView.h>
 
 
-#define VERSION "beta 4"
+#define VERSION "beta 5"
 
 
 const char* BlType[] = {"all", "fast", "session", "track", "trtail", "unreserve", "unclose"};
@@ -323,11 +324,9 @@ jpWindow::jpWindow(BRect frame)
 	fTabView->AddTab(fAudioView, fMiscTab);
 	fMiscTab->SetLabel("Audio");
 
-
 //	fMiscTab = new BTab();
 //	fTabView->AddTab(new CopyCDView(r, this), fMiscTab);
 //	fMiscTab->SetLabel("CopyCD");
-
 
 	fMiscTab = new BTab();
 	fCDRWView = new CDRWView(r);
@@ -519,7 +518,6 @@ void jpWindow::CalculateSize()
 				total_vrcd = temp = GetVRCDSize();
 				angle_temp[0] = temp / 1024 / 1024;
 			}
-
 		}
 	}
 
@@ -571,7 +569,6 @@ void jpWindow::CalculateSize()
 				nrtracks = 1;
 				total_vrcd = temp = GetVRCDSize();
 				angle_temp[nrtracks - 1] = temp / 1024 / 1024;
-
 			}
 
 			if (item1->fIconBitmap == fLeftList->fAudioBitmap) {
@@ -613,19 +610,17 @@ void jpWindow::CalculateSize()
 			angles[i] = ((float)360 / (float)(total / 1024 / 1024)) * (float)angle_temp[i];
 		else
 			angles[i] = ((float)360 / (float)(total / 1024 / 1024)) * (float)angle_temp[i] + angles[i - 1];
-
 	}
-
-
 }
 
 
 void jpWindow::InitBurnIt()
-{
+{	
 	const char* tr;
 	char temp_char[1024];
 	app_info info;
 	BPath path;
+
 	be_app->GetAppInfo(&info);
 	entry_ref ref = info.ref;
 	BEntry(&ref, true).GetPath(&path);
@@ -635,7 +630,6 @@ void jpWindow::InitBurnIt()
 	sprintf(temp_char, "%s/tmp", BURNIT_PATH);
 	if (!BEntry(temp_char).Exists())
 		BDirectory(BURNIT_PATH).CreateDirectory(temp_char, NULL);
-
 	IMAGE_NAME = new char[1024];
 	sprintf(IMAGE_NAME, "%s/BurnItNow.raw", temp_char);
 	sprintf(temp_char, "%s/VRCD", temp_char);
@@ -645,7 +639,7 @@ void jpWindow::InitBurnIt()
 	BURN_DIR = new char[strlen(temp_char)+1];
 	strcpy(BURN_DIR, temp_char);
 
-	FindCDRTools(); // Locate cdrecord and set CDRTOOLS_DIR
+	FindCDRTools();
 
 	// Load from pref file
 	if (fBurnItPrefs->FindString("ISOFILE_DIR", &tr) == B_OK)
@@ -743,12 +737,11 @@ void jpWindow::InitBurnIt()
 
 	JUST_IMAGE = false;
 	CDSIZE = 650;
-
 }
 
 
 void jpWindow::FindCDRTools()
-{
+{	
 	BPath path;
 	BEntry entry;
 
@@ -756,44 +749,46 @@ void jpWindow::FindCDRTools()
 	if (fStatus != B_OK)
 		return;
 
-    /* now check to see if CDRTOOLS/cdrtools exists... */
 	path.SetTo(CDRTOOLS_DIR.Path());
     entry.GetPath(&path);
     path.Append("cdrecord");
     if (entry.Exists() != B_OK)
         printf("Error: cdrecord not found, pathname: %s\n", path.Path());
+        
     return;
-    // TODO: Shouldn't assume cdrecord is in B_COMMON_BIN_DIRECTORY. perhaps look in several locations or do a fuller search for it.
-    
 }
 
 
 void jpWindow::CheckForDevices()
-{
+{	
 	bool got_it;
 	char command[2048];
 	char buffer[1024], buf[512];
 	FILE* f;
-	int i, j;
+	int i, j, k, l, m;
 	int msg;
+ int pa=0,pb=0,pc=0,px=0;
+ char awbuf[50];
+	char sidbuf[8];
+	char sivbuf[20];
+	char sinbuf[50];
+	//see struct cdrecorder { char scsiid[7]; char scsi_vendor[20]; char scsi_name[50];};
 	
-	BString commandstr; // this will replace command
+	BString commandstr;
 	BEntry cdrecord, mkisofs;
 	BPath path1, path2;
-	
-	path1.SetTo(CDRTOOLS_DIR.Path());
-	path1.Append("cdrecord");
+
+	path1.SetTo(CDRTOOLS_DIR.Path());	path1.Append("cdrecord");
 	cdrecord.SetTo(path1.Path());
-	
-	path2.SetTo(CDRTOOLS_DIR.Path());
-	path2.Append("mkisofs");
+	path2.SetTo(CDRTOOLS_DIR.Path());	path2.Append("mkisofs");
 	mkisofs.SetTo(path2.Path());
-		
+	
 	got_it = false;
 	
 	commandstr.SetTo(CDRTOOLS_DIR.Path());
 	commandstr.Append("/cdrecord -scanbus");
 	strcpy(command, commandstr.String());
+	printf(" com: '%s'\n",commandstr.String());	
 	
 	if (cdrecord.Exists() && mkisofs.Exists()) {
 		if (fRecorderCount < 100) {
@@ -803,42 +798,88 @@ void jpWindow::CheckForDevices()
 				buffer[0] = 0;
 				fgets(buffer, 1024, f);
 				if (!strncmp(buffer, "scsibus", 7)) scsibus = true;
-				for (i = 0; i < (int)strlen(buffer); i++) {
-					if (buffer[i] >= '0' && buffer[i] <= '9') {
-						if (buffer[i + 1] == ',' || buffer[i + 2] == ',') {
-							got_it = true;
+
+				for (i = 0; i < (int)strlen(buffer); i++) 
+				{	if (buffer[i] >= '0' && buffer[i] <= '9') {
+						if (buffer[i + 1] == ',' || buffer[i + 2] == ',') 
+						{	got_it = true;
 							break;
 						}
 					}
 				}
-				if (got_it) {
-					if (buffer[i + 11] == '\'') {
-						fRecorderCount++;
-						// scsiid
-						memset((char*)&fScsiDevices[fRecorderCount - 1].scsiid[0], 0, 7);
-						strncpy(fScsiDevices[fRecorderCount - 1].scsiid, &buffer[i], 6);
+				
+				if (got_it) 
+				{	k= strspn(buffer,"\t 1234567890,)");
+					m= strspn(buffer,"\t ,)");
 
-						// scsi vendor
-						i += 12;
-						for (j = 0; j < (int)strlen(buffer) - i; j ++) {
-							if (buffer[i + j] == '\'')
-								break;
+					if (buffer[k] == '\'') 		
+					{	l= (int)strlen(buffer);
+						buffer[l-1]='\0'; 				printf("[buffer] '%s' \n",buffer);
+												
+						pa=0;
+						pb=0;
+						pc=0;
+						px=0;
+						memset(sidbuf, 0, 7 );
+						memset(sivbuf, 0, 20 );
+						memset(sinbuf, 0, 50 );
+						
+						for (pa = 0; pa < l ; pa++ ) 
+						{	
+							if (pb == 0 && buffer[pa] == '\'')  
+							 pb=pa+1;
+							
+							if (pb >= 1 && buffer[pa] == '\'')	
+							{	
+							 pc=pa;	
+								if(pc > pb)  
+								{
+									memset(awbuf, 0,  50 );
+									memcpy(awbuf, &buffer[pb], (pc-pb) ); 
+									pb=0;
+									pc=0;
+									if( px == 0 )	{ 
+									 awbuf[7 -1]='\0';  
+									 strncpy(sidbuf,awbuf, 7);  
+									}
+									if( px == 1 )	{ 
+									 awbuf[20-1]='\0';
+									 strncpy(sivbuf,awbuf ,20);
+									}								
+									if( px == 2 )	{
+										awbuf[50-1]='\0';
+										strncpy(sinbuf,awbuf, 50);
+									}
+									px++;
+								}
+							}
 						}
+						sidbuf[7-1]='\0';
+						sivbuf[20-1]='\0';
+						sinbuf[50-1]='\0';
+
+						printf("[len=%02ld] '%s' \n",strlen(sidbuf),sidbuf );
+						printf("[len=%02ld] '%s' \n",strlen(sivbuf),sivbuf );
+						printf("[len=%02ld] '%s' \n",strlen(sinbuf),sinbuf );
+												
+						fRecorderCount++;
+						memset((char*)&fScsiDevices[fRecorderCount - 1].scsiid[0], 0,  7 );
+						strncpy(fScsiDevices[fRecorderCount - 1].scsiid, &buffer[m], 7);
+						printf("[len=%02ld] scsiid: '%s' \n",strlen(fScsiDevices[fRecorderCount - 1].scsiid)
+															,fScsiDevices[fRecorderCount - 1].scsiid);
+						
+						// scsi vendor
 						memset((char*)&fScsiDevices[fRecorderCount - 1].scsi_vendor[0], 0, 20);
-						strncpy(fScsiDevices[fRecorderCount - 1].scsi_vendor, &buffer[i], j);
+						strncpy(fScsiDevices[fRecorderCount - 1].scsi_vendor, sivbuf, 20);
 
 						// scsi name
-						i += j + 3;
-						for (j = 0; j < (int)strlen(buffer) - i; j ++) {
-							if (buffer[i + j] == '\'')
-								break;
-						}
 						memset((char*)&fScsiDevices[fRecorderCount - 1].scsi_name[0], 0, 50);
-						strncpy(fScsiDevices[fRecorderCount - 1].scsi_name, &buffer[i], j);
+						strncpy(fScsiDevices[fRecorderCount - 1].scsi_name, sinbuf , 50);
+					
 						msg = 'dev\0' | fRecorderCount;
 
-						strcpy(buf, fScsiDevices[fRecorderCount - 1].scsi_vendor);
-						strcat(buf, fScsiDevices[fRecorderCount - 1].scsi_name);
+						strcpy(buf,sivbuf); strcat(buf," "); 
+						strcat(buf,sinbuf); strcat(buf," \0");
 						fPrefsView->fRecordersMenu->AddItem(new BMenuItem(buf, new BMessage(msg)));
 					}
 				}
@@ -846,14 +887,17 @@ void jpWindow::CheckForDevices()
 			pclose(f);
 
 			fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &blue);
-			sprintf(buf, "Found %d devices.\n\n", fRecorderCount); // TODO: Fix plural text when only one device found
-			fLogView->fLogTextView->Insert(buf);
-			if (SCSI_DEV != -1) {
-				fBurnDevice = &fScsiDevices[SCSI_DEV - 1];
-				fPrefsView->fRecordersMenu->ItemAt(SCSI_DEV - 1)->SetMarked(true);
-			} else
-				fBurnDevice = NULL;
-
+			
+			if(fRecorderCount == 1)	{
+				sprintf(buf, "Found %d device.\n\n", fRecorderCount); 
+			else	{
+				sprintf(buf, "Found %d devices.\n\n", fRecorderCount);
+ 			fLogView->fLogTextView->Insert(buf);
+ 			if (SCSI_DEV != -1) {
+ 				fBurnDevice = &fScsiDevices[SCSI_DEV - 1];
+ 				fPrefsView->fRecordersMenu->ItemAt(SCSI_DEV - 1)->SetMarked(true);
+ 			} else
+				   fBurnDevice = NULL;
 			Unlock();
 		}
 	} else {
@@ -871,15 +915,17 @@ void jpWindow::CheckForDevices()
 
 
 int jpWindow::CheckMulti(char* str)
-{
+{	
 	FILE* f;
 	int temp;
 	char buf[1024];
 	
-	BString commandstr; // this will replace command
+	BString commandstr;
 
 	commandstr.SetTo(CDRTOOLS_DIR.Path());
-	commandstr.Append("/cdrecord -msinfo dev=9,1,0 2>&1");
+	commandstr.Append("/");
+	commandstr.Append("cdrecord -msinfo dev=11,0,0 2>&1");
+	printf("com: '%s'",commandstr.String());
 	
 	f = popen(commandstr.String(), "r");
 	while (!feof(f) && !ferror(f)) {
@@ -900,13 +946,12 @@ int jpWindow::CheckMulti(char* str)
 			return 1;
 		}
 	}
-
 	return 1;
 }
 
 
 void jpWindow::BurnNOW()
-{
+{	
 	char buf[1024];
 	int temp;
 	temp = 0;
@@ -951,6 +996,7 @@ void jpWindow::BurnNOW()
 				MyAlert->Go();
 			}
 		}
+
 		// AudioCD
 		else if (BURN_TYPE == 1) {
 			BPath temp_path;
@@ -966,6 +1012,7 @@ void jpWindow::BurnNOW()
 			}
 			BurnWithCDRecord();
 		}
+
 		// MixCD
 		if (BURN_TYPE == 2) {
 			BPath temp_path;
@@ -1013,18 +1060,18 @@ void jpWindow::BurnNOW()
 				MyAlert->Go();
 			}
 		}
-
 	}
 }
 
 
 void jpWindow::BlankNOW()
-{
+{	
 	int Result;
 	
 	BString commandstr;
 
 	commandstr.SetTo(CDRTOOLS_DIR.Path());
+	commandstr.Append("/");
 	
 	if (fBurnDevice == NULL) {
 		fTabView->Select(5);
@@ -1042,6 +1089,9 @@ void jpWindow::BlankNOW()
 			SetButtons(false);
 			char command[2000];
 			commandstr << "cdrecord dev=" << fBurnDevice->scsiid << " speed=" << BLANK_SPD << " blank=" << BlType[BLANK_TYPE];
+
+			printf("BlankNOW: '%s'\n",commandstr.String());
+
 			Lock();
 			strcpy (command, commandstr.String());
 			resume_thread(Cntrl = spawn_thread(controller, "Blanking", 15, command));
@@ -1049,10 +1099,7 @@ void jpWindow::BlankNOW()
 			resume_thread(OPBlank = spawn_thread(OutPutBlank, "OutPutBlank", 15, fStatusWindow));
 			snooze(500000);
 			Unlock();
-
-
 		}
-
 	}
 }
 
@@ -1106,6 +1153,7 @@ void jpWindow::MessageReceived(BMessage* message)
 				delete command;
 			}
 			break;
+
 		case CALCULATE_SIZE: {
 				if (VRCD && !ISOFILE) {
 					BAlert* MyAlert = new BAlert("BurnItNow", "This can take a moment because you have a Virtual CD Directory\nSo dont kill BurnItNow because it doesn't answer, it's just calculating the size.", "Ok", NULL, NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
@@ -1115,9 +1163,11 @@ void jpWindow::MessageReceived(BMessage* message)
 				CalculateSize();
 			}
 			break;
+
 		case BURN_WITH_CDRECORD:
 			BurnWithCDRecord();
 			break;
+
 		case WRITE_TO_LOG: {
 				char* temp_str;
 				bool temp_bool;
@@ -1129,9 +1179,11 @@ void jpWindow::MessageReceived(BMessage* message)
 					MessageLog(temp_str);
 			}
 			break;
+
 		case SET_BUTTONS_TRUE:
 			SetButtons(true);
 			break;
+
 		case DATA_VIRTUALCD:
 			VRCD = true;
 			ISOFILE = false;
@@ -1139,12 +1191,14 @@ void jpWindow::MessageReceived(BMessage* message)
 			if (fDataView->fBootableCDCheckBox->Value() == 1)
 				fDataView->fChooseBootImageButton->SetEnabled(true);
 			break;
+
 		case DATA_ISOFILE:
 			VRCD = false;
 			ISOFILE = true;
 			fDataView->fBootableCDCheckBox->SetEnabled(false);
 			fDataView->fChooseBootImageButton->SetEnabled(false);
 			break;
+
 		case DATA_ISO9660:
 			IMAGE_TYPE = 0;
 			sprintf(DATA_STRING, " ");
@@ -1157,6 +1211,7 @@ void jpWindow::MessageReceived(BMessage* message)
 			if (BURN_TYPE == 1)
 				fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
+
 		case DATA_BFS:
 			IMAGE_TYPE = 1;
 			fDataView->fBootableCDCheckBox->SetEnabled(false);
@@ -1164,6 +1219,7 @@ void jpWindow::MessageReceived(BMessage* message)
 			fBurnView->fOnTheFlyCheckBox->SetEnabled(false);
 			fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
+
 		case DATA_HFS:
 			sprintf(DATA_STRING, "-hfs");
 			IMAGE_TYPE = 0;
@@ -1176,6 +1232,7 @@ void jpWindow::MessageReceived(BMessage* message)
 			if (BURN_TYPE == 1)
 				fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
+
 		case DATA_JOLIET:
 			sprintf(DATA_STRING, "-l -D -J");
 			IMAGE_TYPE = 0;
@@ -1188,6 +1245,7 @@ void jpWindow::MessageReceived(BMessage* message)
 			if (BURN_TYPE == 1)
 				fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
+
 		case DATA_ROCK:
 			sprintf(DATA_STRING, "-l -L -r");
 			IMAGE_TYPE = 0;
@@ -1200,6 +1258,7 @@ void jpWindow::MessageReceived(BMessage* message)
 			if (BURN_TYPE == 1)
 				fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
+
 		case DATA_WINDOWS:
 			sprintf(DATA_STRING, "-D -l");
 			IMAGE_TYPE = 0;
@@ -1212,6 +1271,7 @@ void jpWindow::MessageReceived(BMessage* message)
 			if (BURN_TYPE == 1)
 				fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
+
 		case DATA_REALROCK:
 			sprintf(DATA_STRING, "-l -L -R");
 			IMAGE_TYPE = 0;
@@ -1225,7 +1285,6 @@ void jpWindow::MessageReceived(BMessage* message)
 				fBurnView->fMultiCheckBox->SetEnabled(false);
 			break;
 
-
 		case BURN_DATA_CD:
 			BURN_TYPE = 0;
 			if (fDataView->fBeOSRadio->Value() != 1) {
@@ -1238,6 +1297,7 @@ void jpWindow::MessageReceived(BMessage* message)
 					fDataView->fChooseBootImageButton->SetEnabled(true);
 			}
 			break;
+
 		case BURN_AUDIO_CD:
 			BURN_TYPE = 1;
 			fBurnView->fOnTheFlyCheckBox->SetEnabled(false);
@@ -1245,6 +1305,7 @@ void jpWindow::MessageReceived(BMessage* message)
 			fDataView->fBootableCDCheckBox->SetEnabled(false);
 			fDataView->fChooseBootImageButton->SetEnabled(false);
 			break;
+
 		case BURN_MIX_CD:
 			BURN_TYPE = 2;
 			if (fDataView->fBeOSRadio->Value() != 1) {
@@ -1255,24 +1316,28 @@ void jpWindow::MessageReceived(BMessage* message)
 					fDataView->fChooseBootImageButton->SetEnabled(true);
 			}
 			break;
+
 		case AUDIO_PAD:
 			if (fAudioView->fPadCheckBox->Value() == 1)
 				strcpy(PAD, "-pad");
 			else
 				strcpy(PAD, " ");
 			break;
+
 		case AUDIO_SWAB:
 			if (fAudioView->fSwabCheckBox->Value() == 1)
 				strcpy(SWAB, "-swab");
 			else
 				strcpy(SWAB, " ");
 			break;
+
 		case AUDIO_NOFIX:
 			if (fAudioView->fNoFixCheckBox->Value() == 1)
 				strcpy(NOFIX, "-nofix");
 			else
 				strcpy(NOFIX, " ");
 			break;
+
 		case AUDIO_PREEMP:
 			if (fAudioView->fPreEmpCheckBox->Value() == 1)
 				strcpy(PREEMP, "-preemp");
@@ -1286,12 +1351,14 @@ void jpWindow::MessageReceived(BMessage* message)
 			else
 				strcpy(MULTISESSION, " ");
 			break;
+
 		case BURN_DUMMY_MODE:
 			if (fBurnView->fDummyModeCheckBox->Value() == 1)
 				strcpy(DUMMYMODE, "-dummy");
 			else
 				strcpy(DUMMYMODE, " ");
 			break;
+
 		case BURN_ONTHEFLY:
 			if (fBurnView->fOnTheFlyCheckBox->Value() == 1) {
 				fBurnView->fMultiCheckBox->SetEnabled(false);
@@ -1302,18 +1369,21 @@ void jpWindow::MessageReceived(BMessage* message)
 				ONTHEFLY = false;
 			}
 			break;
+
 		case BURN_EJECT:
 			if (fBurnView->fEjectCheckBox->Value() == 1)
 				strcpy(EJECT, "-eject");
 			else
 				strcpy(EJECT, " ");
 			break;
+
 		case MISC_DAO:
 			if (fPrefsView->fDAOCheckBox->Value() == 1)
 				strcpy(DAO, "-dao");
 			else
 				strcpy(DAO, " ");
 			break;
+
 		case MISC_BURNPROOF:
 			if (fPrefsView->fBurnProofCheckBox->Value() == 1)
 				strcpy(BURNPROOF, "driveropts = burnproof");
@@ -1324,12 +1394,15 @@ void jpWindow::MessageReceived(BMessage* message)
 		case MENU_FILE_ABOUT:
 			AWindow();
 			break;
+
 		case OPEN_ISO_FILE:
 			fISOOpenPanel->Show();
 			break;
+
 		case MAKE_IMAGE:
 			BurnNOW();
 			break;
+
 		case MAKE_AND_SAVE_IMAGE:
 			if (VRCD && !ISOFILE)
 				fISOSavePanel->Show();
@@ -1338,6 +1411,7 @@ void jpWindow::MessageReceived(BMessage* message)
 				MyAlert->Go();
 			}
 			break;
+
 		case B_SAVE_REQUESTED: {
 				entry_ref tempas_ref;
 				const char* name;
@@ -1348,27 +1422,35 @@ void jpWindow::MessageReceived(BMessage* message)
 				MakeImageNOW(0, "");
 			}
 			break;
+
 		case BLANK_IT_NOW:
 			BlankNOW();
 			break;
+
 		case BLANK_FULL:
 			BLANK_TYPE = 0;
 			break;
+
 		case BLANK_FAST:
 			BLANK_TYPE = 1;
 			break;
+
 		case BLANK_SESSION:
 			BLANK_TYPE = 2;
 			break;
+
 		case BLANK_TRACK:
 			BLANK_TYPE = 3;
 			break;
+
 		case BLANK_TRACK_TAIL:
 			BLANK_TYPE = 4;
 			break;
+
 		case BLANK_UNRES:
 			BLANK_TYPE = 5;
 			break;
+
 		case BLANK_UNCLOSE:
 			BLANK_TYPE = 6;
 			break;
@@ -1390,9 +1472,11 @@ void jpWindow::MessageReceived(BMessage* message)
 		case PARENT_DIR:
 			fRightList->ParentDir();
 			break;
+
 		case MAKE_DIR:
 			fRightList->CreateDir();
 			break;
+
 		case MAKE_DIRECTORY:
 			const char* temp_char;
 			message->FindString("DirName", &temp_char);
@@ -1403,6 +1487,7 @@ void jpWindow::MessageReceived(BMessage* message)
 				MyAlert->Go();
 			}
 			break;
+
 		case NEW_VRCD:
 			if (!ISOFILE && !VRCD) {
 				fLeftList->AddItem(new LeftListItem(&temp_ref, "VRCD - []", fLeftList->fVRCDBitmap, NULL), 0);
@@ -1424,6 +1509,7 @@ void jpWindow::MessageReceived(BMessage* message)
 				MyAlert->Go();
 			}
 			break;
+
 		case VOLUME_NAME: {
 				message->FindString("DirName", &temp_char);
 				strcpy(VOL_NAME, temp_char);
@@ -1443,7 +1529,7 @@ void jpWindow::MessageReceived(BMessage* message)
 				}
 			}
 			break;
-			// BOOT
+
 		case BOOT_CHECKED: {
 				LeftListItem* item;
 				if (fDataView->fBootableCDCheckBox->Value() == 1) {
@@ -1466,12 +1552,14 @@ void jpWindow::MessageReceived(BMessage* message)
 				}
 			}
 			break;
+
 		case BOOT_FILE_PANEL:
 			fDataView->fBootableCDCheckBox->SetValue(0);
 			fDataView->fChooseBootImageButton->SetEnabled(false);
 			BOOTABLE = false;
 			fDataView->fFilePanel->Show();
 			break;
+
 		case BOOT_CHANGE_IMAGE_NAME: {
 				LeftListItem* item;
 				off_t size;
@@ -1502,15 +1590,16 @@ void jpWindow::MessageReceived(BMessage* message)
 				}
 			}
 			break;
+
 		case CHANGE_VOL_NAME: {
 				fVolumeNameWindow = new AskName(BRect(200, 200, 440, 240), "Volume name", VOLUME_NAME, VOL_NAME);
 				fVolumeNameWindow->Show();
 			}
 			break;
+
 		default:
 			BWindow::MessageReceived(message);
 			break;
-
 	}
 	if ((message->what & 0xffffff00) == 'dev\0') {
 		count = (uint8)(message->what & 0xff);
@@ -1580,23 +1669,6 @@ void jpWindow::SetISOFile(char* string)
 
 void jpWindow::MakeImageNOW(int Multi, const char* str)
 {
-	/*float temp1
-	if ( Cntrl != 0 && OPMkImage != 0) {
-		kill_thread(Cntrl);
-		kill_thread(OPMkImage);
-		system("kill -9 mkisofs");
-		fBurnView->fBurnButton->SetLabel("Burn");
-		OPMkImage = 0;
-		Cntrl = 0;
-		PutLog("User Aborted burning (Makeing Image)");
-		fStatusWindow->Lock();
-		fStatusWindow->fStatusBar->SetBarColor(red);
-		temp1 = fStatusBar->CurrentValue();
-		fStatusWindow->fStatusBar->Reset();
-		fStatusWindow->fStatusBar->Update(temp1);
-		fStatusWindow->Unlock();
-		BEntry(IMAGE_NAME, true).Remove();
-	} else {*/
 	int Result;
 	BAlert* MyAlert = new BAlert("Burn?", "Do you want to make the image?", "I changed my mind.", "Do it.", NULL, B_WIDTH_AS_USUAL, B_WARNING_ALERT);
 	Result = MyAlert->Go();
@@ -1650,12 +1722,11 @@ void jpWindow::MakeImageNOW(int Multi, const char* str)
 			}
 		}
 	}
-//}
 }
 
 
 void jpWindow::GetTsize(char* tsize)
-{
+{	
 	char buffer[1024];
 	char command[1024];
 	FILE* f;
@@ -1663,8 +1734,10 @@ void jpWindow::GetTsize(char* tsize)
 	BString commandstr;
 	
 	commandstr.SetTo(CDRTOOLS_DIR.Path());
+	commandstr << "/";
 	commandstr << "mkisofs -print-size " << DATA_STRING << " -f -V " << '"' << VOL_NAME << '"' << " " << '"' << BURN_DIR << '"' << " 2>&1";
-
+	
+	printf("GetTsize: '%s'\n",commandstr.String());
 	strcpy(command, commandstr.String());
 	f = popen(command, "r");
 	memset(command, 0, 1024);
@@ -1682,7 +1755,7 @@ void jpWindow::GetTsize(char* tsize)
 
 
 void jpWindow::BurnWithCDRecord()
-{
+{	
 	char tsize[512];
 	char command[2048];
 	int Result;
@@ -1704,26 +1777,50 @@ void jpWindow::BurnWithCDRecord()
 		fStatusWindow->Unlock();
 
 		SetButtons(false);
+		
+		commandstr.SetTo(CDRTOOLS_DIR.Path());
+		commandstr << "/";
+		commandstr << "cdrecord dev=" << fBurnDevice->scsiid;
+		
 		if (BURN_TYPE == 0) {
 			fStatusWindow->Lock();
 			fStatusWindow->SetAngles(angles, 1);
 			fStatusWindow->Unlock();
 
-			if (ONTHEFLY && !ISOFILE && VRCD) {
+			if (ONTHEFLY && !ISOFILE && VRCD)
+			{
 				if (BOOTABLE)
 					MakeBootImage();
 
 				GetTsize(tsize);
 			commandstr.SetTo(CDRTOOLS_DIR.Path());
-			commandstr << "mkisofs" << DATA_STRING << " -quiet " << BOOTSTRING << " -f -V " << '"' << VOL_NAME << '"' << " " << '"' << BURN_DIR << '"' << " | ";
-			commandstr << CDRTOOLS_DIR.Path() << "cdrecord dev=" << fBurnDevice->scsiid << " speed=" << BURN_SPD << " " << BURNPROOF;
-			commandstr << "tsize" << tsize << " " << DAO << " -data " << DUMMYMODE << " " << EJECT << "-v -";
-			} else {
+			commandstr << "/";
+			commandstr << "mkisofs " << DATA_STRING << " -quiet " ;
+			commandstr << BOOTSTRING ;
+			commandstr << " -f -V " << '"' << VOL_NAME << '"' << " " << '"' << BURN_DIR << '"' << " | ";
+			commandstr << CDRTOOLS_DIR.Path() << "/cdrecord dev=" << fBurnDevice->scsiid;
+			commandstr << " speed=" << BURN_SPD ;
+			commandstr << " "  << BURNPROOF;
+			commandstr << "tsize" << tsize << " "; 
+			commandstr << DAO << " -data ";
+			commandstr << DUMMYMODE ;
+			commandstr << " " << EJECT << " -v -";
+			} 
+			else 
+			{
 			commandstr.SetTo(CDRTOOLS_DIR.Path());
-			commandstr << "cdrecord dev=" << fBurnDevice->scsiid << " speed=" << BURN_SPD << " " << BURNPROOF << " " << DAO;
-			commandstr << " -data " << DUMMYMODE << " " << EJECT << " " << MULTISESSION	<< "\"" << IMAGE_NAME << "\"";
+			commandstr << "/";
+			commandstr << "cdrecord dev=" << fBurnDevice->scsiid << " speed=" << BURN_SPD ;
+			commandstr << " " << BURNPROOF << " " << DAO;
+			commandstr << " -data " << DUMMYMODE ;
+			commandstr << " " << EJECT ;
+			commandstr << " " << MULTISESSION	<< "\"" << IMAGE_NAME << "\"";
 			}	
-			Lock();
+			
+			commandstr.ReplaceAll("\t"," "); 	commandstr.ReplaceAll("  "," ");
+			printf("BURN_TYPE0: '%s'\n",commandstr.String());
+			
+			Lock();	
 			strcpy(command, commandstr.String());
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
 			snooze(500000);
@@ -1736,9 +1833,22 @@ void jpWindow::BurnWithCDRecord()
 			fStatusWindow->Unlock();
 
 			commandstr.SetTo(CDRTOOLS_DIR.Path());
-			commandstr << "/cdrecord dev=" << fBurnDevice->scsiid;
-			commandstr << "speed=" << BURN_SPD << " " << BURNPROOF << " " << DAO << " " << PAD << " " << PREEMP << " " << SWAB << " " << NOFIX;
-			commandstr << " -audio " << DUMMYMODE << " " << EJECT << " " << AUDIO_FILES;
+			commandstr << "//";
+			commandstr << "cdrecord dev=" << fBurnDevice->scsiid;
+			commandstr << " speed=" << BURN_SPD; 
+			commandstr << " " << BURNPROOF ;
+			commandstr << " " << DAO; 
+			commandstr << " " << PAD;
+			commandstr << " " << PREEMP ;
+			commandstr << " " << SWAB ;
+			commandstr << " " << NOFIX;
+			commandstr << " -audio " << DUMMYMODE;
+			commandstr << " " << EJECT ;
+			commandstr << " " << AUDIO_FILES;
+			
+			commandstr.ReplaceAll("\t"," "); 	commandstr.ReplaceAll("  "," ");
+			printf("BURN_TYPE1: '%s'\n",commandstr.String());
+
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
 			snooze(500000);
@@ -1756,17 +1866,35 @@ void jpWindow::BurnWithCDRecord()
 					MakeBootImage();
 
 				commandstr.SetTo(CDRTOOLS_DIR.Path());
-				commandstr << "/mkisofs " << DATA_STRING << BOOTSTRING << " -quiet -f -V " << '"' << VOL_NAME << '"' << BURN_DIR << '"' << " |";
-				commandstr << CDRTOOLS_DIR.Path() << "/cdrecord dev=" <<  fBurnDevice->scsiid << "speed=" << BURN_SPD << " " << BURNPROOF;
-				commandstr << " tsize=" << tsize << " " << DAO << " " << DUMMYMODE << " " << EJECT << " " << PAD << " " << PREEMP << " " << SWAB << " " << NOFIX;
+				commandstr << "/";
+				commandstr << "mkisofs " << DATA_STRING << BOOTSTRING << " -quiet -f -V " ;
+			 	commandstr << '"' << VOL_NAME << '"' << BURN_DIR << '"' << " |";
+				commandstr << CDRTOOLS_DIR.Path() << "/cdrecord dev=" ;
+			 	commandstr <<  fBurnDevice->scsiid << "speed=" << BURN_SPD ;
+			 	commandstr << " " << BURNPROOF;
+				commandstr << " tsize=" << tsize ;
+			 	commandstr << " " << DAO << " " << DUMMYMODE ;
+			 	commandstr << " " << EJECT << " " << PAD ;
+			 	commandstr << " " << PREEMP << " " << SWAB ;
+			 	commandstr << " " << NOFIX;
 				commandstr << " -data - -audio " << AUDIO_FILES;
 				MessageLog(commandstr.String());
 			} else {
 				commandstr.SetTo(CDRTOOLS_DIR.Path());
-				commandstr << "/cdrecord dev=" << fBurnDevice->scsiid;
-				commandstr << " speed=" << BURN_SPD << " " << BURNPROOF << " " << DAO << " " << PAD << " " << PREEMP << " " << SWAB << " " << NOFIX << " " << DUMMYMODE << " " << EJECT; 
+				commandstr << "//";
+				commandstr << "cdrecord dev=" << fBurnDevice->scsiid;
+				commandstr << " speed=" << BURN_SPD ;
+			 	commandstr << " " << BURNPROOF << " " << DAO << " " << PAD ;
+			 	commandstr << " " << PREEMP << " " << SWAB ;
+			 	commandstr << " " << NOFIX ;
+			 	commandstr << " " << DUMMYMODE ;
+			 	commandstr << " " << EJECT; 
 				commandstr << " -data " << '"' << IMAGE_NAME << '"' << " -audio " << AUDIO_FILES;
 			}
+			
+			commandstr.ReplaceAll("\t"," "); 	commandstr.ReplaceAll("  "," ");
+			printf("BURN_TYPE2: '%s'\n",commandstr.String());
+			
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
 			snooze(500000);
@@ -1794,7 +1922,7 @@ void jpWindow::SetButtons(bool what)
 
 
 void jpWindow::MakeBootImage()
-{
+{	
 	char temp[1024];
 	char temp2[1024];
 	BPath path;
