@@ -67,13 +67,13 @@ void AboutView::Draw(BRect updateRect)
 	fViewFont->SetSize(20);
 	fViewFont->SetFace(B_REGULAR_FACE);
 	SetFont(fViewFont);
-	p1.x = r.left + 30;
+	p1.x = r.left + 10;
 	p1.y = r.top + 110;
 	MovePenTo(p1);
 	SetHighColor(0, 0, 0);
 	SetDrawingMode(B_OP_ALPHA);
 	DrawString(COPYRIGHT1);
-	p1.x = r.left + 30;
+	p1.x = r.left + 10;
 	p1.y = r.top +140;
 	MovePenTo(p1);
 	SetHighColor(0, 0, 0);
