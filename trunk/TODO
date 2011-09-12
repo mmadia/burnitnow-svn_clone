@@ -1,4 +1,5 @@
-* Add vector icons(at least the main app icon for now)
+* Add vector icons, main app has one now, perhaps add more icons for various
+    functions at some point.
 
 * Add proper Archiving/Unarchiving for the main window
     This will be used for saving the settings/state and in the future could be
@@ -34,4 +35,4 @@
 
 * Investigate UDF/DVD support
 
-  
+* Localize the application
