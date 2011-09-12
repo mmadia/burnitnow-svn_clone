@@ -1,11 +1,11 @@
 /*
  * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Copyright 2011 BurnItNow Maintainers
  * Distributed under the terms of the MIT License.
  */
 
 
 #include "RightList.h"
-
 #include "AskName.h"
 #include "jpWindow.h"
 
@@ -13,7 +13,9 @@
 #include <Application.h>
 #include <Bitmap.h>
 #include <Directory.h>
+#include <MenuItem.h>
 #include <Path.h>
+#include <Button.h>
 #include <Resources.h>
 #include <TranslationUtils.h>
 #include <TranslatorFormats.h>
@@ -119,6 +121,12 @@ RightList::RightList(BRect size)
 	fDirectoryBitmap = BTranslationUtils::GetBitmap('PNG ', "folder.png");
 	fInfoBitmap = BTranslationUtils::GetBitmap('PNG ', "info.png");
 	UpdateDir();
+	
+	//BPopUpMenu* fItemPopUpMenu;
+	fItemPopUpMenu = new BPopUpMenu("Items Popup");
+	fItemPopUpMenu->SetRadioMode(false);
+	fItemPopUpMenu->AddItem(new BMenuItem("Remove", new BMessage('reIT')));
+	//fItemPopUpMenu->AddItem(new BMenuItem("Delete", new BMessage('deIT')));
 }
 
 
@@ -157,29 +165,45 @@ void RightList::MessageReceived(BMessage* msg)
 
 void RightList::DeleteDirFromVRCD(entry_ref* ref)
 {
+	printf("DeleteDirFromVRCD \n");
 	BDirectory* temp_dir;
 	entry_ref temp_ref;
 	temp_dir = new BDirectory(ref);
-	while (temp_dir->GetNextRef(&temp_ref) != B_ENTRY_NOT_FOUND) {
-		if (BEntry(&temp_ref, true).IsDirectory()) {
+	
+	while (temp_dir->GetNextRef(&temp_ref) != B_ENTRY_NOT_FOUND)
+	{
+		if (BEntry(&temp_ref, true).IsDirectory()) 
+		{
 			DeleteDirFromVRCD(&temp_ref);
 			BEntry(&temp_ref).Remove();
-		} else
+		} 
+		else
+		{
 			BEntry(&temp_ref).Remove();
+		}
 	}
 	delete temp_dir;
+	printf("DeleteDirFromVRCD END\n");
 }
 
 
 void RightList::DeleteFromVRCD(entry_ref* ref)
 {
+	printf("DeleteFromVRCD \n");
 	BEntry temp_entry(ref);
+	
+	char buf[B_PATH_NAME_LENGTH];   temp_entry.GetName( buf);
+	WriteLog("Delete:");  WriteLog(  buf );  
 
-	if (temp_entry.IsDirectory()) {
-		DeleteDirFromVRCD(ref);
+	if (temp_entry.IsDirectory()) 
+	{	DeleteDirFromVRCD(ref);
 		temp_entry.Remove();
-	} else
+	} 
+	else
+	{
 		temp_entry.Remove();
+	}	
+	printf("DeleteFromVRCD END\n");
 }
 
 
@@ -195,26 +219,30 @@ void RightList::KeyDown(const char* bytes, int32 numBytes)
 					BAlert* MyAlert = new BAlert("BurnItNow", "Are you sure you want to delete this selection", "Yes", "No", NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
 					MyAlert->SetFeel(B_MODAL_ALL_WINDOW_FEEL);
 					result = MyAlert->Go();
-					if (result == 0) {
+					if (result == 0) 
+					{
 						DeleteFromVRCD(&item->fRef);
 						UpdateDir();
+						
 					} else {
-						UpdateDir();
+						//UpdateDir();
 						WriteLog("Didnt delete file");
 					}
-					if (item != NULL)
-						delete item;
+
+					//if (item != NULL) {		delete item; }
+
 				}
 				break;
 			}
 		default:
-			BListView::KeyDown(bytes, numBytes);
+		BListView::KeyDown(bytes, numBytes);
 	}
 }
 
 
 void RightList::MouseDown(BPoint point)
 {
+	int32 result;
 	BMessage* msg = Window()->CurrentMessage();
 	uint32 clicks = msg->FindInt32("clicks");
 	uint32 button = msg->FindInt32("buttons");
@@ -224,6 +252,39 @@ void RightList::MouseDown(BPoint point)
 		fClickCount = 1;
 
 	fLastButton = button;
+	
+	if ((button == B_SECONDARY_MOUSE_BUTTON) ) 
+	{
+		int32 itemn = IndexOf(point);
+		if (itemn >= 0) 
+		{
+			BMenuItem* selected;
+			BPoint p = point;
+			ConvertToScreen(&p);
+			Select(itemn);
+			selected = fItemPopUpMenu->Go(p);
+			if (selected) {
+				if (!strcmp(selected->Label(), "Remove")) {
+					int32 selection = CurrentSelection();
+					if (selection >= 0) {	
+						FileListItem* item = (FileListItem*)ItemAt(selection);
+						if (item->fIconBitmap != NULL && item->fIconBitmap != fInfoBitmap) {
+							//printf("Will remove %s\n",(char*) item->fName);
+							BAlert* MyAlert = new BAlert("BurnItNow", "Are you sure you want to delete this selection", "Yes", "No", NULL, B_WIDTH_AS_USUAL, B_INFO_ALERT);
+							MyAlert->SetFeel(B_MODAL_ALL_WINDOW_FEEL);
+							result = MyAlert->Go();
+							if (result == 0) {
+								DeleteFromVRCD(&item->fRef);
+								UpdateDir();
+							}
+						}
+					}
+				}
+			}		
+		}
+	}
+	
+	
 	if ((button == B_PRIMARY_MOUSE_BUTTON) && (fClickCount == 2)) {
 		int32 selection = CurrentSelection();
 		if (selection >= 0) {
@@ -233,9 +294,8 @@ void RightList::MouseDown(BPoint point)
 					UpdateDir();
 		}
 		fClickCount = 0;
-
 	} else
-		BListView::MouseDown(point);
+	BListView::MouseDown(point);
 }
 
 
@@ -244,47 +304,77 @@ void RightList::UpdateInfo(char* str1 = NULL, char* str2 = NULL, char* str3 = NU
 	MakeEmpty();
 	if (str1 != NULL)
 		AddItem(new FileListItem(NULL, str1, fInfoBitmap));
-
 	if (str2 != NULL)
 		AddItem(new FileListItem(NULL, str2, NULL));
-
 	if (str3 != NULL)
 		AddItem(new FileListItem(NULL, str3, NULL));
-
 	if (str4 != NULL)
 		AddItem(new FileListItem(NULL, str4, NULL));
-
 	if (str5 != NULL)
 		AddItem(new FileListItem(NULL, str5, NULL));
 }
 
 
 void RightList::UpdateDir()
-{
+{	
 	BEntry temp_entry;
-	entry_ref temp_ref;
-	MakeEmpty();
+	entry_ref temp_ref;		
+	status_t ret=B_OK;  
+ 
+ 	MakeEmpty();
+ 	
 	fBDirectory->GetEntry(&temp_entry);
 	fBDirectory->SetTo(&temp_entry);
+
+	if(fBDirectory->GetEntry(&temp_entry) == B_OK) {
+		ret=fBDirectory->SetTo(&temp_entry);		
+		if(ret != B_OK) {
+			printf(" cant  fBDirectory->SetTo(&temp_entry)\n");
+		}	
+	}
+	else {
+		printf(" cant fBDirectory->GetEntry(&temp_entry)\n");
+	}
+
 	while (fBDirectory->GetNextRef(&temp_ref) != B_ENTRY_NOT_FOUND) {
-		if (BEntry(&temp_ref, true).IsDirectory())
+		if (BEntry(&temp_ref, true).IsDirectory()) {
 			AddItem(new FileListItem(&temp_ref, temp_ref.name, fDirectoryBitmap));
-		else
+		}
+		else {
 			AddItem(new FileListItem(&temp_ref, temp_ref.name, fFileBitmap));
+		}
+	}
+	
+	//Added: 
+	char buf[B_FILE_NAME_LENGTH];  
+	bool enableBut=true;
+	temp_entry.GetName(buf);	
+	//printf(" ** strstr:  %p | %s\n", strstr("VRCD", buf), buf);
+	if( strstr("VRCD", buf) != NULL ) {
+		enableBut=false;
+	}
+
+	jpWindow* win = dynamic_cast<jpWindow*>(Window());	//printf(" *jpWindow %p\n",win);
+	if (win != NULL) {
+		win->Lock();
+		win->fParentDirButton->SetEnabled(enableBut);
+		win->Unlock();
 	}
 }
 
 
 void RightList::ParentDir()
-{
-	BEntry temp_entry, temp_entry2;
+{	
+	BEntry temp_entry, temp_entry2;  
 	BPath temp_path;
+	
 	if (fBDirectory->GetEntry(&temp_entry) == B_OK) {
-		temp_entry.GetParent(&temp_entry2);
-		if (temp_entry2.GetPath(&temp_path) == B_OK) {
-			if (!strncmp(temp_path.Path(), BURN_DIR, strlen(BURN_DIR))) {
-				temp_entry.GetParent(fBDirectory);
-				UpdateDir();
+		if( temp_entry.GetParent(&temp_entry2) == B_OK) {
+			if (temp_entry2.GetPath(&temp_path) == B_OK) {
+				if (!strncmp(temp_path.Path(), BURN_DIR, strlen(BURN_DIR))) {
+					temp_entry.GetParent(fBDirectory);
+					UpdateDir();
+				}
 			}
 		}
 	}
@@ -293,7 +383,7 @@ void RightList::ParentDir()
 
 void RightList::CreateDir()
 {
-	AskName* makeDirWindow = new AskName(BRect(200, 200, 440, 240), "Make directory", MAKE_DIRECTORY, "");
+	AskName* makeDirWindow = new AskName(BRect(200, 200, 440, 250), "Make directory", MAKE_DIRECTORY, "");
 	makeDirWindow->Show();
 }
 
@@ -390,8 +480,10 @@ void RightList::MakeLink(entry_ref* ref)
 
 
 void RightList::WriteLog(const char* string)
-{
-	jpWindow* win = dynamic_cast<jpWindow*>(Window());
-	if (win != NULL)
+{	
+	jpWindow* win = dynamic_cast<jpWindow*>(Window());	
+	if (win != NULL) {
 		win->MessageLog(string);
+	}
+			
 }

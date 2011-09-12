@@ -1,5 +1,6 @@
 /*
  * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Copyright 2011 BurnItNow Maintainers
  * Distributed under the terms of the MIT License.
  */
 
@@ -24,7 +25,6 @@ LogView::LogView(BRect size)
 	logLabel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	logLabel->SetDrawingMode(B_OP_ALPHA);
 	r = Bounds();
-//	r.InsetBy(5.0,5.0);
 	BBox* logBox = new BBox(r, "logBox", B_FOLLOW_NONE, B_WILL_DRAW | B_FRAME_EVENTS, B_PLAIN_BORDER);
 	logBox->SetLabel(logLabel);
 	AddChild(logBox);
@@ -39,6 +39,7 @@ LogView::LogView(BRect size)
 	fLogTextView = new BTextView(r, "fLogTextView", r2, B_FOLLOW_NONE, B_WILL_DRAW);
 	fLogTextView->MakeEditable(false);
 	fLogTextView->SetStylable(true);
-	BScrollView* logScrollView = new BScrollView("logScrollView", fLogTextView, B_FOLLOW_NONE, 0, false, true, B_FANCY_BORDER);
+	//BScrollView* 
+	logScrollView = new BScrollView("logScrollView", fLogTextView, B_FOLLOW_NONE, 0, false, true, B_FANCY_BORDER);
 	logBox->AddChild(logScrollView);
 }

@@ -361,8 +361,8 @@ jpWindow::jpWindow(BRect frame)
 	r.bottom = 240;
 	r.left = (r.right / 2);
 	r.right -= (r.right - r.left) / 2;
-	fMakeDirButton = new BButton(r, "ParentDir", "ParentDir", new BMessage(PARENT_DIR));
-	fAroundBox->AddChild(fMakeDirButton);
+	fParentDirButton = new BButton(r, "ParentDir", "ParentDir", new BMessage( PARENT_DIR ));
+	fAroundBox->AddChild(fParentDirButton);
 
 	// MakeDir button
 	r = fAroundBox->Bounds();
@@ -372,8 +372,8 @@ jpWindow::jpWindow(BRect frame)
 	r.left = (r.right / 2) + 2;
 	r.left += (r.right - r.left) / 2 + 2;
 	r.right -= 2;
-	fParentDirButton = new BButton(r, "MakeDir", "MakeDir", new BMessage(MAKE_DIR));
-	fAroundBox->AddChild(fParentDirButton);
+	fMakeDirButton = new BButton(r, "MakeDir", "MakeDir", new BMessage( MAKE_DIR ));
+	fAroundBox->AddChild(fMakeDirButton);
 
 	if (!VRCD) {
 		fMakeDirButton->SetEnabled(false);
@@ -472,10 +472,11 @@ uint64 jpWindow::GetVRCDSize()
 	if (IMAGE_TYPE == 0) {
 		FILE* f1;
 		sprintf(command, "mkisofs -print-size %s %s -gui -f -V \"%s\" -C %s \"%s\" 2>&1", DATA_STRING, BOOTSTRING, VOL_NAME, fBurnDevice->scsiid, BURN_DIR);
+		printf("com: %s\n",command);
 		f1 = popen(command, "r");
 		while (!feof(f1) && !ferror(f1)) {
 			buffer[0] = 0;
-			fgets(buffer, 1024, f1);
+			fgets(buffer, 1024, f1);	//printf("# %s",buffer);
 			if (!strncmp("Total extents scheduled to be written = ", &buffer[0], 40)) {
 				for (i = 0; i < strlen(&buffer[40]); i++) {
 					if ((buffer[i + 40] != '\n') || (buffer[i + 41] != '\0'))
@@ -500,9 +501,13 @@ void jpWindow::CalculateSize()
 	uint32 angle_temp[100];
 	uint32 tracks, i;
 	off_t temp, total_audio, total, total_iso, total_vrcd;
-	total_audio = total = total_iso = total_vrcd = 0;
-	temp = 0;
-	nrtracks = 0;
+	
+	total_audio = 0;
+	total = 0;
+	total_iso = 0;
+	total_vrcd = 0;
+	temp = 0;	nrtracks = 0;
+	
 	if (BURN_TYPE == 0) {
 		sprintf(what, "DataCD");
 		total_vrcd = total = total_iso = total_audio = 0;
@@ -521,9 +526,7 @@ void jpWindow::CalculateSize()
 				angle_temp[0] = temp / 1024 / 1024;
 			}
 		}
-	}
-
-	else if (BURN_TYPE == 1) {
+	} else if (BURN_TYPE == 1) {
 		sprintf(what, "AudioCD");
 		total_vrcd = total = total_iso = total_audio = temp = 0;
 		fStatusBar->SetBarColor(green);
@@ -788,9 +791,8 @@ void jpWindow::CheckForDevices()
 	got_it = false;
 	
 	commandstr.SetTo(CDRTOOLS_DIR.Path());
-	commandstr.Append("/cdrecord -scanbus");
-	strcpy(command, commandstr.String());
-	printf(" com: '%s'\n",commandstr.String());	
+	commandstr.Append("/cdrecord -scanbus");	
+	strcpy(command, commandstr.String());		
 	
 	if (cdrecord.Exists() && mkisofs.Exists()) {
 		if (fRecorderCount < 100) {
@@ -816,8 +818,7 @@ void jpWindow::CheckForDevices()
 
 					if (buffer[k] == '\'') {
 						l= (int)strlen(buffer);
-						buffer[l-1]='\0';
-						printf("[buffer] '%s' \n",buffer);
+						buffer[l-1]='\0';	//	printf("[buffer] '%s' \n",buffer);
 						pa=0;
 						pb=0;
 						pc=0;
@@ -852,19 +853,24 @@ void jpWindow::CheckForDevices()
 								}
 							}
 						}
-						sidbuf[7-1]='\0';
-						sivbuf[20-1]='\0';
-						sinbuf[50-1]='\0';
-
-						printf("[len=%02ld] '%s' \n",strlen(sidbuf),sidbuf );
-						printf("[len=%02ld] '%s' \n",strlen(sivbuf),sivbuf );
-						printf("[len=%02ld] '%s' \n",strlen(sinbuf),sinbuf );
+						sidbuf[7]='\0';
+						sivbuf[20]='\0';
+						sinbuf[50]='\0';
+						//printf("[len=%02ld] '%s' \n",strlen(sidbuf),sidbuf );
+						//printf("[len=%02ld] '%s' \n",strlen(sivbuf),sivbuf );
+						//printf("[len=%02ld] '%s' \n",strlen(sinbuf),sinbuf );
+									
 												
 						fRecorderCount++;
 						memset((char*)&fScsiDevices[fRecorderCount - 1].scsiid[0], 0,  7 );
-						strncpy(fScsiDevices[fRecorderCount - 1].scsiid, &buffer[m], 7);
+						/* strncpy(fScsiDevices[fRecorderCount - 1].scsiid, &buffer[m], 7);
 						printf("[len=%02ld] scsiid: '%s' \n",strlen(fScsiDevices[fRecorderCount - 1].scsiid)
-															,fScsiDevices[fRecorderCount - 1].scsiid);
+										,fScsiDevices[fRecorderCount - 1].scsiid);  */
+										
+						strncpy(sidbuf, &buffer[m], 7);	
+						m= strspn(sidbuf,",1234567890"); if(m > 0) { sidbuf[m]='\0';}	
+						strncpy(fScsiDevices[fRecorderCount - 1].scsiid, sidbuf, 7);
+						printf("[len=%02ld] sidbuf: '%s' \n",strlen(sidbuf),sidbuf);
 						
 						// scsi vendor
 						memset((char*)&fScsiDevices[fRecorderCount - 1].scsi_vendor[0], 0, 20);
@@ -1086,7 +1092,9 @@ void jpWindow::BlankNOW()
 
 			SetButtons(false);
 			char command[2000];
-			commandstr << "cdrecord dev=" << fBurnDevice->scsiid << " speed=" << BLANK_SPD << " blank=" << BlType[BLANK_TYPE];
+			commandstr << "cdrecord dev=" << fBurnDevice->scsiid << " speed=" << BLANK_SPD ;
+			commandstr << " blank=" << BlType[BLANK_TYPE];
+			commandstr << " -V";
 
 			printf("BlankNOW: '%s'\n",commandstr.String());
 
@@ -1096,6 +1104,8 @@ void jpWindow::BlankNOW()
 			snooze(500000);
 			resume_thread(OPBlank = spawn_thread(OutPutBlank, "OutPutBlank", 15, fStatusWindow));
 			snooze(500000);
+
+			MessageLog("Blanking done");
 			Unlock();
 		}
 	}
@@ -1104,25 +1114,31 @@ void jpWindow::BlankNOW()
 
 void jpWindow::PutLog(const char* string)
 {
+	font_height fh;  fLogView->fLogTextView->GetFontHeight( &fh );
 	Lock();
 	fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &red2);
 	fLogView->fLogTextView->Insert("*******\n");
 	fLogView->fLogTextView->Insert(string);
 	fLogView->fLogTextView->Insert("\n*******\n");
-	fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &black);
-	fLogView->fLogTextView->ScrollToOffset(fLogView->fLogTextView->CountLines() * 100);
+	//fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &black);
+	//fLogView->fLogTextView->ScrollToOffset(fLogView->fLogTextView->CountLines() * 100);
+	fLogView->fLogTextView->ScrollBy( 0, fh.ascent );
 	Unlock();
 }
 
 
 void jpWindow::MessageLog(const char* string)
-{
+{	
+	font_height fh;  fLogView->fLogTextView->GetFontHeight( &fh );	//  ascent,descent,leading;
+	//float fv=10.0;  fv=  fh.ascent ;				// printf("MessageLog(Size %5.2f)\n",fv);
 	Lock();
 	fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &green);
 	fLogView->fLogTextView->Insert(string);
 	fLogView->fLogTextView->Insert("\n");
-	fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &black);
-	fLogView->fLogTextView->ScrollToOffset(fLogView->fLogTextView->CountLines() * 100);
+	//fLogView->fLogTextView->SetFontAndColor(0, 0, be_plain_font, B_FONT_ALL, &black);
+	//fLogView->fLogTextView->ScrollToOffset(fLogView->fLogTextView->CountLines() * 100);
+	//fLogView->fLogTextView->ScrollToOffset(fLogView->fLogTextView->CountLines() );
+	fLogView->fLogTextView->ScrollBy( 0, fh.ascent );
 	Unlock();
 }
 
@@ -1748,7 +1764,6 @@ void jpWindow::GetTsize(char* tsize)
 		}
 	}
 	pclose(f);
-
 }
 
 
@@ -1785,34 +1800,33 @@ void jpWindow::BurnWithCDRecord()
 			fStatusWindow->SetAngles(angles, 1);
 			fStatusWindow->Unlock();
 
-			if (ONTHEFLY && !ISOFILE && VRCD)
-			{
+			if (ONTHEFLY && !ISOFILE && VRCD) {
 				if (BOOTABLE)
 					MakeBootImage();
-
 				GetTsize(tsize);
-			commandstr.SetTo(CDRTOOLS_DIR.Path());
-			commandstr << "/";
-			commandstr << "mkisofs " << DATA_STRING << " -quiet " ;
-			commandstr << BOOTSTRING ;
-			commandstr << " -f -V " << '"' << VOL_NAME << '"' << " " << '"' << BURN_DIR << '"' << " | ";
-			commandstr << CDRTOOLS_DIR.Path() << "/cdrecord dev=" << fBurnDevice->scsiid;
-			commandstr << " speed=" << BURN_SPD ;
-			commandstr << " "  << BURNPROOF;
-			commandstr << "tsize" << tsize << " "; 
-			commandstr << DAO << " -data ";
-			commandstr << DUMMYMODE ;
-			commandstr << " " << EJECT << " -v -";
+				commandstr.SetTo(CDRTOOLS_DIR.Path());
+				commandstr << "/";
+				commandstr << "mkisofs " << DATA_STRING << " -quiet " ;
+				commandstr << BOOTSTRING ;
+				commandstr << " -f -V " << '"' << VOL_NAME << '"' << " " << '"';
+				commandstr << BURN_DIR << '"' << " | " << CDRTOOLS_DIR.Path();
+				commandstr << "/cdrecord dev=" << fBurnDevice->scsiid;
+				commandstr << " speed=" << BURN_SPD ;
+				commandstr << " "  << BURNPROOF;
+				commandstr << "tsize" << tsize << " "; 
+				commandstr << DAO << " -data ";
+				commandstr << DUMMYMODE ;
+				commandstr << " " << EJECT << " -v -";
 			} 
-			else 
-			{
-			commandstr.SetTo(CDRTOOLS_DIR.Path());
-			commandstr << "/";
-			commandstr << "cdrecord dev=" << fBurnDevice->scsiid << " speed=" << BURN_SPD ;
-			commandstr << " " << BURNPROOF << " " << DAO;
-			commandstr << " -data " << DUMMYMODE ;
-			commandstr << " " << EJECT ;
-			commandstr << " " << MULTISESSION	<< "\"" << IMAGE_NAME << "\"";
+			else {
+				commandstr.SetTo(CDRTOOLS_DIR.Path());
+				commandstr << "/";
+				commandstr << "cdrecord dev=" << fBurnDevice->scsiid << " speed=" << BURN_SPD ;
+				commandstr << " " << BURNPROOF << " " << DAO;
+				commandstr << " -data " << DUMMYMODE ;
+				commandstr << " " << EJECT ;
+				commandstr << " -v" ;	// aw 110910
+				commandstr << " " << MULTISESSION	<< "\"" << IMAGE_NAME << "\"";
 			}	
 			
 			commandstr.ReplaceAll("\t"," "); 	commandstr.ReplaceAll("  "," ");
@@ -1829,7 +1843,6 @@ void jpWindow::BurnWithCDRecord()
 			fStatusWindow->Lock();
 			fStatusWindow->SetAngles(angles, nrtracks);
 			fStatusWindow->Unlock();
-
 			commandstr.SetTo(CDRTOOLS_DIR.Path());
 			commandstr << "//";
 			commandstr << "cdrecord dev=" << fBurnDevice->scsiid;
@@ -1843,10 +1856,8 @@ void jpWindow::BurnWithCDRecord()
 			commandstr << " -audio " << DUMMYMODE;
 			commandstr << " " << EJECT ;
 			commandstr << " " << AUDIO_FILES;
-			
 			commandstr.ReplaceAll("\t"," "); 	commandstr.ReplaceAll("  "," ");
 			printf("BURN_TYPE1: '%s'\n",commandstr.String());
-
 			Lock();
 			resume_thread(Cntrl = spawn_thread(controller, "Burning", 15, command));
 			snooze(500000);
@@ -1900,9 +1911,10 @@ void jpWindow::BurnWithCDRecord()
 			snooze(500000);
 			Unlock();
 		}
-
 	}
 
+	//restore after burning  not checked..  // aw 1109100
+	fBurnView->fBurnButton->SetLabel("Burn!");
 }
 
 

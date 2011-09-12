@@ -1,5 +1,6 @@
 /*
  * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Copyright 2011 BurnItNow Maintainers
  * Distributed under the terms of the MIT License.
  */
 
@@ -33,13 +34,10 @@ AskName::AskName(BRect frame, const char* title, uint32 mess, const char* what)
 	r = aroundView->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.right -= 70;
-	r.bottom = 23;
+	r.bottom = 26;
 	fNameTextView = new BTextView(r, "Name_", r, B_FOLLOW_NONE, B_WILL_DRAW);
 	fNameTextView->SetWordWrap(false);
 	fNameTextView->DisallowChar('\n');
-//	if (fMessageWhat == VOLUME_NAME) {
-//		Name->DisallowChar(' ');
-//	}
 	aroundView->AddChild(new BScrollView("NameScroll", fNameTextView, B_FOLLOW_NONE, 0, false, false, B_FANCY_BORDER));
 	r2 = aroundView->Bounds();
 	r2.InsetBy(5.0, 5.0);

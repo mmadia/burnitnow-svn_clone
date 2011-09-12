@@ -1,5 +1,6 @@
 /*
  * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Copyright 2011 BurnItNow maintainers
  * Distributed under the terms of the MIT License.
  */
 
@@ -76,8 +77,8 @@ CDRWView::CDRWView(BRect size)
 	r.InsetBy(5.0, 5.0);
 	r.top += 15;
 	r.left = 155;
-	r.right = 250;
-	sprintf(temp_char, "Blank Speed [%dx]", BLANK_SPD);
+	r.right = 270;
+	sprintf(temp_char,"Blank Speed [%dx]", BLANK_SPD);
 	fBlankSpeedSlider = new BSlider(r, "BlankSpeed", temp_char, new BMessage(BLANK_SPEED_CHANGE), 0, 5, B_BLOCK_THUMB, B_FOLLOW_NONE);
 	fBlankSpeedSlider->SetHashMarks(B_HASH_MARKS_BOTTOM);
 	fBlankSpeedSlider->SetHashMarkCount(6);
@@ -89,10 +90,8 @@ CDRWView::CDRWView(BRect size)
 	r.InsetBy(5.0, 5.0);
 	r.top += 10;
 	r.bottom = r.top + 50;
-	r.left = 300;
-	r.right = 365;
+	r.left = 330;
+	r.right = 415;
 	fBlankButton = new BButton(r, "BlankButton", "Blank!", new BMessage(BLANK_IT_NOW));
 	CDRWBox->AddChild(fBlankButton);
-
-	
 }

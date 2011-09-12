@@ -1,5 +1,6 @@
 /*
  * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Copyright 2011 BurnItNow maintainers
  * Distributed under the terms of the MIT License.
  */
 
@@ -135,7 +136,6 @@ BurnView::BurnView(BRect size)
 
 	burnBox->AddChild(fEjectCheckBox);
 
-
 	// fBurnButton
 	r = burnBox->Bounds();
 	r.InsetBy(5.0, 5.0);
@@ -158,7 +158,7 @@ BurnView::BurnView(BRect size)
 	r = burnBox->Bounds();
 	r.InsetBy(5.0, 5.0);
 	r.left = 225;
-	r.right = 350;
+	r.right = 370;
 	r.top += 10;
 	sprintf(temp_char, "Burning Speed [%dx]", BURN_SPD);
 	fSpeedSlider = new BSlider(r, "Speed", temp_char, new BMessage(SPEED_CHANGE), 0, 5, B_BLOCK_THUMB, B_FOLLOW_NONE);

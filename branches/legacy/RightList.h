@@ -1,5 +1,6 @@
 /*
  * Copyright 2000-2002, Johan Nilsson. All rights reserved.
+ * Copyright 2011 BurnItNow maintainers
  * Distributed under the terms of the MIT License.
  */
 #ifndef _RIGHTLIST_H_
@@ -8,6 +9,7 @@
 
 #include <Entry.h>
 #include <ListView.h>
+#include <PopUpMenu.h>
 
 
 class FileListItem : public BListItem {
@@ -46,6 +48,9 @@ public:
 	BBitmap* fFileBitmap;
 	BBitmap* fDirectoryBitmap;
 	BBitmap* fInfoBitmap;
+	
+	BPopUpMenu* fItemPopUpMenu;
+	
 };
 
 
